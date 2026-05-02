@@ -1,16 +1,22 @@
-import { currentUser } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 
 import { generateOllamaAnswer } from "@/lib/ai/ollama";
 import type { AdminAiHealth } from "@/lib/admin/contracts";
 import { isAllowedAdminEmail } from "@/lib/auth/adminAccess";
 import { isClerkConfigured } from "@/lib/auth/clerkConfig";
+import { getPrimaryEmailFromClerkUser } from "@/lib/auth/clerkUserEmail";
 import type { EvidenceChunk } from "@/lib/search/contracts";
 
 export async function GET() {
   if (isClerkConfigured()) {
-    const user = await currentUser();
-    const email =
-      user?.primaryEmailAddress?.emailAddress || user?.emailAddresses.find((address) => address.emailAddress)?.emailAddress || "";
+    const { userId } = await auth();
+    if (!userId) {
+      return Response.json({ error: "Admin sign-in required" }, { status: 401 });
+    }
+
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const email = getPrimaryEmailFromClerkUser(user);
 
     if (!isAllowedAdminEmail(email)) {
       return Response.json({ error: "Admin email domain required" }, { status: 403 });
