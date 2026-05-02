@@ -26,6 +26,8 @@ The app renders a safe setup state until `NEXT_PUBLIC_CONVEX_URL` is configured.
 NEXT_PUBLIC_CONVEX_URL=
 CONVEX_URL=
 KNOWLEDGE_IMPORT_SECRET=
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
 OLLAMA_API_KEY=
 OLLAMA_HOST=https://ollama.com
 OLLAMA_MODEL=gpt-oss:120b
@@ -33,6 +35,7 @@ OLLAMA_MODEL=gpt-oss:120b
 
 `OLLAMA_API_KEY` must stay server-side. Do not prefix it with `NEXT_PUBLIC_`.
 `KNOWLEDGE_IMPORT_SECRET` is only needed when importing chunks into a Convex deployment that has the same secret configured.
+Clerk is optional for local development. When both Clerk keys are configured, `/admin` and `/api/admin/*` require sign-in and a `terminalauto.ca` or `valleycollision.ca` email address.
 
 ## Convex
 
@@ -75,6 +78,8 @@ npm run build
 Deploy the `web/` directory to Vercel. Configure:
 
 - `CONVEX_DEPLOY_KEY`
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+- `CLERK_SECRET_KEY`
 - `OLLAMA_API_KEY`
 - `OLLAMA_HOST`
 - `OLLAMA_MODEL`
