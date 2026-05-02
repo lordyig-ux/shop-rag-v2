@@ -1,0 +1,42 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Convex local/generated state
+.convex/
+
+# Git worktrees
+.worktrees/
+
+# Local production/runtime artifacts
+dist/
+archive/
+shop-rag/data/logs/
+shop-rag/data/jobs/
+shop-rag/data/reports/
+shop-rag/data/*.sqlite
+shop-rag/data/*.db
+shop-rag/data/selected_collection.txt
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
