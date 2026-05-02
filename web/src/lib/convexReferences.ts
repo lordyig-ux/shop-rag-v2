@@ -1,5 +1,6 @@
 import { makeFunctionReference } from "convex/server";
 
+import type { AdminOverview } from "@/lib/admin/contracts";
 import type { NormalizedChunkRecord } from "@/lib/knowledge/normalizeChunk";
 import type { EvidenceChunk, KnowledgeFilter } from "@/lib/search/contracts";
 
@@ -14,6 +15,8 @@ export const convexFunctions = {
     },
     EvidenceChunk[]
   >("knowledge:search"),
+
+  adminOverview: makeFunctionReference<"query", Record<string, never>, AdminOverview>("knowledge:adminOverview"),
 
   logQuery: makeFunctionReference<
     "mutation",

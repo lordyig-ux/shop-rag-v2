@@ -40,6 +40,7 @@ const chunkInput = v.object({
 });
 
 const searchKnowledgeType = v.union(v.literal("all"), knowledgeType);
+type KnowledgeTypeValue = "sop" | "insurance_policy" | "shop_doc" | "reference";
 
 export const upsertImportedChunks = mutationGeneric({
   args: {
@@ -141,6 +142,83 @@ export const search = queryGeneric({
   },
 });
 
+export const adminOverview = queryGeneric({
+  args: {},
+  handler: async (ctx) => {
+    const [sources, chunks, recentQueries] = await Promise.all([
+      ctx.db.query("sources").collect(),
+      ctx.db.query("chunks").collect(),
+      ctx.db.query("queryLogs").withIndex("by_createdAt").order("desc").take(12),
+    ]);
+
+    const sourcesByKnowledgeType = countByKnowledgeType(sources);
+    const chunksByKnowledgeType = countByKnowledgeType(chunks);
+    const batchMap = new Map<string, { sources: Set<string>; chunks: number; importedAt: number }>();
+
+    for (const source of sources) {
+      const batch = batchMap.get(source.importedBatchId) || {
+        sources: new Set<string>(),
+        chunks: 0,
+        importedAt: 0,
+      };
+      batch.sources.add(source.sourceId);
+      batch.importedAt = Math.max(batch.importedAt, source.importedAt);
+      batchMap.set(source.importedBatchId, batch);
+    }
+
+    for (const chunk of chunks) {
+      const batch = batchMap.get(chunk.importedBatchId) || {
+        sources: new Set<string>(),
+        chunks: 0,
+        importedAt: 0,
+      };
+      batch.chunks += 1;
+      batch.importedAt = Math.max(batch.importedAt, chunk.importedAt);
+      batchMap.set(chunk.importedBatchId, batch);
+    }
+
+    const batches = Array.from(batchMap.entries())
+      .map(([batchId, batch]) => ({
+        batchId,
+        sources: batch.sources.size,
+        chunks: batch.chunks,
+        importedAt: batch.importedAt,
+      }))
+      .sort((left, right) => right.importedAt - left.importedAt);
+
+    const sourceSamples = sources
+      .slice()
+      .sort((left, right) => right.importedAt - left.importedAt)
+      .slice(0, 12)
+      .map((source) => ({
+        title: source.title,
+        category: source.category,
+        knowledgeType: source.knowledgeType,
+        sourceUrl: source.sourceUrl,
+        importedBatchId: source.importedBatchId,
+        importedAt: source.importedAt,
+      }));
+
+    return {
+      sourceCount: sources.length,
+      chunkCount: chunks.length,
+      queryCount: recentQueries.length,
+      latestImportAt: batches[0]?.importedAt || null,
+      chunksByKnowledgeType,
+      sourcesByKnowledgeType,
+      batches,
+      recentQueries: recentQueries.map((query) => ({
+        question: query.question,
+        resultCount: query.resultCount,
+        usedAi: query.usedAi,
+        warnings: query.warnings,
+        createdAt: query.createdAt,
+      })),
+      sourceSamples,
+    };
+  },
+});
+
 export const logQuery = mutationGeneric({
   args: {
     question: v.string(),
@@ -159,3 +237,18 @@ export const logQuery = mutationGeneric({
     });
   },
 });
+
+function countByKnowledgeType<T extends { knowledgeType: KnowledgeTypeValue }>(rows: T[]) {
+  const counts = {
+    sop: 0,
+    insurance_policy: 0,
+    shop_doc: 0,
+    reference: 0,
+  };
+
+  for (const row of rows) {
+    counts[row.knowledgeType] += 1;
+  }
+
+  return counts;
+}
