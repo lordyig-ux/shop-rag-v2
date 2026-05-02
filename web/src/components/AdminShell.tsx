@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { AdminAiHealth, AdminOverview, AdminSignal } from "@/lib/admin/contracts";
 import { deriveAdminSignals } from "@/lib/admin/adminStatus";
 import { convexFunctions } from "@/lib/convexReferences";
+import type { KnowledgeType } from "@/lib/knowledge/normalizeChunk";
 
 const typeLabels: Record<keyof AdminOverview["chunksByKnowledgeType"], string> = {
   sop: "SOPs",
@@ -19,6 +20,14 @@ export function AdminShell() {
   const overview = useQuery(convexFunctions.adminOverview, {});
   const [aiHealth, setAiHealth] = useState<AdminAiHealth | null>(null);
   const [aiError, setAiError] = useState("");
+  const [batchId, setBatchId] = useState(defaultBatchId());
+  const [fileName, setFileName] = useState("");
+  const [fileContent, setFileContent] = useState("");
+  const [knowledgeType, setKnowledgeType] = useState<KnowledgeType>("insurance_policy");
+  const [maintenanceBusy, setMaintenanceBusy] = useState(false);
+  const [maintenanceError, setMaintenanceError] = useState("");
+  const [maintenanceResult, setMaintenanceResult] = useState<Record<string, unknown> | null>(null);
+  const [deletingBatch, setDeletingBatch] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -47,6 +56,72 @@ export function AdminShell() {
   }, []);
 
   const signals = useMemo(() => deriveAdminSignals(overview, aiHealth), [overview, aiHealth]);
+
+  async function loadImportFile(file: File | undefined) {
+    setMaintenanceError("");
+    setMaintenanceResult(null);
+    if (!file) {
+      setFileName("");
+      setFileContent("");
+      return;
+    }
+
+    setFileName(file.name);
+    setFileContent(await file.text());
+  }
+
+  async function runImport(dryRun: boolean) {
+    setMaintenanceBusy(true);
+    setMaintenanceError("");
+    setMaintenanceResult(null);
+
+    try {
+      const response = await fetch("/api/admin/imports", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: fileContent,
+          batch: batchId,
+          knowledgeType,
+          dryRun,
+        }),
+      });
+      const body = (await response.json()) as Record<string, unknown>;
+      if (!response.ok) {
+        throw new Error(typeof body.error === "string" ? body.error : "Import failed");
+      }
+      setMaintenanceResult(body);
+    } catch (error) {
+      setMaintenanceError(error instanceof Error ? error.message : "Import failed");
+    } finally {
+      setMaintenanceBusy(false);
+    }
+  }
+
+  async function deleteBatch(targetBatchId: string) {
+    if (!window.confirm(`Delete all chunks and sources in batch "${targetBatchId}"?`)) {
+      return;
+    }
+
+    setDeletingBatch(targetBatchId);
+    setMaintenanceError("");
+    setMaintenanceResult(null);
+
+    try {
+      const response = await fetch(`/api/admin/batches/${encodeURIComponent(targetBatchId)}`, {
+        method: "DELETE",
+      });
+      const body = (await response.json()) as Record<string, unknown>;
+      if (!response.ok) {
+        throw new Error(typeof body.error === "string" ? body.error : "Delete failed");
+      }
+      setMaintenanceResult(body);
+    } catch (error) {
+      setMaintenanceError(error instanceof Error ? error.message : "Delete failed");
+    } finally {
+      setDeletingBatch("");
+    }
+  }
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-6 text-slate-950 sm:px-6 lg:px-8">
@@ -79,6 +154,81 @@ export function AdminShell() {
           </div>
         ) : (
           <>
+            <Panel title="Database Maintenance">
+              <div className="grid gap-4 lg:grid-cols-[1fr_0.8fr]">
+                <div className="space-y-4">
+                  <label className="block text-sm font-medium text-slate-700" htmlFor="jsonl-upload">
+                    JSONL file
+                  </label>
+                  <input
+                    id="jsonl-upload"
+                    className="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 file:mr-3 file:rounded-md file:border-0 file:bg-slate-950 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white"
+                    type="file"
+                    accept=".jsonl,application/json,text/plain"
+                    onChange={(event) => void loadImportFile(event.target.files?.[0])}
+                  />
+                  {fileName ? <div className="text-sm text-slate-500">{fileName}</div> : null}
+
+                  <div className="grid gap-3 sm:grid-cols-[1fr_220px]">
+                    <label className="block text-sm font-medium text-slate-700" htmlFor="batch-id">
+                      Batch ID
+                      <input
+                        id="batch-id"
+                        className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                        value={batchId}
+                        onChange={(event) => setBatchId(event.target.value)}
+                      />
+                    </label>
+                    <label className="block text-sm font-medium text-slate-700" htmlFor="knowledge-type">
+                      Type
+                      <select
+                        id="knowledge-type"
+                        className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                        value={knowledgeType}
+                        onChange={(event) => setKnowledgeType(event.target.value as KnowledgeType)}
+                      >
+                        <option value="insurance_policy">Insurance policy</option>
+                        <option value="sop">SOP</option>
+                        <option value="shop_doc">Shop doc</option>
+                        <option value="reference">Reference</option>
+                      </select>
+                    </label>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-emerald-600 disabled:cursor-not-allowed disabled:opacity-50"
+                      disabled={maintenanceBusy || !fileContent}
+                      type="button"
+                      onClick={() => void runImport(true)}
+                    >
+                      Dry Run
+                    </button>
+                    <button
+                      className="rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+                      disabled={maintenanceBusy || !fileContent}
+                      type="button"
+                      onClick={() => void runImport(false)}
+                    >
+                      {maintenanceBusy ? "Working..." : "Import"}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  {maintenanceError ? (
+                    <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800">{maintenanceError}</div>
+                  ) : maintenanceResult ? (
+                    <pre className="max-h-80 overflow-auto rounded-md border border-slate-200 bg-slate-950 p-4 text-xs leading-5 text-white">
+                      {JSON.stringify(maintenanceResult, null, 2)}
+                    </pre>
+                  ) : (
+                    <EmptyMessage>Maintenance results will appear here.</EmptyMessage>
+                  )}
+                </div>
+              </div>
+            </Panel>
+
             <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <Metric label="Sources" value={overview.sourceCount} />
               <Metric label="Chunks" value={overview.chunkCount} />
@@ -104,9 +254,21 @@ export function AdminShell() {
                   <div className="space-y-3">
                     {overview.batches.map((batch) => (
                       <div key={batch.batchId} className="rounded-md border border-slate-200 bg-slate-50 p-3 text-sm">
-                        <div className="font-semibold text-slate-950">{batch.batchId}</div>
-                        <div className="mt-1 text-slate-600">
-                          {batch.sources} sources, {batch.chunks} chunks, imported {formatDate(batch.importedAt)}
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <div className="font-semibold text-slate-950">{batch.batchId}</div>
+                            <div className="mt-1 text-slate-600">
+                              {batch.sources} sources, {batch.chunks} chunks, imported {formatDate(batch.importedAt)}
+                            </div>
+                          </div>
+                          <button
+                            className="rounded-md border border-red-200 bg-white px-3 py-1.5 text-xs font-semibold text-red-700 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                            disabled={Boolean(deletingBatch)}
+                            type="button"
+                            onClick={() => void deleteBatch(batch.batchId)}
+                          >
+                            {deletingBatch === batch.batchId ? "Deleting..." : "Delete"}
+                          </button>
                         </div>
                       </div>
                     ))}
@@ -125,7 +287,7 @@ export function AdminShell() {
                       <div key={`${query.createdAt}-${query.question}`} className="rounded-md border border-slate-200 p-3 text-sm">
                         <div className="font-medium text-slate-950">{query.question}</div>
                         <div className="mt-1 text-slate-600">
-                          {formatDate(query.createdAt)} · {query.resultCount} results · {query.usedAi ? "AI used" : "Fallback"}
+                          {formatDate(query.createdAt)} - {query.resultCount} results - {query.usedAi ? "AI used" : "Fallback"}
                         </div>
                         {query.warnings.length ? <div className="mt-1 text-amber-700">{query.warnings.join(", ")}</div> : null}
                       </div>
@@ -212,6 +374,10 @@ function Panel({ children, title }: { children: React.ReactNode; title: string }
 
 function EmptyMessage({ children }: { children: React.ReactNode }) {
   return <div className="rounded-md border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">{children}</div>;
+}
+
+function defaultBatchId() {
+  return `public-safe-${new Date().toISOString().slice(0, 10)}`;
 }
 
 function formatDate(value: number) {

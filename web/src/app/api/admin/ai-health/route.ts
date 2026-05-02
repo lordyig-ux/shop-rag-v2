@@ -1,26 +1,12 @@
-import { auth, clerkClient } from "@clerk/nextjs/server";
-
 import { generateOllamaAnswer } from "@/lib/ai/ollama";
 import type { AdminAiHealth } from "@/lib/admin/contracts";
-import { isAllowedAdminEmail } from "@/lib/auth/adminAccess";
-import { isClerkConfigured } from "@/lib/auth/clerkConfig";
-import { getPrimaryEmailFromClerkUser } from "@/lib/auth/clerkUserEmail";
+import { adminAccessErrorResponse, requireAdminAccess } from "@/lib/auth/requireAdminAccess";
 import type { EvidenceChunk } from "@/lib/search/contracts";
 
 export async function GET() {
-  if (isClerkConfigured()) {
-    const { userId } = await auth();
-    if (!userId) {
-      return Response.json({ error: "Admin sign-in required" }, { status: 401 });
-    }
-
-    const client = await clerkClient();
-    const user = await client.users.getUser(userId);
-    const email = getPrimaryEmailFromClerkUser(user);
-
-    if (!isAllowedAdminEmail(email)) {
-      return Response.json({ error: "Admin email domain required" }, { status: 403 });
-    }
+  const access = await requireAdminAccess();
+  if (!access.ok) {
+    return adminAccessErrorResponse(access);
   }
 
   const host = process.env.OLLAMA_HOST || "https://ollama.com";

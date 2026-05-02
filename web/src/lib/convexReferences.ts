@@ -40,4 +40,18 @@ export const convexFunctions = {
       chunksUpserted: number;
     }
   >("knowledge:upsertImportedChunks"),
+
+  deleteImportedBatchPage: makeFunctionReference<
+    "mutation",
+    {
+      importSecret?: string;
+      batchId: string;
+      limit?: number;
+    },
+    {
+      chunksDeleted: number;
+      sourcesDeleted: number;
+      hasMore: boolean;
+    }
+  >("knowledge:deleteImportedBatchPage"),
 };

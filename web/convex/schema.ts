@@ -24,6 +24,7 @@ export default defineSchema({
   })
     .index("by_sourceId", ["sourceId"])
     .index("by_knowledgeType", ["knowledgeType"])
+    .index("by_importedBatchId", ["importedBatchId"])
     .searchIndex("search_title", {
       searchField: "title",
       filterFields: ["knowledgeType", "importedBatchId"],
@@ -48,6 +49,7 @@ export default defineSchema({
     .index("by_chunkId", ["chunkId"])
     .index("by_sourceId", ["sourceId"])
     .index("by_knowledgeType", ["knowledgeType"])
+    .index("by_importedBatchId", ["importedBatchId"])
     .searchIndex("search_text", {
       searchField: "text",
       filterFields: ["knowledgeType", "importedBatchId"],

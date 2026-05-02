@@ -97,6 +97,46 @@ export const upsertImportedChunks = mutationGeneric({
   },
 });
 
+export const deleteImportedBatchPage = mutationGeneric({
+  args: {
+    importSecret: v.optional(v.string()),
+    batchId: v.string(),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    assertImportSecret(args.importSecret);
+
+    const batchId = args.batchId.trim();
+    if (!batchId) {
+      throw new Error("Batch ID is required");
+    }
+
+    const limit = Math.max(1, Math.min(args.limit || 200, 500));
+    const chunks = await ctx.db
+      .query("chunks")
+      .withIndex("by_importedBatchId", (q) => q.eq("importedBatchId", batchId))
+      .take(limit);
+    const sources = await ctx.db
+      .query("sources")
+      .withIndex("by_importedBatchId", (q) => q.eq("importedBatchId", batchId))
+      .take(limit);
+
+    for (const chunk of chunks) {
+      await ctx.db.delete(chunk._id);
+    }
+
+    for (const source of sources) {
+      await ctx.db.delete(source._id);
+    }
+
+    return {
+      chunksDeleted: chunks.length,
+      sourcesDeleted: sources.length,
+      hasMore: chunks.length === limit || sources.length === limit,
+    };
+  },
+});
+
 export const search = queryGeneric({
   args: {
     question: v.string(),

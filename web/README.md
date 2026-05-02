@@ -78,6 +78,7 @@ npm run build
 Deploy the `web/` directory to Vercel. Configure:
 
 - `CONVEX_DEPLOY_KEY`
+- `KNOWLEDGE_IMPORT_SECRET`
 - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
 - `CLERK_SECRET_KEY`
 - `OLLAMA_API_KEY`
@@ -90,6 +91,15 @@ Use this Vercel build command so Convex deploys production functions and provide
 npx convex deploy --cmd-url-env-var-name NEXT_PUBLIC_CONVEX_URL --cmd "npm run build"
 ```
 
-Configure `KNOWLEDGE_IMPORT_SECRET` in the Convex production deployment, not Vercel, before importing production chunks.
+Configure the same `KNOWLEDGE_IMPORT_SECRET` in both the Convex production deployment and Vercel. Convex uses it to reject unauthorized writes, and Vercel uses it from protected admin routes when importing or deleting batches.
+
+## Admin Maintenance
+
+After Clerk is configured, `/admin` supports:
+
+- JSONL dry-runs
+- JSONL imports into Convex
+- batch deletion for rollback/replacement
+- production source/chunk/search/AI status checks
 
 The Ollama defaults target the direct Ollama Cloud API model name `gpt-oss:120b`. If you run through a local Ollama app instead, use the cloud tag appropriate to that host, such as `gpt-oss:120b-cloud`.
