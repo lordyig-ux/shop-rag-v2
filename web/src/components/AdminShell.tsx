@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import type { AdminAiHealth, AdminOverview, AdminSignal } from "@/lib/admin/contracts";
 import { deriveAdminSignals } from "@/lib/admin/adminStatus";
+import type { IcbcCheckResult } from "@/lib/admin/icbcMaintenance";
 import { convexFunctions } from "@/lib/convexReferences";
 import type { KnowledgeType } from "@/lib/knowledge/normalizeChunk";
 
@@ -16,10 +17,20 @@ const typeLabels: Record<keyof AdminOverview["chunksByKnowledgeType"], string> =
   reference: "Reference",
 };
 
+type ToolTab = "icbc" | "shop_docs" | "mitchell_ceg";
+type IcbcCheckUiResult = IcbcCheckResult & {
+  logStored?: boolean;
+  logWarning?: string;
+};
+
 export function AdminShell() {
   const overview = useQuery(convexFunctions.adminOverview, {});
   const [aiHealth, setAiHealth] = useState<AdminAiHealth | null>(null);
   const [aiError, setAiError] = useState("");
+  const [activeTool, setActiveTool] = useState<ToolTab>("icbc");
+  const [icbcBusy, setIcbcBusy] = useState(false);
+  const [icbcError, setIcbcError] = useState("");
+  const [icbcResult, setIcbcResult] = useState<IcbcCheckUiResult | null>(null);
   const [batchId, setBatchId] = useState(defaultBatchId());
   const [fileName, setFileName] = useState("");
   const [fileContent, setFileContent] = useState("");
@@ -56,6 +67,7 @@ export function AdminShell() {
   }, []);
 
   const signals = useMemo(() => deriveAdminSignals(overview, aiHealth), [overview, aiHealth]);
+  const latestIcbcRun = overview?.maintenanceRuns.find((run) => run.jobType === "icbc_check") || null;
 
   async function loadImportFile(file: File | undefined) {
     setMaintenanceError("");
@@ -98,6 +110,25 @@ export function AdminShell() {
     }
   }
 
+  async function runIcbcCheck() {
+    setIcbcBusy(true);
+    setIcbcError("");
+    setIcbcResult(null);
+
+    try {
+      const response = await fetch("/api/admin/icbc/check", { method: "GET" });
+      const body = (await response.json()) as IcbcCheckUiResult | { error?: string };
+      if (!response.ok) {
+        throw new Error("error" in body && body.error ? body.error : "ICBC update check failed");
+      }
+      setIcbcResult(body as IcbcCheckUiResult);
+    } catch (error) {
+      setIcbcError(error instanceof Error ? error.message : "ICBC update check failed");
+    } finally {
+      setIcbcBusy(false);
+    }
+  }
+
   async function deleteBatch(targetBatchId: string) {
     if (!window.confirm(`Delete all chunks and sources in batch "${targetBatchId}"?`)) {
       return;
@@ -129,9 +160,9 @@ export function AdminShell() {
         <header className="flex flex-col gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">Terminal Auto Body</p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-normal sm:text-4xl">Admin Status</h1>
+            <h1 className="mt-2 text-3xl font-semibold tracking-normal sm:text-4xl">Admin Dashboard</h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-              Read-only production checks for the public-safe knowledge base.
+              Production maintenance for the public-safe knowledge base.
             </p>
           </div>
           <Link
@@ -154,7 +185,100 @@ export function AdminShell() {
           </div>
         ) : (
           <>
-            <Panel title="Database Maintenance">
+            <Panel title="Knowledge Base Tools">
+              <div className="flex flex-wrap gap-2">
+                <ToolTabButton active={activeTool === "icbc"} onClick={() => setActiveTool("icbc")}>
+                  ICBC
+                </ToolTabButton>
+                <ToolTabButton active={activeTool === "shop_docs"} onClick={() => setActiveTool("shop_docs")}>
+                  Shop Docs
+                </ToolTabButton>
+                <ToolTabButton active={activeTool === "mitchell_ceg"} onClick={() => setActiveTool("mitchell_ceg")}>
+                  Mitchell CEG
+                </ToolTabButton>
+              </div>
+
+              {activeTool === "icbc" ? (
+                <div className="mt-5 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="text-base font-semibold text-slate-950">ICBC Maintenance</h3>
+                      <p className="mt-2 text-sm leading-6 text-slate-600">
+                        Compare the ICBC navigation map with the sources currently stored in Convex.
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        className="rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+                        disabled={icbcBusy}
+                        type="button"
+                        onClick={() => void runIcbcCheck()}
+                      >
+                        {icbcBusy ? "Checking..." : "Check ICBC Updates"}
+                      </button>
+                      <button
+                        className="rounded-md border border-slate-300 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-500"
+                        disabled
+                        type="button"
+                      >
+                        Run Full ICBC Refresh
+                      </button>
+                    </div>
+
+                    <div className="space-y-1 text-sm text-slate-600">
+                      <div>
+                        Live collection: <span className="font-semibold text-slate-950">{overview.batches[0]?.batchId || "No batch"}</span>
+                      </div>
+                      <div>
+                        Last checked:{" "}
+                        <span className="font-semibold text-slate-950">
+                          {latestIcbcRun ? formatDate(latestIcbcRun.createdAt) : "Not checked from this admin yet"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <IcbcCheckResultPanel result={icbcResult} error={icbcError} latestRun={latestIcbcRun} />
+                </div>
+              ) : null}
+
+              {activeTool === "shop_docs" ? (
+                <div className="mt-5 space-y-4">
+                  <h3 className="text-base font-semibold text-slate-950">Shop Docs Ingestion</h3>
+                  <p className="max-w-3xl text-sm leading-6 text-slate-600">
+                    The hosted version will use a secure upload inbox instead of reading a Windows folder directly.
+                    Use the manual JSONL import below until the file inbox is added.
+                  </p>
+                  <button
+                    className="rounded-md border border-slate-300 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-500"
+                    disabled
+                    type="button"
+                  >
+                    Import Shop Docs
+                  </button>
+                </div>
+              ) : null}
+
+              {activeTool === "mitchell_ceg" ? (
+                <div className="mt-5 space-y-4">
+                  <h3 className="text-base font-semibold text-slate-950">Mitchell CEG Maintenance</h3>
+                  <p className="max-w-3xl text-sm leading-6 text-slate-600">
+                    The hosted crawler will refresh the Mitchell CEG public pages and import them as shop docs in the
+                    next maintenance slice.
+                  </p>
+                  <button
+                    className="rounded-md border border-slate-300 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-500"
+                    disabled
+                    type="button"
+                  >
+                    Refresh Mitchell CEG
+                  </button>
+                </div>
+              ) : null}
+            </Panel>
+
+            <Panel title="Manual JSONL Import">
               <div className="grid gap-4 lg:grid-cols-[1fr_0.8fr]">
                 <div className="space-y-4">
                   <label className="block text-sm font-medium text-slate-700" htmlFor="jsonl-upload">
@@ -338,6 +462,109 @@ export function AdminShell() {
   );
 }
 
+function IcbcCheckResultPanel({
+  error,
+  latestRun,
+  result,
+}: {
+  error: string;
+  latestRun: AdminOverview["maintenanceRuns"][number] | null;
+  result: IcbcCheckUiResult | null;
+}) {
+  if (error) {
+    return <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800">{error}</div>;
+  }
+
+  if (!result) {
+    return latestRun ? (
+      <div className="rounded-md border border-slate-200 bg-slate-50 p-4 text-sm">
+        <div className="font-semibold text-slate-950">Latest ICBC check</div>
+        <div className="mt-1 text-slate-600">{latestRun.summary}</div>
+        <div className="mt-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          {latestRun.status} - {formatDate(latestRun.createdAt)}
+        </div>
+      </div>
+    ) : (
+      <EmptyMessage>ICBC check results will appear here.</EmptyMessage>
+    );
+  }
+
+  const comparison = result.comparison;
+
+  return (
+    <div className="space-y-4">
+      <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <span
+            className={`rounded-md px-2 py-1 text-xs font-semibold uppercase tracking-wide ${
+              result.status === "up_to_date" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"
+            }`}
+          >
+            {result.status === "up_to_date" ? "Up to date" : "Updates found"}
+          </span>
+          <span className="text-sm text-slate-500">{formatDate(result.checkedAt)}</span>
+        </div>
+        <p className="mt-3 text-sm leading-6 text-slate-700">{result.summary}</p>
+        {result.logWarning ? <p className="mt-2 text-sm text-amber-700">{result.logWarning}</p> : null}
+      </div>
+
+      <div className="grid gap-2 sm:grid-cols-3">
+        <CompactMetric label="ICBC topics" value={comparison.totalLatest} />
+        <CompactMetric label="Current sources" value={comparison.totalCurrent} />
+        <CompactMetric label="Matched" value={comparison.unchangedCount} />
+        <CompactMetric label="New topics" value={comparison.missingFromKnowledgeBase.length} />
+        <CompactMetric label="Stale sources" value={comparison.staleInKnowledgeBase.length} />
+        <CompactMetric label="Title changes" value={comparison.titleChanges.length} />
+      </div>
+
+      {comparison.missingFromKnowledgeBase.length ? (
+        <ResultList title="New ICBC topics">
+          {comparison.missingFromKnowledgeBase.slice(0, 8).map((entry) => (
+            <li key={entry.topicId}>
+              <a className="font-medium text-emerald-700 hover:text-emerald-900" href={entry.sourceUrl}>
+                {entry.title}
+              </a>
+            </li>
+          ))}
+        </ResultList>
+      ) : null}
+
+      {comparison.staleInKnowledgeBase.length ? (
+        <ResultList title="Sources no longer in the ICBC nav">
+          {comparison.staleInKnowledgeBase.slice(0, 8).map((source) => (
+            <li key={`${source.importedBatchId}-${source.sourceRef}`}>{source.title}</li>
+          ))}
+        </ResultList>
+      ) : null}
+    </div>
+  );
+}
+
+function ToolTabButton({
+  active,
+  children,
+  onClick,
+}: {
+  active: boolean;
+  children: React.ReactNode;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      aria-pressed={active}
+      className={`rounded-md border px-4 py-2 text-sm font-semibold ${
+        active
+          ? "border-red-600 bg-red-600 text-white"
+          : "border-slate-300 bg-white text-slate-700 hover:border-red-500 hover:text-slate-950"
+      }`}
+      type="button"
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+}
+
 function SignalCard({ signal }: { signal: AdminSignal }) {
   const toneClass =
     signal.tone === "good"
@@ -350,6 +577,15 @@ function SignalCard({ signal }: { signal: AdminSignal }) {
     <div className={`rounded-lg border p-4 ${toneClass}`}>
       <div className="text-sm font-semibold">{signal.label}</div>
       <div className="mt-1 text-sm">{signal.message}</div>
+    </div>
+  );
+}
+
+function CompactMetric({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-md border border-slate-200 bg-white p-3">
+      <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</div>
+      <div className="mt-1 text-lg font-semibold text-slate-950">{value.toLocaleString()}</div>
     </div>
   );
 }
@@ -374,6 +610,15 @@ function Panel({ children, title }: { children: React.ReactNode; title: string }
 
 function EmptyMessage({ children }: { children: React.ReactNode }) {
   return <div className="rounded-md border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">{children}</div>;
+}
+
+function ResultList({ children, title }: { children: React.ReactNode; title: string }) {
+  return (
+    <div className="rounded-md border border-slate-200 bg-white p-4 text-sm">
+      <div className="font-semibold text-slate-950">{title}</div>
+      <ul className="mt-2 list-disc space-y-1 pl-5 text-slate-700">{children}</ul>
+    </div>
+  );
 }
 
 function defaultBatchId() {

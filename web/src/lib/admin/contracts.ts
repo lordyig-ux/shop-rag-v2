@@ -29,6 +29,15 @@ export type AdminSourceSample = {
   importedAt: number;
 };
 
+export type AdminMaintenanceRun = {
+  jobType: "icbc_check" | "icbc_refresh" | "mitchell_ceg_refresh" | "shop_docs_import";
+  status: "running" | "succeeded" | "failed";
+  summary: string;
+  detailJson: string;
+  createdByEmail: string;
+  createdAt: number;
+};
+
 export type AdminOverview = {
   sourceCount: number;
   chunkCount: number;
@@ -39,6 +48,7 @@ export type AdminOverview = {
   batches: AdminBatchSummary[];
   recentQueries: AdminRecentQuery[];
   sourceSamples: AdminSourceSample[];
+  maintenanceRuns: AdminMaintenanceRun[];
 };
 
 export type AdminAiHealth = {

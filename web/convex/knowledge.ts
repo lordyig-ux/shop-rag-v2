@@ -41,6 +41,13 @@ const chunkInput = v.object({
 
 const searchKnowledgeType = v.union(v.literal("all"), knowledgeType);
 type KnowledgeTypeValue = "sop" | "insurance_policy" | "shop_doc" | "reference";
+const maintenanceJobType = v.union(
+  v.literal("icbc_check"),
+  v.literal("icbc_refresh"),
+  v.literal("mitchell_ceg_refresh"),
+  v.literal("shop_docs_import"),
+);
+const maintenanceStatus = v.union(v.literal("running"), v.literal("succeeded"), v.literal("failed"));
 
 export const upsertImportedChunks = mutationGeneric({
   args: {
@@ -185,10 +192,11 @@ export const search = queryGeneric({
 export const adminOverview = queryGeneric({
   args: {},
   handler: async (ctx) => {
-    const [sources, chunks, recentQueries] = await Promise.all([
+    const [sources, chunks, recentQueries, recentMaintenanceRuns] = await Promise.all([
       ctx.db.query("sources").collect(),
       ctx.db.query("chunks").collect(),
       ctx.db.query("queryLogs").withIndex("by_createdAt").order("desc").take(12),
+      ctx.db.query("maintenanceRuns").withIndex("by_createdAt").order("desc").take(8),
     ]);
 
     const sourcesByKnowledgeType = countByKnowledgeType(sources);
@@ -255,7 +263,57 @@ export const adminOverview = queryGeneric({
         createdAt: query.createdAt,
       })),
       sourceSamples,
+      maintenanceRuns: recentMaintenanceRuns.map((run) => ({
+        jobType: run.jobType,
+        status: run.status,
+        summary: run.summary,
+        detailJson: run.detailJson,
+        createdByEmail: run.createdByEmail,
+        createdAt: run.createdAt,
+      })),
     };
+  },
+});
+
+export const icbcSourceSnapshot = queryGeneric({
+  args: {},
+  handler: async (ctx) => {
+    const sources = await ctx.db.query("sources").collect();
+
+    return sources
+      .filter((source) => isIcbcSource(source.sourceRef, source.sourceUrl))
+      .map((source) => ({
+        title: source.title,
+        sourceRef: source.sourceRef,
+        sourceUrl: source.sourceUrl,
+        importedBatchId: source.importedBatchId,
+        importedAt: source.importedAt,
+      }));
+  },
+});
+
+export const recordMaintenanceRun = mutationGeneric({
+  args: {
+    importSecret: v.optional(v.string()),
+    jobType: maintenanceJobType,
+    status: maintenanceStatus,
+    summary: v.string(),
+    detailJson: v.string(),
+    createdByEmail: v.string(),
+  },
+  handler: async (ctx, args) => {
+    assertImportSecret(args.importSecret);
+
+    await ctx.db.insert("maintenanceRuns", {
+      jobType: args.jobType,
+      status: args.status,
+      summary: args.summary,
+      detailJson: args.detailJson,
+      createdByEmail: args.createdByEmail,
+      createdAt: Date.now(),
+    });
+
+    return null;
   },
 });
 
@@ -291,4 +349,14 @@ function countByKnowledgeType<T extends { knowledgeType: KnowledgeTypeValue }>(r
   }
 
   return counts;
+}
+
+function isIcbcSource(sourceRef: string, sourceUrl: string | null) {
+  const values = [sourceRef, sourceUrl || ""].map((value) => value.toLowerCase());
+  return values.some(
+    (value) =>
+      value.includes("mdp.partners.icbc.com/topic") ||
+      value.includes("mdp.partners.icbc.com/topics") ||
+      value.includes("damg-"),
+  );
 }

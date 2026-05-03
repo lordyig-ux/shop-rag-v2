@@ -23,6 +23,7 @@ const overview: AdminOverview = {
   batches: [],
   recentQueries: [],
   sourceSamples: [],
+  maintenanceRuns: [],
 };
 
 const aiHealth: AdminAiHealth = {

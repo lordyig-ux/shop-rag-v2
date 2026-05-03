@@ -8,6 +8,15 @@ const knowledgeType = v.union(
   v.literal("reference"),
 );
 
+const maintenanceJobType = v.union(
+  v.literal("icbc_check"),
+  v.literal("icbc_refresh"),
+  v.literal("mitchell_ceg_refresh"),
+  v.literal("shop_docs_import"),
+);
+
+const maintenanceStatus = v.union(v.literal("running"), v.literal("succeeded"), v.literal("failed"));
+
 export default defineSchema({
   sources: defineTable({
     sourceId: v.string(),
@@ -79,4 +88,15 @@ export default defineSchema({
     comment: v.optional(v.string()),
     createdAt: v.number(),
   }).index("by_createdAt", ["createdAt"]),
+
+  maintenanceRuns: defineTable({
+    jobType: maintenanceJobType,
+    status: maintenanceStatus,
+    summary: v.string(),
+    detailJson: v.string(),
+    createdByEmail: v.string(),
+    createdAt: v.number(),
+  })
+    .index("by_createdAt", ["createdAt"])
+    .index("by_jobType_createdAt", ["jobType", "createdAt"]),
 });

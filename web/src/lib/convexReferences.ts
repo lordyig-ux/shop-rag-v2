@@ -1,6 +1,7 @@
 import { makeFunctionReference } from "convex/server";
 
 import type { AdminOverview } from "@/lib/admin/contracts";
+import type { IcbcSourceSnapshot } from "@/lib/admin/icbcMaintenance";
 import type { NormalizedChunkRecord } from "@/lib/knowledge/normalizeChunk";
 import type { EvidenceChunk, KnowledgeFilter } from "@/lib/search/contracts";
 
@@ -17,6 +18,10 @@ export const convexFunctions = {
   >("knowledge:search"),
 
   adminOverview: makeFunctionReference<"query", Record<string, never>, AdminOverview>("knowledge:adminOverview"),
+
+  icbcSourceSnapshot: makeFunctionReference<"query", Record<string, never>, IcbcSourceSnapshot[]>(
+    "knowledge:icbcSourceSnapshot",
+  ),
 
   logQuery: makeFunctionReference<
     "mutation",
@@ -54,4 +59,17 @@ export const convexFunctions = {
       hasMore: boolean;
     }
   >("knowledge:deleteImportedBatchPage"),
+
+  recordMaintenanceRun: makeFunctionReference<
+    "mutation",
+    {
+      importSecret?: string;
+      jobType: "icbc_check" | "icbc_refresh" | "mitchell_ceg_refresh" | "shop_docs_import";
+      status: "running" | "succeeded" | "failed";
+      summary: string;
+      detailJson: string;
+      createdByEmail: string;
+    },
+    null
+  >("knowledge:recordMaintenanceRun"),
 };
