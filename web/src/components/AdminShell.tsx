@@ -8,6 +8,7 @@ import type { AdminAiHealth, AdminOverview, AdminSignal } from "@/lib/admin/cont
 import { deriveAdminSignals } from "@/lib/admin/adminStatus";
 import type { IcbcCheckResult } from "@/lib/admin/icbcMaintenance";
 import type { IcbcRefreshResult } from "@/lib/admin/icbcRefresh";
+import { jsonResponseErrorMessage, readJsonResponse } from "@/lib/admin/jsonResponse";
 import type { MitchellCegRefreshResult } from "@/lib/admin/mitchellCeg";
 import { COLLISION_PROGRAM_GUIDE_URL, type ShopDocsImportResult } from "@/lib/admin/shopDocs";
 import { convexFunctions } from "@/lib/convexReferences";
@@ -62,10 +63,11 @@ export function AdminShell() {
 
     fetch("/api/admin/ai-health")
       .then(async (response) => {
+        const health = await readJsonResponse<AdminAiHealth>(response, "AI health check failed");
         if (!response.ok) {
-          throw new Error(`${response.status} ${response.statusText}`);
+          throw new Error(jsonResponseErrorMessage(health, "AI health check failed"));
         }
-        return (await response.json()) as AdminAiHealth;
+        return health;
       })
       .then((health) => {
         if (active) {
@@ -118,9 +120,9 @@ export function AdminShell() {
           dryRun,
         }),
       });
-      const body = (await response.json()) as Record<string, unknown>;
+      const body = await readJsonResponse<Record<string, unknown>>(response, "Import failed");
       if (!response.ok) {
-        throw new Error(typeof body.error === "string" ? body.error : "Import failed");
+        throw new Error(jsonResponseErrorMessage(body, "Import failed"));
       }
       setMaintenanceResult(body);
     } catch (error) {
@@ -138,9 +140,9 @@ export function AdminShell() {
 
     try {
       const response = await fetch("/api/admin/icbc/check", { method: "GET" });
-      const body = (await response.json()) as IcbcCheckUiResult | { error?: string };
+      const body = await readJsonResponse<IcbcCheckUiResult | { error?: string }>(response, "ICBC update check failed");
       if (!response.ok) {
-        throw new Error("error" in body && body.error ? body.error : "ICBC update check failed");
+        throw new Error(jsonResponseErrorMessage(body, "ICBC update check failed"));
       }
       setIcbcResult(body as IcbcCheckUiResult);
     } catch (error) {
@@ -166,9 +168,9 @@ export function AdminShell() {
 
     try {
       const response = await fetch("/api/admin/icbc/refresh", { method: "POST" });
-      const body = (await response.json()) as IcbcRefreshUiResult | { error?: string };
+      const body = await readJsonResponse<IcbcRefreshUiResult | { error?: string }>(response, "ICBC refresh failed");
       if (!response.ok) {
-        throw new Error("error" in body && body.error ? body.error : "ICBC refresh failed");
+        throw new Error(jsonResponseErrorMessage(body, "ICBC refresh failed"));
       }
       setIcbcRefreshResult(body as IcbcRefreshUiResult);
     } catch (error) {
@@ -189,9 +191,9 @@ export function AdminShell() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ urls: shopDocsUrls }),
       });
-      const body = (await response.json()) as ShopDocsUiResult | { error?: string };
+      const body = await readJsonResponse<ShopDocsUiResult | { error?: string }>(response, "Shop Docs import failed");
       if (!response.ok) {
-        throw new Error("error" in body && body.error ? body.error : "Shop Docs import failed");
+        throw new Error(jsonResponseErrorMessage(body, "Shop Docs import failed"));
       }
       setShopDocsResult(body as ShopDocsUiResult);
     } catch (error) {
@@ -208,9 +210,12 @@ export function AdminShell() {
 
     try {
       const response = await fetch("/api/admin/mitchell-ceg/refresh", { method: "POST" });
-      const body = (await response.json()) as MitchellCegRefreshResult | { error?: string };
+      const body = await readJsonResponse<MitchellCegRefreshResult | { error?: string }>(
+        response,
+        "Mitchell CEG refresh failed",
+      );
       if (!response.ok) {
-        throw new Error("error" in body && body.error ? body.error : "Mitchell CEG refresh failed");
+        throw new Error(jsonResponseErrorMessage(body, "Mitchell CEG refresh failed"));
       }
       setMitchellResult(body as MitchellCegRefreshResult);
     } catch (error) {
@@ -233,9 +238,9 @@ export function AdminShell() {
       const response = await fetch(`/api/admin/batches/${encodeURIComponent(targetBatchId)}`, {
         method: "DELETE",
       });
-      const body = (await response.json()) as Record<string, unknown>;
+      const body = await readJsonResponse<Record<string, unknown>>(response, "Delete failed");
       if (!response.ok) {
-        throw new Error(typeof body.error === "string" ? body.error : "Delete failed");
+        throw new Error(jsonResponseErrorMessage(body, "Delete failed"));
       }
       setMaintenanceResult(body);
     } catch (error) {
