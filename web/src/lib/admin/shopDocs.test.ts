@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   COLLISION_PROGRAM_GUIDE_URL,
   buildShopDocTextRecords,
+  shopDocsNoRecordsError,
   parseShopDocUrlImportRequest,
 } from "./shopDocs";
 
@@ -53,5 +54,20 @@ describe("buildShopDocTextRecords", () => {
       fileType: "html",
       knowledgeType: "shop_doc",
     });
+  });
+});
+
+describe("shopDocsNoRecordsError", () => {
+  it("includes the first skipped URL error so production PDF failures are visible", () => {
+    expect(
+      shopDocsNoRecordsError([
+        {
+          url: COLLISION_PROGRAM_GUIDE_URL,
+          error: "Cannot find module pdf.worker.mjs",
+        },
+      ]),
+    ).toBe(
+      `Shop Docs import failed: no records were extracted. First skipped URL: ${COLLISION_PROGRAM_GUIDE_URL} - Cannot find module pdf.worker.mjs`,
+    );
   });
 });

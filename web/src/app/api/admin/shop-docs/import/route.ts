@@ -11,8 +11,10 @@ import {
   buildShopDocPdfRecords,
   buildShopDocTextRecords,
   parseShopDocUrlImportRequest,
+  shopDocsNoRecordsError,
   type ShopDocsImportResult,
 } from "@/lib/admin/shopDocs";
+import { extractPdfTextPages } from "@/lib/admin/pdfText";
 import { adminAccessErrorResponse, requireAdminAccess } from "@/lib/auth/requireAdminAccess";
 import { convexFunctions } from "@/lib/convexReferences";
 import type { NormalizedChunkRecord } from "@/lib/knowledge/normalizeChunk";
@@ -66,7 +68,7 @@ export async function POST(request: Request) {
   }
 
   if (!records.length) {
-    const summary = `Shop Docs import failed: no records were extracted.`;
+    const summary = shopDocsNoRecordsError(skipped);
     await recordMaintenanceRun(client, importSecret, {
       createdByEmail: access.email,
       detail: { batchId, skipped },
@@ -117,23 +119,15 @@ async function fetchShopDocRecords(url: string, batchId: string) {
 
   if (looksLikePdf) {
     const data = Buffer.from(await response.arrayBuffer());
-    const { PDFParse } = await import("pdf-parse");
-    const parser = new PDFParse({ data });
-    try {
-      const infoResult = await parser.getInfo();
-      const textResult = await parser.getText();
-      const infoTitle = typeof infoResult.info?.Title === "string" ? infoResult.info.Title.trim() : "";
-      const title = normalizeTitle(infoTitle || titleFromUrl(url));
-      return buildShopDocPdfRecords({
-        batchId,
-        modifiedAt,
-        pages: textResult.pages.map((page) => ({ pageNumber: page.num, text: page.text })),
-        sourceUrl: url,
-        title,
-      });
-    } finally {
-      await parser.destroy();
-    }
+    const textResult = await extractPdfTextPages(data);
+    const title = normalizeTitle(textResult.title || titleFromUrl(url));
+    return buildShopDocPdfRecords({
+      batchId,
+      modifiedAt,
+      pages: textResult.pages,
+      sourceUrl: url,
+      title,
+    });
   }
 
   const rawText = await response.text();

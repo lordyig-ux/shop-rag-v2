@@ -18,6 +18,15 @@ export type ShopDocsImportResult = {
   summary: string;
 };
 
+export function shopDocsNoRecordsError(skipped: ShopDocsImportResult["skipped"]): string {
+  const firstSkipped = skipped[0];
+  if (!firstSkipped) {
+    return "Shop Docs import failed: no records were extracted.";
+  }
+
+  return `Shop Docs import failed: no records were extracted. First skipped URL: ${firstSkipped.url} - ${firstSkipped.error}`;
+}
+
 export function parseShopDocUrlImportRequest(input: unknown): ShopDocUrlImportRequest {
   if (!isRecord(input) || typeof input.urls !== "string") {
     return { ok: false, error: "Enter at least one public document URL." };
