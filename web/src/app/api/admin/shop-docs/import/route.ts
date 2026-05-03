@@ -1,4 +1,3 @@
-import { PDFParse } from "pdf-parse";
 import { ConvexHttpClient } from "convex/browser";
 
 import {
@@ -118,6 +117,7 @@ async function fetchShopDocRecords(url: string, batchId: string) {
 
   if (looksLikePdf) {
     const data = Buffer.from(await response.arrayBuffer());
+    const { PDFParse } = await import("pdf-parse");
     const parser = new PDFParse({ data });
     try {
       const infoResult = await parser.getInfo();
