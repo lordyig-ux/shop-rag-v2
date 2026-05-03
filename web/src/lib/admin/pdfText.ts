@@ -34,9 +34,11 @@ export async function extractPdfTextPages(
 export async function ensurePdfNodeGlobals() {
   const globalScope = globalThis as typeof globalThis & {
     DOMMatrix?: typeof DOMMatrix;
+    pdfjsWorker?: unknown;
   };
 
   globalScope.DOMMatrix ||= SimpleDOMMatrix as unknown as typeof DOMMatrix;
+  globalScope.pdfjsWorker ||= await import("pdfjs-dist/legacy/build/pdf.worker.mjs");
 }
 
 class SimpleDOMMatrix {

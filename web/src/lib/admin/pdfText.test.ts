@@ -31,20 +31,34 @@ describe("extractPdfTextPages", () => {
 });
 
 describe("ensurePdfNodeGlobals", () => {
-  it("installs DOMMatrix for PDF parsing in Node runtimes", async () => {
+  it("installs DOMMatrix and the PDF worker handler for PDF parsing in Node runtimes", async () => {
     const originalDomMatrix = globalThis.DOMMatrix;
+    const globalScope = globalThis as typeof globalThis & { pdfjsWorker?: unknown };
+    const originalPdfjsWorker = globalScope.pdfjsWorker;
 
     try {
       Reflect.deleteProperty(globalThis, "DOMMatrix");
+      Reflect.deleteProperty(globalScope, "pdfjsWorker");
 
       await ensurePdfNodeGlobals();
 
       expect(globalThis.DOMMatrix).toBeDefined();
+      expect(globalScope.pdfjsWorker).toEqual(
+        expect.objectContaining({
+          WorkerMessageHandler: expect.any(Function),
+        }),
+      );
     } finally {
       if (originalDomMatrix) {
         globalThis.DOMMatrix = originalDomMatrix;
       } else {
         Reflect.deleteProperty(globalThis, "DOMMatrix");
+      }
+
+      if (originalPdfjsWorker) {
+        globalScope.pdfjsWorker = originalPdfjsWorker;
+      } else {
+        Reflect.deleteProperty(globalScope, "pdfjsWorker");
       }
     }
   });
