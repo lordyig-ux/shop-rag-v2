@@ -102,6 +102,10 @@ After Clerk is configured, `/admin` supports:
 - batch deletion for rollback/replacement
 - ICBC update checks against the public navigation map
 - full ICBC refreshes that scrape public ICBC topics, import a fresh batch, then remove older ICBC records
+- Mitchell CEG refreshes that crawl public CEG P-pages and import them as shop docs
+- Shop Docs URL imports for public PDFs, HTML, Markdown, and text documents
 - production source/chunk/search/AI status checks
+
+PDF imports keep page-aware source links by storing search result URLs as `source.pdf#page=N`.
 
 The Ollama defaults target the direct Ollama Cloud API model name `gpt-oss:120b`. If you run through a local Ollama app instead, use the cloud tag appropriate to that host, such as `gpt-oss:120b-cloud`.

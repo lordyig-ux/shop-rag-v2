@@ -182,6 +182,86 @@ export const deleteIcbcSourcesExceptBatchPage = mutationGeneric({
   },
 });
 
+export const deleteSourcesBySourceRefExceptBatchPage = mutationGeneric({
+  args: {
+    importSecret: v.optional(v.string()),
+    keepBatchId: v.string(),
+    sourceRefs: v.array(v.string()),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    assertImportSecret(args.importSecret);
+
+    const keepBatchId = args.keepBatchId.trim();
+    const sourceRefs = new Set(args.sourceRefs.map((sourceRef) => sourceRef.trim()).filter(Boolean));
+    if (!keepBatchId || !sourceRefs.size) {
+      throw new Error("Batch ID and source refs are required");
+    }
+
+    const limit = Math.max(1, Math.min(args.limit || 200, 500));
+    const chunks = (await ctx.db.query("chunks").collect())
+      .filter((chunk) => chunk.importedBatchId !== keepBatchId && sourceRefs.has(chunk.sourceRef))
+      .slice(0, limit);
+    const sources = (await ctx.db.query("sources").collect())
+      .filter((source) => source.importedBatchId !== keepBatchId && sourceRefs.has(source.sourceRef))
+      .slice(0, limit);
+
+    for (const chunk of chunks) {
+      await ctx.db.delete(chunk._id);
+    }
+
+    for (const source of sources) {
+      await ctx.db.delete(source._id);
+    }
+
+    return {
+      chunksDeleted: chunks.length,
+      sourcesDeleted: sources.length,
+      hasMore: chunks.length === limit || sources.length === limit,
+    };
+  },
+});
+
+export const deleteSourcesByUrlPrefixExceptBatchPage = mutationGeneric({
+  args: {
+    importSecret: v.optional(v.string()),
+    keepBatchId: v.string(),
+    urlPrefix: v.string(),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    assertImportSecret(args.importSecret);
+
+    const keepBatchId = args.keepBatchId.trim();
+    const urlPrefix = args.urlPrefix.trim().toLowerCase();
+    if (!keepBatchId || !urlPrefix) {
+      throw new Error("Batch ID and URL prefix are required");
+    }
+
+    const limit = Math.max(1, Math.min(args.limit || 200, 500));
+    const chunks = (await ctx.db.query("chunks").collect())
+      .filter((chunk) => chunk.importedBatchId !== keepBatchId && sourceMatchesPrefix(chunk, urlPrefix))
+      .slice(0, limit);
+    const sources = (await ctx.db.query("sources").collect())
+      .filter((source) => source.importedBatchId !== keepBatchId && sourceMatchesPrefix(source, urlPrefix))
+      .slice(0, limit);
+
+    for (const chunk of chunks) {
+      await ctx.db.delete(chunk._id);
+    }
+
+    for (const source of sources) {
+      await ctx.db.delete(source._id);
+    }
+
+    return {
+      chunksDeleted: chunks.length,
+      sourcesDeleted: sources.length,
+      hasMore: chunks.length === limit || sources.length === limit,
+    };
+  },
+});
+
 export const search = queryGeneric({
   args: {
     question: v.string(),
@@ -397,4 +477,8 @@ function isIcbcSource(sourceRef: string, sourceUrl: string | null) {
       value.includes("mdp.partners.icbc.com/topics") ||
       value.includes("damg-"),
   );
+}
+
+function sourceMatchesPrefix(row: { sourceRef: string; sourceUrl: string | null }, prefix: string) {
+  return [row.sourceRef, row.sourceUrl || ""].some((value) => value.toLowerCase().startsWith(prefix));
 }

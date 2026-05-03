@@ -74,6 +74,36 @@ export const convexFunctions = {
     }
   >("knowledge:deleteIcbcSourcesExceptBatchPage"),
 
+  deleteSourcesBySourceRefExceptBatchPage: makeFunctionReference<
+    "mutation",
+    {
+      importSecret?: string;
+      keepBatchId: string;
+      sourceRefs: string[];
+      limit?: number;
+    },
+    {
+      chunksDeleted: number;
+      sourcesDeleted: number;
+      hasMore: boolean;
+    }
+  >("knowledge:deleteSourcesBySourceRefExceptBatchPage"),
+
+  deleteSourcesByUrlPrefixExceptBatchPage: makeFunctionReference<
+    "mutation",
+    {
+      importSecret?: string;
+      keepBatchId: string;
+      urlPrefix: string;
+      limit?: number;
+    },
+    {
+      chunksDeleted: number;
+      sourcesDeleted: number;
+      hasMore: boolean;
+    }
+  >("knowledge:deleteSourcesByUrlPrefixExceptBatchPage"),
+
   recordMaintenanceRun: makeFunctionReference<
     "mutation",
     {

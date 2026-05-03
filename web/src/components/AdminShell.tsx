@@ -8,6 +8,8 @@ import type { AdminAiHealth, AdminOverview, AdminSignal } from "@/lib/admin/cont
 import { deriveAdminSignals } from "@/lib/admin/adminStatus";
 import type { IcbcCheckResult } from "@/lib/admin/icbcMaintenance";
 import type { IcbcRefreshResult } from "@/lib/admin/icbcRefresh";
+import type { MitchellCegRefreshResult } from "@/lib/admin/mitchellCeg";
+import { COLLISION_PROGRAM_GUIDE_URL, type ShopDocsImportResult } from "@/lib/admin/shopDocs";
 import { convexFunctions } from "@/lib/convexReferences";
 import type { KnowledgeType } from "@/lib/knowledge/normalizeChunk";
 
@@ -24,6 +26,10 @@ type IcbcCheckUiResult = IcbcCheckResult & {
   logWarning?: string;
 };
 type IcbcRefreshUiResult = IcbcRefreshResult;
+type ShopDocsUiResult = ShopDocsImportResult & {
+  oldSourcesDeleted?: number;
+  oldChunksDeleted?: number;
+};
 
 export function AdminShell() {
   const overview = useQuery(convexFunctions.adminOverview, {});
@@ -35,6 +41,13 @@ export function AdminShell() {
   const [icbcResult, setIcbcResult] = useState<IcbcCheckUiResult | null>(null);
   const [icbcRefreshBusy, setIcbcRefreshBusy] = useState(false);
   const [icbcRefreshResult, setIcbcRefreshResult] = useState<IcbcRefreshUiResult | null>(null);
+  const [shopDocsUrls, setShopDocsUrls] = useState(COLLISION_PROGRAM_GUIDE_URL);
+  const [shopDocsBusy, setShopDocsBusy] = useState(false);
+  const [shopDocsError, setShopDocsError] = useState("");
+  const [shopDocsResult, setShopDocsResult] = useState<ShopDocsUiResult | null>(null);
+  const [mitchellBusy, setMitchellBusy] = useState(false);
+  const [mitchellError, setMitchellError] = useState("");
+  const [mitchellResult, setMitchellResult] = useState<MitchellCegRefreshResult | null>(null);
   const [batchId, setBatchId] = useState(defaultBatchId());
   const [fileName, setFileName] = useState("");
   const [fileContent, setFileContent] = useState("");
@@ -73,6 +86,8 @@ export function AdminShell() {
   const signals = useMemo(() => deriveAdminSignals(overview, aiHealth), [overview, aiHealth]);
   const latestIcbcCheckRun = overview?.maintenanceRuns.find((run) => run.jobType === "icbc_check") || null;
   const latestIcbcRefreshRun = overview?.maintenanceRuns.find((run) => run.jobType === "icbc_refresh") || null;
+  const latestShopDocsRun = overview?.maintenanceRuns.find((run) => run.jobType === "shop_docs_import") || null;
+  const latestMitchellRun = overview?.maintenanceRuns.find((run) => run.jobType === "mitchell_ceg_refresh") || null;
 
   async function loadImportFile(file: File | undefined) {
     setMaintenanceError("");
@@ -160,6 +175,48 @@ export function AdminShell() {
       setIcbcError(error instanceof Error ? error.message : "ICBC refresh failed");
     } finally {
       setIcbcRefreshBusy(false);
+    }
+  }
+
+  async function runShopDocsImport() {
+    setShopDocsBusy(true);
+    setShopDocsError("");
+    setShopDocsResult(null);
+
+    try {
+      const response = await fetch("/api/admin/shop-docs/import", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ urls: shopDocsUrls }),
+      });
+      const body = (await response.json()) as ShopDocsUiResult | { error?: string };
+      if (!response.ok) {
+        throw new Error("error" in body && body.error ? body.error : "Shop Docs import failed");
+      }
+      setShopDocsResult(body as ShopDocsUiResult);
+    } catch (error) {
+      setShopDocsError(error instanceof Error ? error.message : "Shop Docs import failed");
+    } finally {
+      setShopDocsBusy(false);
+    }
+  }
+
+  async function runMitchellRefresh() {
+    setMitchellBusy(true);
+    setMitchellError("");
+    setMitchellResult(null);
+
+    try {
+      const response = await fetch("/api/admin/mitchell-ceg/refresh", { method: "POST" });
+      const body = (await response.json()) as MitchellCegRefreshResult | { error?: string };
+      if (!response.ok) {
+        throw new Error("error" in body && body.error ? body.error : "Mitchell CEG refresh failed");
+      }
+      setMitchellResult(body as MitchellCegRefreshResult);
+    } catch (error) {
+      setMitchellError(error instanceof Error ? error.message : "Mitchell CEG refresh failed");
+    } finally {
+      setMitchellBusy(false);
     }
   }
 
@@ -292,36 +349,67 @@ export function AdminShell() {
               ) : null}
 
               {activeTool === "shop_docs" ? (
-                <div className="mt-5 space-y-4">
-                  <h3 className="text-base font-semibold text-slate-950">Shop Docs Ingestion</h3>
-                  <p className="max-w-3xl text-sm leading-6 text-slate-600">
-                    The hosted version will use a secure upload inbox instead of reading a Windows folder directly.
-                    Use the manual JSONL import below until the file inbox is added.
-                  </p>
-                  <button
-                    className="rounded-md border border-slate-300 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-500"
-                    disabled
-                    type="button"
-                  >
-                    Import Shop Docs
-                  </button>
+                <div className="mt-5 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="text-base font-semibold text-slate-950">Shop Docs Ingestion</h3>
+                      <p className="mt-2 text-sm leading-6 text-slate-600">
+                        Import public PDF, HTML, Markdown, or text URLs into the hosted knowledge base.
+                      </p>
+                    </div>
+                    <label className="block text-sm font-medium text-slate-700" htmlFor="shop-doc-urls">
+                      Public document URLs
+                      <textarea
+                        id="shop-doc-urls"
+                        className="mt-2 min-h-32 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                        value={shopDocsUrls}
+                        onChange={(event) => setShopDocsUrls(event.target.value)}
+                      />
+                    </label>
+                    <button
+                      className="rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+                      disabled={shopDocsBusy || !shopDocsUrls.trim()}
+                      type="button"
+                      onClick={() => void runShopDocsImport()}
+                    >
+                      {shopDocsBusy ? "Importing..." : "Import Shop Docs"}
+                    </button>
+                  </div>
+                  <MaintenanceResultPanel
+                    busy={shopDocsBusy}
+                    busyMessage="Importing Shop Docs. PDFs may take a minute."
+                    error={shopDocsError}
+                    latestRun={latestShopDocsRun}
+                    result={shopDocsResult}
+                  />
                 </div>
               ) : null}
 
               {activeTool === "mitchell_ceg" ? (
-                <div className="mt-5 space-y-4">
-                  <h3 className="text-base font-semibold text-slate-950">Mitchell CEG Maintenance</h3>
-                  <p className="max-w-3xl text-sm leading-6 text-slate-600">
-                    The hosted crawler will refresh the Mitchell CEG public pages and import them as shop docs in the
-                    next maintenance slice.
-                  </p>
-                  <button
-                    className="rounded-md border border-slate-300 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-500"
-                    disabled
-                    type="button"
-                  >
-                    Refresh Mitchell CEG
-                  </button>
+                <div className="mt-5 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="text-base font-semibold text-slate-950">Mitchell CEG Maintenance</h3>
+                      <p className="mt-2 text-sm leading-6 text-slate-600">
+                        Crawl the public Mitchell CEG P-pages and import them as hosted shop docs.
+                      </p>
+                    </div>
+                    <button
+                      className="rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+                      disabled={mitchellBusy}
+                      type="button"
+                      onClick={() => void runMitchellRefresh()}
+                    >
+                      {mitchellBusy ? "Refreshing..." : "Refresh Mitchell CEG"}
+                    </button>
+                  </div>
+                  <MaintenanceResultPanel
+                    busy={mitchellBusy}
+                    busyMessage="Refreshing Mitchell CEG pages. This can take a minute or two."
+                    error={mitchellError}
+                    latestRun={latestMitchellRun}
+                    result={mitchellResult}
+                  />
                 </div>
               ) : null}
             </Panel>
@@ -642,6 +730,50 @@ function IcbcRefreshResultPanel({ result }: { result: IcbcRefreshUiResult }) {
       </div>
     </div>
   );
+}
+
+function MaintenanceResultPanel({
+  busy,
+  busyMessage,
+  error,
+  latestRun,
+  result,
+}: {
+  busy: boolean;
+  busyMessage: string;
+  error: string;
+  latestRun: AdminOverview["maintenanceRuns"][number] | null;
+  result: unknown | null;
+}) {
+  if (error) {
+    return <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800">{error}</div>;
+  }
+
+  if (busy) {
+    return <EmptyMessage>{busyMessage}</EmptyMessage>;
+  }
+
+  if (result) {
+    return (
+      <pre className="max-h-96 overflow-auto rounded-md border border-slate-200 bg-slate-950 p-4 text-xs leading-5 text-white">
+        {JSON.stringify(result, null, 2)}
+      </pre>
+    );
+  }
+
+  if (latestRun) {
+    return (
+      <div className="rounded-md border border-slate-200 bg-slate-50 p-4 text-sm">
+        <div className="font-semibold text-slate-950">Latest run</div>
+        <div className="mt-1 text-slate-600">{latestRun.summary}</div>
+        <div className="mt-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          {latestRun.status} - {formatDate(latestRun.createdAt)}
+        </div>
+      </div>
+    );
+  }
+
+  return <EmptyMessage>Maintenance results will appear here.</EmptyMessage>;
 }
 
 function ToolTabButton({
