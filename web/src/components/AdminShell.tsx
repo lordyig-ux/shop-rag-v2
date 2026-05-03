@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { AdminAiHealth, AdminOverview, AdminSignal } from "@/lib/admin/contracts";
 import { deriveAdminSignals } from "@/lib/admin/adminStatus";
 import type { IcbcCheckResult } from "@/lib/admin/icbcMaintenance";
+import type { IcbcRefreshResult } from "@/lib/admin/icbcRefresh";
 import { convexFunctions } from "@/lib/convexReferences";
 import type { KnowledgeType } from "@/lib/knowledge/normalizeChunk";
 
@@ -22,6 +23,7 @@ type IcbcCheckUiResult = IcbcCheckResult & {
   logStored?: boolean;
   logWarning?: string;
 };
+type IcbcRefreshUiResult = IcbcRefreshResult;
 
 export function AdminShell() {
   const overview = useQuery(convexFunctions.adminOverview, {});
@@ -31,6 +33,8 @@ export function AdminShell() {
   const [icbcBusy, setIcbcBusy] = useState(false);
   const [icbcError, setIcbcError] = useState("");
   const [icbcResult, setIcbcResult] = useState<IcbcCheckUiResult | null>(null);
+  const [icbcRefreshBusy, setIcbcRefreshBusy] = useState(false);
+  const [icbcRefreshResult, setIcbcRefreshResult] = useState<IcbcRefreshUiResult | null>(null);
   const [batchId, setBatchId] = useState(defaultBatchId());
   const [fileName, setFileName] = useState("");
   const [fileContent, setFileContent] = useState("");
@@ -67,7 +71,8 @@ export function AdminShell() {
   }, []);
 
   const signals = useMemo(() => deriveAdminSignals(overview, aiHealth), [overview, aiHealth]);
-  const latestIcbcRun = overview?.maintenanceRuns.find((run) => run.jobType === "icbc_check") || null;
+  const latestIcbcCheckRun = overview?.maintenanceRuns.find((run) => run.jobType === "icbc_check") || null;
+  const latestIcbcRefreshRun = overview?.maintenanceRuns.find((run) => run.jobType === "icbc_refresh") || null;
 
   async function loadImportFile(file: File | undefined) {
     setMaintenanceError("");
@@ -114,6 +119,7 @@ export function AdminShell() {
     setIcbcBusy(true);
     setIcbcError("");
     setIcbcResult(null);
+    setIcbcRefreshResult(null);
 
     try {
       const response = await fetch("/api/admin/icbc/check", { method: "GET" });
@@ -126,6 +132,34 @@ export function AdminShell() {
       setIcbcError(error instanceof Error ? error.message : "ICBC update check failed");
     } finally {
       setIcbcBusy(false);
+    }
+  }
+
+  async function runIcbcRefresh() {
+    if (
+      !window.confirm(
+        "Run a full ICBC refresh now? This scrapes the public ICBC procedures and replaces older ICBC entries after the new batch imports.",
+      )
+    ) {
+      return;
+    }
+
+    setIcbcRefreshBusy(true);
+    setIcbcError("");
+    setIcbcResult(null);
+    setIcbcRefreshResult(null);
+
+    try {
+      const response = await fetch("/api/admin/icbc/refresh", { method: "POST" });
+      const body = (await response.json()) as IcbcRefreshUiResult | { error?: string };
+      if (!response.ok) {
+        throw new Error("error" in body && body.error ? body.error : "ICBC refresh failed");
+      }
+      setIcbcRefreshResult(body as IcbcRefreshUiResult);
+    } catch (error) {
+      setIcbcError(error instanceof Error ? error.message : "ICBC refresh failed");
+    } finally {
+      setIcbcRefreshBusy(false);
     }
   }
 
@@ -211,18 +245,19 @@ export function AdminShell() {
                     <div className="flex flex-wrap gap-2">
                       <button
                         className="rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-slate-400"
-                        disabled={icbcBusy}
+                        disabled={icbcBusy || icbcRefreshBusy}
                         type="button"
                         onClick={() => void runIcbcCheck()}
                       >
                         {icbcBusy ? "Checking..." : "Check ICBC Updates"}
                       </button>
                       <button
-                        className="rounded-md border border-slate-300 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-500"
-                        disabled
+                        className="rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+                        disabled={icbcBusy || icbcRefreshBusy}
                         type="button"
+                        onClick={() => void runIcbcRefresh()}
                       >
-                        Run Full ICBC Refresh
+                        {icbcRefreshBusy ? "Refreshing..." : "Run Full ICBC Refresh"}
                       </button>
                     </div>
 
@@ -233,13 +268,26 @@ export function AdminShell() {
                       <div>
                         Last checked:{" "}
                         <span className="font-semibold text-slate-950">
-                          {latestIcbcRun ? formatDate(latestIcbcRun.createdAt) : "Not checked from this admin yet"}
+                          {latestIcbcCheckRun ? formatDate(latestIcbcCheckRun.createdAt) : "Not checked from this admin yet"}
+                        </span>
+                      </div>
+                      <div>
+                        Last refreshed:{" "}
+                        <span className="font-semibold text-slate-950">
+                          {latestIcbcRefreshRun ? formatDate(latestIcbcRefreshRun.createdAt) : "Not refreshed from this admin yet"}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <IcbcCheckResultPanel result={icbcResult} error={icbcError} latestRun={latestIcbcRun} />
+                  <IcbcResultPanel
+                    checkResult={icbcResult}
+                    error={icbcError}
+                    latestCheckRun={latestIcbcCheckRun}
+                    latestRefreshRun={latestIcbcRefreshRun}
+                    refreshBusy={icbcRefreshBusy}
+                    refreshResult={icbcRefreshResult}
+                  />
                 </div>
               ) : null}
 
@@ -462,34 +510,60 @@ export function AdminShell() {
   );
 }
 
-function IcbcCheckResultPanel({
+function IcbcResultPanel({
+  checkResult,
   error,
-  latestRun,
-  result,
+  latestCheckRun,
+  latestRefreshRun,
+  refreshBusy,
+  refreshResult,
 }: {
+  checkResult: IcbcCheckUiResult | null;
   error: string;
-  latestRun: AdminOverview["maintenanceRuns"][number] | null;
-  result: IcbcCheckUiResult | null;
+  latestCheckRun: AdminOverview["maintenanceRuns"][number] | null;
+  latestRefreshRun: AdminOverview["maintenanceRuns"][number] | null;
+  refreshBusy: boolean;
+  refreshResult: IcbcRefreshUiResult | null;
 }) {
   if (error) {
     return <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800">{error}</div>;
   }
 
-  if (!result) {
-    return latestRun ? (
+  if (refreshBusy) {
+    return <EmptyMessage>Refreshing ICBC procedures. This can take a minute or two.</EmptyMessage>;
+  }
+
+  if (refreshResult) {
+    return <IcbcRefreshResultPanel result={refreshResult} />;
+  }
+
+  if (!checkResult) {
+    if (latestRefreshRun) {
+      return (
+        <div className="rounded-md border border-slate-200 bg-slate-50 p-4 text-sm">
+          <div className="font-semibold text-slate-950">Latest ICBC refresh</div>
+          <div className="mt-1 text-slate-600">{latestRefreshRun.summary}</div>
+          <div className="mt-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            {latestRefreshRun.status} - {formatDate(latestRefreshRun.createdAt)}
+          </div>
+        </div>
+      );
+    }
+
+    return latestCheckRun ? (
       <div className="rounded-md border border-slate-200 bg-slate-50 p-4 text-sm">
         <div className="font-semibold text-slate-950">Latest ICBC check</div>
-        <div className="mt-1 text-slate-600">{latestRun.summary}</div>
+        <div className="mt-1 text-slate-600">{latestCheckRun.summary}</div>
         <div className="mt-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-          {latestRun.status} - {formatDate(latestRun.createdAt)}
+          {latestCheckRun.status} - {formatDate(latestCheckRun.createdAt)}
         </div>
       </div>
     ) : (
-      <EmptyMessage>ICBC check results will appear here.</EmptyMessage>
+      <EmptyMessage>ICBC maintenance results will appear here.</EmptyMessage>
     );
   }
 
-  const comparison = result.comparison;
+  const comparison = checkResult.comparison;
 
   return (
     <div className="space-y-4">
@@ -497,15 +571,15 @@ function IcbcCheckResultPanel({
         <div className="flex flex-wrap items-center gap-2">
           <span
             className={`rounded-md px-2 py-1 text-xs font-semibold uppercase tracking-wide ${
-              result.status === "up_to_date" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"
+              checkResult.status === "up_to_date" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"
             }`}
           >
-            {result.status === "up_to_date" ? "Up to date" : "Updates found"}
+            {checkResult.status === "up_to_date" ? "Up to date" : "Updates found"}
           </span>
-          <span className="text-sm text-slate-500">{formatDate(result.checkedAt)}</span>
+          <span className="text-sm text-slate-500">{formatDate(checkResult.checkedAt)}</span>
         </div>
-        <p className="mt-3 text-sm leading-6 text-slate-700">{result.summary}</p>
-        {result.logWarning ? <p className="mt-2 text-sm text-amber-700">{result.logWarning}</p> : null}
+        <p className="mt-3 text-sm leading-6 text-slate-700">{checkResult.summary}</p>
+        {checkResult.logWarning ? <p className="mt-2 text-sm text-amber-700">{checkResult.logWarning}</p> : null}
       </div>
 
       <div className="grid gap-2 sm:grid-cols-3">
@@ -536,6 +610,36 @@ function IcbcCheckResultPanel({
           ))}
         </ResultList>
       ) : null}
+    </div>
+  );
+}
+
+function IcbcRefreshResultPanel({ result }: { result: IcbcRefreshUiResult }) {
+  return (
+    <div className="space-y-4">
+      <div className="rounded-md border border-emerald-200 bg-emerald-50 p-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="rounded-md bg-emerald-100 px-2 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-800">
+            Refresh complete
+          </span>
+          <span className="text-sm text-emerald-900">{formatDate(result.refreshedAt)}</span>
+        </div>
+        <p className="mt-3 text-sm leading-6 text-emerald-950">{result.summary}</p>
+      </div>
+
+      <div className="grid gap-2 sm:grid-cols-3">
+        <CompactMetric label="Topics found" value={result.topicsFound} />
+        <CompactMetric label="Topics imported" value={result.topicsImported} />
+        <CompactMetric label="Chunks imported" value={result.chunksUpserted} />
+        <CompactMetric label="Old sources deleted" value={result.oldSourcesDeleted} />
+        <CompactMetric label="Old chunks deleted" value={result.oldChunksDeleted} />
+        <CompactMetric label="Seconds" value={Math.round(result.durationMs / 1000)} />
+      </div>
+
+      <div className="rounded-md border border-slate-200 bg-white p-4 text-sm">
+        <div className="font-semibold text-slate-950">{result.batchId}</div>
+        <div className="mt-1 text-slate-600">New live ICBC batch</div>
+      </div>
     </div>
   );
 }

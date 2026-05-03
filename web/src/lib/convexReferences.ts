@@ -60,6 +60,20 @@ export const convexFunctions = {
     }
   >("knowledge:deleteImportedBatchPage"),
 
+  deleteIcbcSourcesExceptBatchPage: makeFunctionReference<
+    "mutation",
+    {
+      importSecret?: string;
+      keepBatchId: string;
+      limit?: number;
+    },
+    {
+      chunksDeleted: number;
+      sourcesDeleted: number;
+      hasMore: boolean;
+    }
+  >("knowledge:deleteIcbcSourcesExceptBatchPage"),
+
   recordMaintenanceRun: makeFunctionReference<
     "mutation",
     {

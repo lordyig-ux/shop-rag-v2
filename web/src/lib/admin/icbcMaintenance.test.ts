@@ -21,15 +21,37 @@ describe("parseIcbcNavEntries", () => {
         topicId: "DAMG-CO-KLH43Y-ndv-vehs-tows",
         href: "DAMG-CO-KLH43Y-ndv-vehs-tows",
         title: "Non-drivable vehicles & tows",
+        category: "ICBC",
         sourceUrl: "https://mdp.partners.icbc.com/topic/DAMG-CO-KLH43Y-ndv-vehs-tows?map=DAMG-MP-NRP91J-vendors",
       },
       {
         topicId: "Policy-on-pre-repair-and-post-repair-scanning",
         href: "Policy-on-pre-repair-and-post-repair-scanning",
         title: "Pre-repair & post-repair scanning policy",
+        category: "ICBC",
         sourceUrl:
           "https://mdp.partners.icbc.com/topic/Policy-on-pre-repair-and-post-repair-scanning?map=DAMG-MP-NRP91J-vendors",
       },
+    ]);
+  });
+});
+
+describe("parseIcbcNavEntries categories", () => {
+  it("uses parent topicrefs as the category path", () => {
+    const xml = `
+      <map>
+        <topicref href="repairs" navtitle="Repairs">
+          <topicref href="light-duty" navtitle="Light duty estimates">
+            <topicref href="scanning-policy" navtitle="Scanning policy" />
+          </topicref>
+        </topicref>
+      </map>
+    `;
+
+    expect(parseIcbcNavEntries(xml).map((entry) => ({ title: entry.title, category: entry.category }))).toEqual([
+      { title: "Repairs", category: "ICBC" },
+      { title: "Light duty estimates", category: "Repairs" },
+      { title: "Scanning policy", category: "Repairs > Light duty estimates" },
     ]);
   });
 });
@@ -57,6 +79,7 @@ describe("compareIcbcSources", () => {
           topicId: "Policy-on-pre-repair-and-post-repair-scanning",
           href: "Policy-on-pre-repair-and-post-repair-scanning",
           title: "Pre-repair and post-repair scanning policy",
+          category: "ICBC",
           sourceUrl:
             "https://mdp.partners.icbc.com/topic/Policy-on-pre-repair-and-post-repair-scanning?map=DAMG-MP-NRP91J-vendors",
         },
@@ -64,6 +87,7 @@ describe("compareIcbcSources", () => {
           topicId: "New-ICBC-topic",
           href: "New-ICBC-topic",
           title: "New ICBC topic",
+          category: "ICBC",
           sourceUrl: "https://mdp.partners.icbc.com/topic/New-ICBC-topic?map=DAMG-MP-NRP91J-vendors",
         },
       ],
@@ -100,6 +124,7 @@ describe("compareIcbcSources", () => {
           topicId: "Existing-topic",
           href: "Existing-topic",
           title: "Existing topic",
+          category: "ICBC",
           sourceUrl: "https://mdp.partners.icbc.com/topic/Existing-topic?map=DAMG-MP-NRP91J-vendors",
         },
       ],

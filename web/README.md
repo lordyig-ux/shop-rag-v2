@@ -100,6 +100,8 @@ After Clerk is configured, `/admin` supports:
 - JSONL dry-runs
 - JSONL imports into Convex
 - batch deletion for rollback/replacement
+- ICBC update checks against the public navigation map
+- full ICBC refreshes that scrape public ICBC topics, import a fresh batch, then remove older ICBC records
 - production source/chunk/search/AI status checks
 
 The Ollama defaults target the direct Ollama Cloud API model name `gpt-oss:120b`. If you run through a local Ollama app instead, use the cloud tag appropriate to that host, such as `gpt-oss:120b-cloud`.

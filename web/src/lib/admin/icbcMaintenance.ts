@@ -6,6 +6,7 @@ export type IcbcNavEntry = {
   topicId: string;
   href: string;
   title: string;
+  category: string;
   sourceUrl: string;
 };
 
@@ -43,13 +44,24 @@ export type IcbcCheckResult = {
 export function parseIcbcNavEntries(xml: string): IcbcNavEntry[] {
   const entries: IcbcNavEntry[] = [];
   const seen = new Set<string>();
-  const topicTags = xml.match(/<topicref\b[^>]*>/gi) || [];
+  const stack: string[] = [];
+  const topicTokens = xml.match(/<\/topicref\s*>|<topicref\b[^>]*>/gi) || [];
 
-  for (const tag of topicTags) {
-    const attributes = parseXmlAttributes(tag);
+  for (const token of topicTokens) {
+    if (/^<\/topicref/i.test(token)) {
+      stack.pop();
+      continue;
+    }
+
+    const attributes = parseXmlAttributes(token);
     const href = attributes.href?.trim();
     const title = attributes.navtitle?.trim();
+    const selfClosing = /\/\s*>$/.test(token);
+
     if (!href || !title) {
+      if (title && !selfClosing) {
+        stack.push(title);
+      }
       continue;
     }
 
@@ -64,8 +76,13 @@ export function parseIcbcNavEntries(xml: string): IcbcNavEntry[] {
       topicId,
       href,
       title,
+      category: stack.length ? stack.join(" > ") : "ICBC",
       sourceUrl: `${ICBC_TOPIC_BASE_URL}/${encodeURIComponent(topicId)}?map=${ICBC_MAP_NAME}`,
     });
+
+    if (!selfClosing) {
+      stack.push(title);
+    }
   }
 
   return entries;
