@@ -27,7 +27,7 @@ export function SearchShell() {
         ? {
             question: submittedQuestion,
             knowledgeType: "all" as const,
-            limit: 8,
+            limit: 16,
           }
         : "skip",
     [submittedQuestion],

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { generateOllamaAnswer } from "./ollama";
+import { generateOllamaAnswer, parseRankedChunkIds, rerankOllamaEvidence } from "./ollama";
 
 const chunks = [
   {
@@ -70,5 +70,72 @@ describe("generateOllamaAnswer", () => {
       usedAi: false,
       warnings: ["ollama_request_failed:429"],
     });
+  });
+});
+
+describe("rerankOllamaEvidence", () => {
+  it("returns ranked chunk ids from Ollama JSON", async () => {
+    const fetchImpl = async () =>
+      new Response(
+        JSON.stringify({
+          message: { content: '{ "rankedChunkIds": ["scan_chunk_2", "scan_chunk_1"] }' },
+        }),
+        { status: 200 },
+      );
+
+    const response = await rerankOllamaEvidence({
+      question: "What does the guide say about scans?",
+      chunks: [
+        chunks[0],
+        {
+          ...chunks[0],
+          chunkId: "scan_chunk_2",
+          text: "A stronger scan excerpt.",
+        },
+      ],
+      config: { apiKey: "test-key", host: "https://ollama.com", model: "gpt-oss:120b" },
+      fetchImpl,
+    });
+
+    expect(response).toEqual({
+      rankedChunkIds: ["scan_chunk_2", "scan_chunk_1"],
+      usedAi: true,
+      warnings: [],
+    });
+  });
+
+  it("falls back on invalid reranker JSON", async () => {
+    const fetchImpl = async () =>
+      new Response(
+        JSON.stringify({
+          message: { content: "The best source is scan_chunk_1." },
+        }),
+        { status: 200 },
+      );
+
+    const response = await rerankOllamaEvidence({
+      question: "What does the guide say about scans?",
+      chunks: [
+        chunks[0],
+        {
+          ...chunks[0],
+          chunkId: "scan_chunk_2",
+        },
+      ],
+      config: { apiKey: "test-key", host: "https://ollama.com", model: "gpt-oss:120b" },
+      fetchImpl,
+    });
+
+    expect(response).toEqual({
+      rankedChunkIds: [],
+      usedAi: false,
+      warnings: ["rerank_ollama_invalid_json"],
+    });
+  });
+});
+
+describe("parseRankedChunkIds", () => {
+  it("extracts JSON even when it is wrapped in surrounding text", () => {
+    expect(parseRankedChunkIds('```json\n{"rankedChunkIds":["a","b"]}\n```')).toEqual(["a", "b"]);
   });
 });
