@@ -93,8 +93,6 @@ describe("buildPageRecords", () => {
 
 describe("makeMaintenanceBatchId", () => {
   it("uses a timestamped prefix", () => {
-    expect(makeMaintenanceBatchId("shop-docs", new Date("2026-05-02T22:30:05.000Z"))).toBe(
-      "shop-docs-2026-05-02-223005",
-    );
+    expect(makeMaintenanceBatchId("shop-docs", new Date("2026-05-02T22:30:05.123Z"))).toBe("shop-docs-2026-05-02-223005123");
   });
 });

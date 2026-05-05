@@ -24,7 +24,7 @@ export type PageRecordInput = Omit<TextRecordInput, "text"> & {
 
 export function makeMaintenanceBatchId(prefix: string, now = new Date()): string {
   const iso = now.toISOString();
-  return `${prefix}-${iso.slice(0, 10)}-${iso.slice(11, 19).replace(/:/g, "")}`;
+  return `${prefix}-${iso.slice(0, 10)}-${iso.slice(11, 23).replace(/[:.]/g, "")}`;
 }
 
 export function buildTextRecords(input: TextRecordInput): { records: NormalizedChunkRecord[] } {
