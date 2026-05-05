@@ -55,6 +55,31 @@ describe("buildShopDocTextRecords", () => {
       knowledgeType: "shop_doc",
     });
   });
+
+  it("uses a stable source ref and no source URL for uploaded files", () => {
+    const result = buildShopDocTextRecords({
+      batchId: "shop-docs-2026-05-02-223005",
+      fileType: "docx",
+      modifiedAt: "2026-05-02",
+      sourceRef: "shop-doc-upload:paint-sop",
+      sourceUrl: null,
+      text: "Paint SOP\n\nCheck primer before paint.",
+      title: "Paint SOP",
+      maxChunkChars: 500,
+    });
+
+    expect(result.records).toHaveLength(1);
+    expect(result.records[0].source).toMatchObject({
+      sourceId: "shop_doc:shop-doc-upload:paint-sop",
+      sourceRef: "shop-doc-upload:paint-sop",
+      sourceUrl: null,
+      fileType: "docx",
+    });
+    expect(result.records[0].chunk).toMatchObject({
+      sourceRef: "shop-doc-upload:paint-sop",
+      sourceUrl: null,
+    });
+  });
 });
 
 describe("shopDocsNoRecordsError", () => {

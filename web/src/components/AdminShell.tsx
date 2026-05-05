@@ -44,6 +44,8 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
   const [icbcRefreshBusy, setIcbcRefreshBusy] = useState(false);
   const [icbcRefreshResult, setIcbcRefreshResult] = useState<IcbcRefreshUiResult | null>(null);
   const [shopDocsUrls, setShopDocsUrls] = useState(COLLISION_PROGRAM_GUIDE_URL);
+  const [shopDocFiles, setShopDocFiles] = useState<File[]>([]);
+  const [shopDocDocumentKey, setShopDocDocumentKey] = useState("");
   const [shopDocsBusy, setShopDocsBusy] = useState(false);
   const [shopDocsError, setShopDocsError] = useState("");
   const [shopDocsResult, setShopDocsResult] = useState<ShopDocsUiResult | null>(null);
@@ -208,6 +210,36 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
     }
   }
 
+  async function runShopDocsFileImport() {
+    setShopDocsBusy(true);
+    setShopDocsError("");
+    setShopDocsResult(null);
+
+    try {
+      const formData = new FormData();
+      for (const file of shopDocFiles) {
+        formData.append("files", file);
+      }
+      if (shopDocDocumentKey.trim()) {
+        formData.append("documentKey", shopDocDocumentKey.trim());
+      }
+
+      const response = await adminFetch("/api/admin/shop-docs/import", {
+        method: "POST",
+        body: formData,
+      });
+      const body = await readJsonResponse<ShopDocsUiResult | { error?: string }>(response, "Shop Docs upload failed");
+      if (!response.ok) {
+        throw new Error(jsonResponseErrorMessage(body, "Shop Docs upload failed"));
+      }
+      setShopDocsResult(body as ShopDocsUiResult);
+    } catch (error) {
+      setShopDocsError(error instanceof Error ? error.message : "Shop Docs upload failed");
+    } finally {
+      setShopDocsBusy(false);
+    }
+  }
+
   async function runMitchellRefresh() {
     setMitchellBusy(true);
     setMitchellError("");
@@ -364,7 +396,8 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
                     <div>
                       <h3 className="text-base font-semibold text-slate-950">Shop Docs Ingestion</h3>
                       <p className="mt-2 text-sm leading-6 text-slate-600">
-                        Import public PDF, HTML, Markdown, or text URLs into the hosted knowledge base.
+                        Import public URLs, or upload files to refresh the hosted knowledge base. Re-upload a file with the same
+                        name to replace its previous chunks.
                       </p>
                     </div>
                     <label className="block text-sm font-medium text-slate-700" htmlFor="shop-doc-urls">
@@ -382,8 +415,52 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
                       type="button"
                       onClick={() => void runShopDocsImport()}
                     >
-                      {shopDocsBusy ? "Importing..." : "Import Shop Docs"}
+                      {shopDocsBusy ? "Importing..." : "Import URLs"}
                     </button>
+                    <div className="border-t border-slate-200 pt-4">
+                      <label className="block text-sm font-medium text-slate-700" htmlFor="shop-doc-files">
+                        Upload files
+                        <input
+                          id="shop-doc-files"
+                          className="mt-2 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 file:mr-3 file:rounded-md file:border-0 file:bg-slate-950 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white"
+                          type="file"
+                          multiple
+                          accept=".pdf,.docx,.xlsx,.csv,.md,.markdown,.txt,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,text/plain,text/html"
+                          onChange={(event) => {
+                            const files = Array.from(event.target.files || []);
+                            setShopDocFiles(files);
+                            if (files.length !== 1) {
+                              setShopDocDocumentKey("");
+                            }
+                          }}
+                        />
+                      </label>
+                      {shopDocFiles.length ? (
+                        <div className="mt-2 text-xs text-slate-500">
+                          {shopDocFiles.map((file) => file.name).join(", ")}
+                        </div>
+                      ) : null}
+                      {shopDocFiles.length === 1 ? (
+                        <label className="mt-3 block text-sm font-medium text-slate-700" htmlFor="shop-doc-key">
+                          Optional update key
+                          <input
+                            id="shop-doc-key"
+                            className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                            placeholder="Defaults to the file name"
+                            value={shopDocDocumentKey}
+                            onChange={(event) => setShopDocDocumentKey(event.target.value)}
+                          />
+                        </label>
+                      ) : null}
+                      <button
+                        className="mt-3 rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+                        disabled={shopDocsBusy || !shopDocFiles.length}
+                        type="button"
+                        onClick={() => void runShopDocsFileImport()}
+                      >
+                        {shopDocsBusy ? "Uploading..." : "Upload / Refresh Files"}
+                      </button>
+                    </div>
                   </div>
                   <MaintenanceResultPanel
                     busy={shopDocsBusy}

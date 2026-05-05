@@ -14,6 +14,16 @@ import {
   shopDocsNoRecordsError,
   type ShopDocsImportResult,
 } from "@/lib/admin/shopDocs";
+import {
+  detectUploadedShopDocKind,
+  documentKeyFromFileName,
+  extractCsvText,
+  extractDocxText,
+  extractSpreadsheetText,
+  extractTextFile,
+  sourceRefForUploadedDocument,
+  titleFromUploadedFileName,
+} from "@/lib/admin/shopDocFiles";
 import { extractPdfTextPages } from "@/lib/admin/pdfText";
 import { adminAccessErrorResponse, requireAdminAccess } from "@/lib/auth/requireAdminAccess";
 import { convexFunctions } from "@/lib/convexReferences";
@@ -23,6 +33,9 @@ export const runtime = "nodejs";
 export const maxDuration = 300;
 
 const IMPORT_BATCH_SIZE = 100;
+type ImportTarget =
+  | { type: "url"; label: string; sourceRef: string; url: string }
+  | { type: "file"; contentType: string; data: Buffer; documentKey: string; fileName: string; label: string; sourceRef: string };
 
 export async function POST(request: Request) {
   const access = await requireAdminAccess();
@@ -30,7 +43,7 @@ export async function POST(request: Request) {
     return adminAccessErrorResponse(access);
   }
 
-  const parsed = parseShopDocUrlImportRequest(await request.json());
+  const parsed = await parseShopDocImportRequest(request);
   if (!parsed.ok) {
     return Response.json({ error: parsed.error }, { status: 400 });
   }
@@ -52,18 +65,18 @@ export async function POST(request: Request) {
 
   await recordMaintenanceRun(client, importSecret, {
     createdByEmail: access.email,
-    detail: { batchId, urls: parsed.value.urls },
+    detail: { batchId, documents: parsed.value.targets.map((target) => target.label) },
     status: "running",
-    summary: `Shop Docs import started for ${parsed.value.urls.length} URL(s).`,
+    summary: `Shop Docs import started for ${parsed.value.targets.length} document(s).`,
   });
 
-  for (const url of parsed.value.urls) {
+  for (const target of parsed.value.targets) {
     try {
-      const imported = await fetchShopDocRecords(url, batchId);
-      sourceRefs.push(url);
+      const imported = target.type === "url" ? await fetchShopDocRecords(target.url, batchId) : await parseUploadedShopDocRecords(target, batchId);
+      sourceRefs.push(target.sourceRef);
       records.push(...imported.records);
     } catch (error) {
-      skipped.push({ url, error: error instanceof Error ? error.message : "Import failed" });
+      skipped.push({ url: target.label, error: error instanceof Error ? error.message : "Import failed" });
     }
   }
 
@@ -86,7 +99,7 @@ export async function POST(request: Request) {
     documentsImported: sourceRefs.length,
     chunksUpserted: imported.chunksUpserted,
     skipped,
-    summary: `Imported ${sourceRefs.length} Shop Docs URL(s) into ${imported.chunksUpserted} chunks.`,
+    summary: `Imported ${sourceRefs.length} Shop Docs document(s) into ${imported.chunksUpserted} chunks.`,
   };
 
   await recordMaintenanceRun(client, importSecret, {
@@ -105,6 +118,50 @@ export async function POST(request: Request) {
     oldSourcesDeleted: deleted.sourcesDeleted,
     oldChunksDeleted: deleted.chunksDeleted,
   });
+}
+
+async function parseShopDocImportRequest(request: Request): Promise<
+  | { ok: true; value: { targets: ImportTarget[] } }
+  | { ok: false; error: string }
+> {
+  const contentType = request.headers.get("content-type")?.toLowerCase() || "";
+  if (!contentType.includes("multipart/form-data")) {
+    const parsed = parseShopDocUrlImportRequest(await request.json());
+    if (!parsed.ok) {
+      return parsed;
+    }
+
+    return {
+      ok: true,
+      value: {
+        targets: parsed.value.urls.map((url) => ({ type: "url", label: url, sourceRef: url, url })),
+      },
+    };
+  }
+
+  const formData = await request.formData();
+  const files = formData.getAll("files").filter((entry): entry is File => entry instanceof File && entry.size > 0);
+  if (!files.length) {
+    return { ok: false, error: "Choose at least one document file to upload." };
+  }
+
+  const requestedDocumentKey = typeof formData.get("documentKey") === "string" ? String(formData.get("documentKey")) : "";
+  const targets: ImportTarget[] = [];
+
+  for (const file of files) {
+    const documentKey = files.length === 1 && requestedDocumentKey.trim() ? documentKeyFromFileName(requestedDocumentKey) : documentKeyFromFileName(file.name);
+    targets.push({
+      type: "file",
+      contentType: file.type,
+      data: Buffer.from(await file.arrayBuffer()),
+      documentKey,
+      fileName: file.name,
+      label: file.name,
+      sourceRef: sourceRefForUploadedDocument(documentKey),
+    });
+  }
+
+  return { ok: true, value: { targets } };
 }
 
 async function fetchShopDocRecords(url: string, batchId: string) {
@@ -152,6 +209,47 @@ async function fetchShopDocRecords(url: string, batchId: string) {
     sourceUrl: url,
     text: rawText,
     title: normalizeTitle(titleFromUrl(url)),
+  });
+}
+
+async function parseUploadedShopDocRecords(target: Extract<ImportTarget, { type: "file" }>, batchId: string) {
+  const fileKind = detectUploadedShopDocKind(target.fileName, target.contentType);
+  if (!fileKind) {
+    throw new Error("Unsupported file type. Upload PDF, Word .docx, Excel .xlsx, CSV, Markdown, HTML, or text files.");
+  }
+
+  const title = normalizeTitle(titleFromUploadedFileName(target.fileName));
+  if (fileKind === "pdf") {
+    const textResult = await extractPdfTextPages(target.data);
+    return buildShopDocPdfRecords({
+      batchId,
+      pages: textResult.pages,
+      sourceRef: target.sourceRef,
+      sourceUrl: null,
+      title: normalizeTitle(textResult.title || title),
+    });
+  }
+
+  let text: string;
+  if (fileKind === "docx") {
+    text = await extractDocxText(target.data);
+  } else if (fileKind === "xlsx") {
+    text = await extractSpreadsheetText(target.data);
+  } else if (fileKind === "csv") {
+    text = extractCsvText(target.data);
+  } else if (fileKind === "html") {
+    text = htmlToReadableMarkdown(extractRoleMain(extractTextFile(target.data)) || extractTextFile(target.data));
+  } else {
+    text = extractTextFile(target.data);
+  }
+
+  return buildShopDocTextRecords({
+    batchId,
+    fileType: fileKind,
+    sourceRef: target.sourceRef,
+    sourceUrl: null,
+    text,
+    title,
   });
 }
 

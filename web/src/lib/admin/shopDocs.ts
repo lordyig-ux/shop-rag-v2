@@ -61,7 +61,8 @@ export function buildShopDocTextRecords(input: {
   batchId: string;
   fileType: string;
   modifiedAt?: string;
-  sourceUrl: string;
+  sourceRef?: string;
+  sourceUrl: string | null;
   text: string;
   title: string;
   maxChunkChars?: number;
@@ -72,7 +73,7 @@ export function buildShopDocTextRecords(input: {
     fileType: input.fileType,
     knowledgeType: "shop_doc",
     modifiedAt: input.modifiedAt,
-    sourceRef: input.sourceUrl,
+    sourceRef: input.sourceRef || input.sourceUrl || input.title,
     sourceUrl: input.sourceUrl,
     text: input.text,
     title: input.title,
@@ -84,7 +85,8 @@ export function buildShopDocPdfRecords(input: {
   batchId: string;
   modifiedAt?: string;
   pages: Array<{ pageNumber: number; text: string }>;
-  sourceUrl: string;
+  sourceRef?: string;
+  sourceUrl: string | null;
   title: string;
   maxChunkChars?: number;
 }): { records: NormalizedChunkRecord[] } {
@@ -97,7 +99,7 @@ export function buildShopDocPdfRecords(input: {
     knowledgeType: "shop_doc",
     modifiedAt: input.modifiedAt,
     pages: input.pages,
-    sourceRef: input.sourceUrl,
+    sourceRef: input.sourceRef || input.sourceUrl || input.title,
     sourceUrl: input.sourceUrl,
     title: input.title,
     maxChunkChars: input.maxChunkChars,

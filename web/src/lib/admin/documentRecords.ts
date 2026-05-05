@@ -9,7 +9,7 @@ export type TextRecordInput = {
   knowledgeType: KnowledgeType;
   modifiedAt?: string;
   sourceRef: string;
-  sourceUrl: string;
+  sourceUrl: string | null;
   text: string;
   title: string;
   maxChunkChars?: number;
@@ -34,8 +34,8 @@ export function buildTextRecords(input: TextRecordInput): { records: NormalizedC
   }
 
   const chunks = chunkText(cleanText, input.maxChunkChars || 1800);
-  const sourceId = `${input.knowledgeType}:${input.sourceUrl}`;
-  const sourceHash = shortHash(input.sourceRef || input.sourceUrl);
+  const sourceId = `${input.knowledgeType}:${input.sourceUrl || input.sourceRef}`;
+  const sourceHash = shortHash(input.sourceRef || input.sourceUrl || sourceId);
   const contentHash = sha1(cleanText);
 
   return {
@@ -73,7 +73,7 @@ export function buildTextRecords(input: TextRecordInput): { records: NormalizedC
 
 export function buildPageRecords(input: PageRecordInput): { records: NormalizedChunkRecord[] } {
   const records: NormalizedChunkRecord[] = [];
-  const sourceHash = shortHash(input.sourceRef || input.sourceUrl);
+  const sourceHash = shortHash(input.sourceRef || input.sourceUrl || `${input.knowledgeType}:${input.title}`);
 
   for (const page of input.pages) {
     const cleanText = normalizeWhitespace(page.text);
@@ -81,8 +81,8 @@ export function buildPageRecords(input: PageRecordInput): { records: NormalizedC
       continue;
     }
 
-    const pageUrl = `${input.sourceUrl}#page=${page.pageNumber}`;
-    const sourceId = `${input.knowledgeType}:${pageUrl}`;
+    const pageUrl = input.sourceUrl ? `${input.sourceUrl}#page=${page.pageNumber}` : null;
+    const sourceId = `${input.knowledgeType}:${pageUrl || `${input.sourceRef}#page=${page.pageNumber}`}`;
     const chunks = chunkText(cleanText, input.maxChunkChars || 1800);
     const contentHash = sha1(cleanText);
 
