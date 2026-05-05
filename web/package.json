@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^7.3.0",
+    "@vercel/blob": "^2.3.3",
     "convex": "^1.37.0",
     "exceljs": "^4.4.0",
     "mammoth": "^1.12.0",

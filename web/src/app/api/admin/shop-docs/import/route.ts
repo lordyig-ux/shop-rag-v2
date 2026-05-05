@@ -24,6 +24,7 @@ import {
   sourceRefForUploadedDocument,
   titleFromUploadedFileName,
 } from "@/lib/admin/shopDocFiles";
+import { uploadShopDocSourceFile } from "@/lib/admin/shopDocSourceFiles";
 import { extractPdfTextPages } from "@/lib/admin/pdfText";
 import { adminAccessErrorResponse, requireAdminAccess } from "@/lib/auth/requireAdminAccess";
 import { convexFunctions } from "@/lib/convexReferences";
@@ -221,11 +222,12 @@ async function parseUploadedShopDocRecords(target: Extract<ImportTarget, { type:
   const title = normalizeTitle(titleFromUploadedFileName(target.fileName));
   if (fileKind === "pdf") {
     const textResult = await extractPdfTextPages(target.data);
+    const sourceUrl = await uploadShopDocSourceFile({ ...target, batchId });
     return buildShopDocPdfRecords({
       batchId,
       pages: textResult.pages,
       sourceRef: target.sourceRef,
-      sourceUrl: null,
+      sourceUrl,
       title: normalizeTitle(textResult.title || title),
     });
   }
@@ -247,7 +249,7 @@ async function parseUploadedShopDocRecords(target: Extract<ImportTarget, { type:
     batchId,
     fileType: fileKind,
     sourceRef: target.sourceRef,
-    sourceUrl: null,
+    sourceUrl: await uploadShopDocSourceFile({ ...target, batchId }),
     text,
     title,
   });
