@@ -4,7 +4,7 @@ import { useQuery } from "convex/react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import type { AdminAiHealth, AdminOverview, AdminSignal } from "@/lib/admin/contracts";
+import type { AdminAiHealth, AdminOverview, AdminShopDocument, AdminSignal } from "@/lib/admin/contracts";
 import { deriveAdminSignals } from "@/lib/admin/adminStatus";
 import type { IcbcCheckResult } from "@/lib/admin/icbcMaintenance";
 import type { IcbcRefreshResult } from "@/lib/admin/icbcRefresh";
@@ -32,6 +32,7 @@ type ShopDocsUiResult = ShopDocsImportResult & {
   oldSourcesDeleted?: number;
   oldChunksDeleted?: number;
 };
+type ShopDocsActionResult = ShopDocsUiResult | Record<string, unknown>;
 
 export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: string }) {
   const overview = useQuery(convexFunctions.adminOverview, {});
@@ -48,7 +49,7 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
   const [shopDocDocumentKey, setShopDocDocumentKey] = useState("");
   const [shopDocsBusy, setShopDocsBusy] = useState(false);
   const [shopDocsError, setShopDocsError] = useState("");
-  const [shopDocsResult, setShopDocsResult] = useState<ShopDocsUiResult | null>(null);
+  const [shopDocsResult, setShopDocsResult] = useState<ShopDocsActionResult | null>(null);
   const [mitchellBusy, setMitchellBusy] = useState(false);
   const [mitchellError, setMitchellError] = useState("");
   const [mitchellResult, setMitchellResult] = useState<MitchellCegRefreshResult | null>(null);
@@ -60,6 +61,7 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
   const [maintenanceError, setMaintenanceError] = useState("");
   const [maintenanceResult, setMaintenanceResult] = useState<Record<string, unknown> | null>(null);
   const [deletingBatch, setDeletingBatch] = useState("");
+  const [deletingSourceRef, setDeletingSourceRef] = useState("");
   const adminFetch = useCallback(
     (input: RequestInfo | URL, init: RequestInit = {}) => fetch(input, withAdminBypassHeader(init, adminBypassToken)),
     [adminBypassToken],
@@ -202,7 +204,7 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
       if (!response.ok) {
         throw new Error(jsonResponseErrorMessage(body, "Shop Docs import failed"));
       }
-      setShopDocsResult(body as ShopDocsUiResult);
+      setShopDocsResult(body);
     } catch (error) {
       setShopDocsError(error instanceof Error ? error.message : "Shop Docs import failed");
     } finally {
@@ -287,6 +289,33 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
     }
   }
 
+  async function deleteShopDocument(sourceRef: string, title: string) {
+    if (!window.confirm(`Delete "${title}" from Shop Docs? This removes it from search.`)) {
+      return;
+    }
+
+    setDeletingSourceRef(sourceRef);
+    setShopDocsError("");
+    setShopDocsResult(null);
+
+    try {
+      const response = await adminFetch("/api/admin/shop-docs/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sourceRef }),
+      });
+      const body = await readJsonResponse<Record<string, unknown> | { error?: string }>(response, "Shop Docs delete failed");
+      if (!response.ok) {
+        throw new Error(jsonResponseErrorMessage(body, "Shop Docs delete failed"));
+      }
+      setShopDocsResult(body as ShopDocsUiResult);
+    } catch (error) {
+      setShopDocsError(error instanceof Error ? error.message : "Shop Docs delete failed");
+    } finally {
+      setDeletingSourceRef("");
+    }
+  }
+
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-6 text-slate-950 sm:px-6 lg:px-8">
       <section className="mx-auto max-w-6xl space-y-6">
@@ -332,8 +361,9 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
               </div>
 
               {activeTool === "icbc" ? (
-                <div className="mt-5 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-                  <div className="space-y-4">
+                <div className="mt-5 space-y-4">
+                  <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+                    <div className="space-y-4">
                     <div>
                       <h3 className="text-base font-semibold text-slate-950">ICBC Maintenance</h3>
                       <p className="mt-2 text-sm leading-6 text-slate-600">
@@ -388,86 +418,94 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
                     refreshResult={icbcRefreshResult}
                   />
                 </div>
+                </div>
               ) : null}
 
               {activeTool === "shop_docs" ? (
-                <div className="mt-5 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="text-base font-semibold text-slate-950">Shop Docs Ingestion</h3>
-                      <p className="mt-2 text-sm leading-6 text-slate-600">
-                        Import public URLs, or upload files to refresh the hosted knowledge base. Re-upload a file with the same
-                        name to replace its previous chunks.
-                      </p>
-                    </div>
-                    <label className="block text-sm font-medium text-slate-700" htmlFor="shop-doc-urls">
-                      Public document URLs
-                      <textarea
-                        id="shop-doc-urls"
-                        className="mt-2 min-h-32 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
-                        value={shopDocsUrls}
-                        onChange={(event) => setShopDocsUrls(event.target.value)}
-                      />
-                    </label>
-                    <button
-                      className="rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
-                      disabled={shopDocsBusy || !shopDocsUrls.trim()}
-                      type="button"
-                      onClick={() => void runShopDocsImport()}
-                    >
-                      {shopDocsBusy ? "Importing..." : "Import URLs"}
-                    </button>
-                    <div className="border-t border-slate-200 pt-4">
-                      <label className="block text-sm font-medium text-slate-700" htmlFor="shop-doc-files">
-                        Upload files
-                        <input
-                          id="shop-doc-files"
-                          className="mt-2 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 file:mr-3 file:rounded-md file:border-0 file:bg-slate-950 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white"
-                          type="file"
-                          multiple
-                          accept=".pdf,.docx,.xlsx,.csv,.md,.markdown,.txt,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,text/plain,text/html"
-                          onChange={(event) => {
-                            const files = Array.from(event.target.files || []);
-                            setShopDocFiles(files);
-                            if (files.length !== 1) {
-                              setShopDocDocumentKey("");
-                            }
-                          }}
+                <div className="mt-5 space-y-4">
+                  <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+                    <div className="space-y-4">
+                      <div>
+                        <h3 className="text-base font-semibold text-slate-950">Shop Docs Ingestion</h3>
+                        <p className="mt-2 text-sm leading-6 text-slate-600">
+                          Import public URLs, or upload files to refresh the hosted knowledge base. Re-upload a file with the same
+                          name to replace its previous chunks.
+                        </p>
+                      </div>
+                      <label className="block text-sm font-medium text-slate-700" htmlFor="shop-doc-urls">
+                        Public document URLs
+                        <textarea
+                          id="shop-doc-urls"
+                          className="mt-2 min-h-32 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                          value={shopDocsUrls}
+                          onChange={(event) => setShopDocsUrls(event.target.value)}
                         />
                       </label>
-                      {shopDocFiles.length ? (
-                        <div className="mt-2 text-xs text-slate-500">
-                          {shopDocFiles.map((file) => file.name).join(", ")}
-                        </div>
-                      ) : null}
-                      {shopDocFiles.length === 1 ? (
-                        <label className="mt-3 block text-sm font-medium text-slate-700" htmlFor="shop-doc-key">
-                          Optional update key
+                      <button
+                        className="rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+                        disabled={shopDocsBusy || !shopDocsUrls.trim()}
+                        type="button"
+                        onClick={() => void runShopDocsImport()}
+                      >
+                        {shopDocsBusy ? "Importing..." : "Import URLs"}
+                      </button>
+                      <div className="border-t border-slate-200 pt-4">
+                        <label className="block text-sm font-medium text-slate-700" htmlFor="shop-doc-files">
+                          Upload files
                           <input
-                            id="shop-doc-key"
-                            className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
-                            placeholder="Defaults to the file name"
-                            value={shopDocDocumentKey}
-                            onChange={(event) => setShopDocDocumentKey(event.target.value)}
+                            id="shop-doc-files"
+                            className="mt-2 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 file:mr-3 file:rounded-md file:border-0 file:bg-slate-950 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white"
+                            type="file"
+                            multiple
+                            accept=".pdf,.docx,.xlsx,.csv,.md,.markdown,.txt,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,text/plain,text/html"
+                            onChange={(event) => {
+                              const files = Array.from(event.target.files || []);
+                              setShopDocFiles(files);
+                              if (files.length !== 1) {
+                                setShopDocDocumentKey("");
+                              }
+                            }}
                           />
                         </label>
-                      ) : null}
-                      <button
-                        className="mt-3 rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
-                        disabled={shopDocsBusy || !shopDocFiles.length}
-                        type="button"
-                        onClick={() => void runShopDocsFileImport()}
-                      >
-                        {shopDocsBusy ? "Uploading..." : "Upload / Refresh Files"}
-                      </button>
+                        {shopDocFiles.length ? (
+                          <div className="mt-2 text-xs text-slate-500">
+                            {shopDocFiles.map((file) => file.name).join(", ")}
+                          </div>
+                        ) : null}
+                        {shopDocFiles.length === 1 ? (
+                          <label className="mt-3 block text-sm font-medium text-slate-700" htmlFor="shop-doc-key">
+                            Optional update key
+                            <input
+                              id="shop-doc-key"
+                              className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                              placeholder="Defaults to the file name"
+                              value={shopDocDocumentKey}
+                              onChange={(event) => setShopDocDocumentKey(event.target.value)}
+                            />
+                          </label>
+                        ) : null}
+                        <button
+                          className="mt-3 rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+                          disabled={shopDocsBusy || !shopDocFiles.length}
+                          type="button"
+                          onClick={() => void runShopDocsFileImport()}
+                        >
+                          {shopDocsBusy ? "Uploading..." : "Upload / Refresh Files"}
+                        </button>
+                      </div>
                     </div>
+                    <MaintenanceResultPanel
+                      busy={shopDocsBusy}
+                      busyMessage="Importing Shop Docs. PDFs may take a minute."
+                      error={shopDocsError}
+                      latestRun={latestShopDocsRun}
+                      result={shopDocsResult}
+                    />
                   </div>
-                  <MaintenanceResultPanel
-                    busy={shopDocsBusy}
-                    busyMessage="Importing Shop Docs. PDFs may take a minute."
-                    error={shopDocsError}
-                    latestRun={latestShopDocsRun}
-                    result={shopDocsResult}
+                  <ShopDocumentsTable
+                    deletingSourceRef={deletingSourceRef}
+                    documents={overview.shopDocuments}
+                    onDelete={(document) => void deleteShopDocument(document.sourceRef, document.title)}
                   />
                 </div>
               ) : null}
@@ -814,6 +852,77 @@ function IcbcRefreshResultPanel({ result }: { result: IcbcRefreshUiResult }) {
       <div className="rounded-md border border-slate-200 bg-white p-4 text-sm">
         <div className="font-semibold text-slate-950">{result.batchId}</div>
         <div className="mt-1 text-slate-600">New live ICBC batch</div>
+      </div>
+    </div>
+  );
+}
+
+function ShopDocumentsTable({
+  deletingSourceRef,
+  documents,
+  onDelete,
+}: {
+  deletingSourceRef: string;
+  documents: AdminShopDocument[];
+  onDelete: (document: AdminShopDocument) => void;
+}) {
+  if (!documents.length) {
+    return <EmptyMessage>No Shop Docs documents found.</EmptyMessage>;
+  }
+
+  return (
+    <div className="rounded-md border border-slate-200">
+      <div className="border-b border-slate-200 bg-slate-50 px-4 py-3">
+        <h3 className="text-sm font-semibold text-slate-950">Shop Docs Document Manager</h3>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[760px] text-left text-sm">
+          <thead className="border-b border-slate-200 bg-white text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <tr>
+              <th className="px-4 py-3">Document</th>
+              <th className="px-4 py-3">Type</th>
+              <th className="px-4 py-3">Chunks</th>
+              <th className="px-4 py-3">Last Imported</th>
+              <th className="px-4 py-3">Source</th>
+              <th className="px-4 py-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-200 bg-white">
+            {documents.map((document) => (
+              <tr key={document.sourceRef}>
+                <td className="px-4 py-3 align-top">
+                  <div className="font-medium text-slate-950">{document.title}</div>
+                  <div className="mt-1 max-w-sm break-all text-xs text-slate-500">{document.documentKey}</div>
+                </td>
+                <td className="px-4 py-3 align-top text-slate-700">{document.fileType.toUpperCase()}</td>
+                <td className="px-4 py-3 align-top text-slate-700">
+                  {document.chunkCount.toLocaleString()} chunks
+                  <div className="text-xs text-slate-500">{document.sourceCount.toLocaleString()} source rows</div>
+                </td>
+                <td className="px-4 py-3 align-top text-slate-700">{formatDate(document.importedAt)}</td>
+                <td className="px-4 py-3 align-top">
+                  {document.sourceUrl ? (
+                    <a className="text-emerald-700 hover:text-emerald-900" href={document.sourceUrl}>
+                      Open
+                    </a>
+                  ) : (
+                    <span className="text-slate-500">Uploaded file</span>
+                  )}
+                </td>
+                <td className="px-4 py-3 text-right align-top">
+                  <button
+                    className="rounded-md border border-red-200 bg-white px-3 py-1.5 text-xs font-semibold text-red-700 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                    disabled={Boolean(deletingSourceRef)}
+                    type="button"
+                    onClick={() => onDelete(document)}
+                  >
+                    {deletingSourceRef === document.sourceRef ? "Deleting..." : "Delete"}
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

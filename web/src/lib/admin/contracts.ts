@@ -29,6 +29,19 @@ export type AdminSourceSample = {
   importedAt: number;
 };
 
+export type AdminShopDocument = {
+  documentKey: string;
+  title: string;
+  fileType: string;
+  sourceRef: string;
+  sourceUrl: string | null;
+  sourceCount: number;
+  chunkCount: number;
+  importedBatchId: string;
+  importedAt: number;
+  modifiedAt: string;
+};
+
 export type AdminMaintenanceRun = {
   jobType: "icbc_check" | "icbc_refresh" | "mitchell_ceg_refresh" | "shop_docs_import";
   status: "running" | "succeeded" | "failed";
@@ -48,6 +61,7 @@ export type AdminOverview = {
   batches: AdminBatchSummary[];
   recentQueries: AdminRecentQuery[];
   sourceSamples: AdminSourceSample[];
+  shopDocuments: AdminShopDocument[];
   maintenanceRuns: AdminMaintenanceRun[];
 };
 

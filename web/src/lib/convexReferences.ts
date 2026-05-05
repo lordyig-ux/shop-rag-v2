@@ -89,6 +89,20 @@ export const convexFunctions = {
     }
   >("knowledge:deleteSourcesBySourceRefExceptBatchPage"),
 
+  deleteSourcesBySourceRefPage: makeFunctionReference<
+    "mutation",
+    {
+      importSecret?: string;
+      sourceRef: string;
+      limit?: number;
+    },
+    {
+      chunksDeleted: number;
+      sourcesDeleted: number;
+      hasMore: boolean;
+    }
+  >("knowledge:deleteSourcesBySourceRefPage"),
+
   deleteSourcesByUrlPrefixExceptBatchPage: makeFunctionReference<
     "mutation",
     {

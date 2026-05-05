@@ -222,6 +222,44 @@ export const deleteSourcesBySourceRefExceptBatchPage = mutationGeneric({
   },
 });
 
+export const deleteSourcesBySourceRefPage = mutationGeneric({
+  args: {
+    importSecret: v.optional(v.string()),
+    sourceRef: v.string(),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    assertImportSecret(args.importSecret);
+
+    const sourceRef = args.sourceRef.trim();
+    if (!sourceRef) {
+      throw new Error("Source ref is required");
+    }
+
+    const limit = Math.max(1, Math.min(args.limit || 200, 500));
+    const chunks = (await ctx.db.query("chunks").collect())
+      .filter((chunk) => chunk.sourceRef === sourceRef)
+      .slice(0, limit);
+    const sources = (await ctx.db.query("sources").collect())
+      .filter((source) => source.sourceRef === sourceRef)
+      .slice(0, limit);
+
+    for (const chunk of chunks) {
+      await ctx.db.delete(chunk._id);
+    }
+
+    for (const source of sources) {
+      await ctx.db.delete(source._id);
+    }
+
+    return {
+      chunksDeleted: chunks.length,
+      sourcesDeleted: sources.length,
+      hasMore: chunks.length === limit || sources.length === limit,
+    };
+  },
+});
+
 export const deleteSourcesByUrlPrefixExceptBatchPage = mutationGeneric({
   args: {
     importSecret: v.optional(v.string()),
@@ -365,6 +403,51 @@ export const adminOverview = queryGeneric({
         importedAt: source.importedAt,
       }));
 
+    const chunkCountsBySourceRef = new Map<string, number>();
+    for (const chunk of chunks) {
+      chunkCountsBySourceRef.set(chunk.sourceRef, (chunkCountsBySourceRef.get(chunk.sourceRef) || 0) + 1);
+    }
+
+    const shopDocumentMap = new Map<
+      string,
+      {
+        documentKey: string;
+        title: string;
+        fileType: string;
+        sourceRef: string;
+        sourceUrl: string | null;
+        sourceCount: number;
+        chunkCount: number;
+        importedBatchId: string;
+        importedAt: number;
+        modifiedAt: string;
+      }
+    >();
+
+    for (const source of sources) {
+      if (source.knowledgeType !== "shop_doc") {
+        continue;
+      }
+
+      const current = shopDocumentMap.get(source.sourceRef);
+      const importedAt = Math.max(current?.importedAt || 0, source.importedAt);
+      const sourceUrl = source.sourceUrl?.split("#page=")[0] || null;
+      shopDocumentMap.set(source.sourceRef, {
+        documentKey: documentKeyFromSourceRef(source.sourceRef),
+        title: importedAt === source.importedAt ? source.title : current?.title || source.title,
+        fileType: importedAt === source.importedAt ? source.fileType : current?.fileType || source.fileType,
+        sourceRef: source.sourceRef,
+        sourceUrl: sourceUrl || current?.sourceUrl || null,
+        sourceCount: (current?.sourceCount || 0) + 1,
+        chunkCount: chunkCountsBySourceRef.get(source.sourceRef) || current?.chunkCount || 0,
+        importedBatchId: importedAt === source.importedAt ? source.importedBatchId : current?.importedBatchId || source.importedBatchId,
+        importedAt,
+        modifiedAt: importedAt === source.importedAt ? source.modifiedAt : current?.modifiedAt || source.modifiedAt,
+      });
+    }
+
+    const shopDocuments = Array.from(shopDocumentMap.values()).sort((left, right) => right.importedAt - left.importedAt);
+
     return {
       sourceCount: sources.length,
       chunkCount: chunks.length,
@@ -381,6 +464,7 @@ export const adminOverview = queryGeneric({
         createdAt: query.createdAt,
       })),
       sourceSamples,
+      shopDocuments,
       maintenanceRuns: recentMaintenanceRuns.map((run) => ({
         jobType: run.jobType,
         status: run.status,
@@ -467,6 +551,10 @@ function countByKnowledgeType<T extends { knowledgeType: KnowledgeTypeValue }>(r
   }
 
   return counts;
+}
+
+function documentKeyFromSourceRef(sourceRef: string) {
+  return sourceRef.startsWith("shop-doc-upload:") ? sourceRef.slice("shop-doc-upload:".length) : sourceRef;
 }
 
 function isIcbcSource(sourceRef: string, sourceUrl: string | null) {
