@@ -2,6 +2,10 @@
 
 :root {
   color-scheme: light;
+  --brand-black: #050505;
+  --brand-red: #e32639;
+  --brand-red-dark: #b91c2b;
+  --brand-red-soft: #fff1f2;
 }
 
 * {
@@ -9,7 +13,7 @@
 }
 
 html {
-  background: #f8fafc;
+  background: #f6f7f9;
 }
 
 body {

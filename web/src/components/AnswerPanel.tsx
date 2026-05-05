@@ -54,7 +54,7 @@ export function AnswerPanel({ response }: { response: SearchResponse }) {
                   </div>
                   {href ? (
                     <a
-                      className="text-sm font-medium text-emerald-700 underline-offset-4 hover:underline"
+                      className="text-sm font-medium text-[var(--brand-red)] underline-offset-4 hover:underline"
                       href={href}
                       target="_blank"
                       rel="noreferrer"

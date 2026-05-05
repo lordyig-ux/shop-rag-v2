@@ -4,16 +4,9 @@ import { useMutation, useQuery } from "convex/react";
 import { useEffect, useMemo, useState } from "react";
 
 import { convexFunctions } from "@/lib/convexReferences";
-import type { KnowledgeFilter, SearchResponse } from "@/lib/search/contracts";
+import type { SearchResponse } from "@/lib/search/contracts";
 import { shapeSearchResponse } from "@/lib/search/shapeResults";
 import { AnswerPanel } from "./AnswerPanel";
-
-const filters: Array<{ label: string; value: KnowledgeFilter }> = [
-  { label: "All docs", value: "all" },
-  { label: "SOPs", value: "sop" },
-  { label: "Insurance policy", value: "insurance_policy" },
-  { label: "Shop docs", value: "shop_doc" },
-];
 
 const examples = [
   "What is our SOP for aluminum repair?",
@@ -24,7 +17,6 @@ const examples = [
 export function SearchShell() {
   const [question, setQuestion] = useState("");
   const [submittedQuestion, setSubmittedQuestion] = useState("");
-  const [knowledgeType, setKnowledgeType] = useState<KnowledgeFilter>("all");
   const [response, setResponse] = useState<SearchResponse | null>(null);
   const [error, setError] = useState("");
   const logQuery = useMutation(convexFunctions.logQuery);
@@ -34,11 +26,11 @@ export function SearchShell() {
       submittedQuestion
         ? {
             question: submittedQuestion,
-            knowledgeType,
+            knowledgeType: "all" as const,
             limit: 8,
           }
         : "skip",
-    [knowledgeType, submittedQuestion],
+    [submittedQuestion],
   );
   const chunks = useQuery(convexFunctions.search, queryArgs);
   const isSearching = Boolean(submittedQuestion && chunks === undefined);
@@ -105,14 +97,14 @@ export function SearchShell() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-6 text-slate-950 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-slate-50 px-4 py-6 text-[var(--brand-black)] sm:px-6 lg:px-8">
       <section className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[minmax(0,0.95fr)_minmax(380px,1.05fr)]">
         <aside className="space-y-6 lg:sticky lg:top-6 lg:self-start">
           <header>
-            <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">Terminal Auto Body</p>
+            <p className="text-sm font-black uppercase tracking-wide text-[var(--brand-red)]">Terminal Auto Body</p>
             <h1 className="mt-2 text-3xl font-semibold tracking-normal sm:text-4xl">Knowledge Base</h1>
             <p className="mt-3 max-w-xl text-sm leading-6 text-slate-600">
-              Public-safe proof of concept for searching SOP and insurance-policy material.
+              Public-safe proof of concept for searching company knowledge, SOPs, and insurance-policy material.
             </p>
           </header>
 
@@ -128,31 +120,20 @@ export function SearchShell() {
             </label>
             <textarea
               id="question"
-              className="mt-2 min-h-28 w-full resize-y rounded-md border border-slate-300 bg-white px-3 py-3 text-base leading-6 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+              className="mt-2 min-h-28 w-full resize-y rounded-md border border-slate-300 bg-white px-3 py-3 text-base leading-6 outline-none transition focus:border-[var(--brand-red)] focus:ring-2 focus:ring-red-100"
               value={question}
               onChange={(event) => setQuestion(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
+                  event.preventDefault();
+                  submit();
+                }
+              }}
               placeholder="Ask about an SOP, policy, estimate process, or shop workflow"
             />
 
-            <div className="mt-4 flex flex-wrap gap-2" aria-label="Source filter">
-              {filters.map((filter) => (
-                <button
-                  key={filter.value}
-                  type="button"
-                  className={`rounded-md border px-3 py-2 text-sm font-medium transition ${
-                    knowledgeType === filter.value
-                      ? "border-emerald-700 bg-emerald-700 text-white"
-                      : "border-slate-300 bg-white text-slate-700 hover:border-emerald-600"
-                  }`}
-                  onClick={() => setKnowledgeType(filter.value)}
-                >
-                  {filter.label}
-                </button>
-              ))}
-            </div>
-
             <button
-              className="mt-4 w-full rounded-md bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+              className="mt-4 w-full rounded-md bg-[var(--brand-black)] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[var(--brand-red)] disabled:cursor-not-allowed disabled:bg-slate-400"
               type="submit"
               disabled={!question.trim() || isWaitingForAnswer}
             >
@@ -164,7 +145,7 @@ export function SearchShell() {
             {examples.map((example) => (
               <button
                 key={example}
-                className="rounded-md border border-slate-200 bg-white px-3 py-2 text-left text-xs font-medium text-slate-600 shadow-sm hover:border-emerald-500 hover:text-slate-950"
+                className="rounded-md border border-slate-200 bg-white px-3 py-2 text-left text-xs font-medium text-slate-600 shadow-sm hover:border-[var(--brand-red)] hover:text-[var(--brand-black)]"
                 type="button"
                 onClick={() => submit(example)}
               >

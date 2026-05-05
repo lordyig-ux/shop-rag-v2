@@ -321,14 +321,14 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
       <section className="mx-auto max-w-6xl space-y-6">
         <header className="flex flex-col gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">Terminal Auto Body</p>
+            <p className="text-sm font-semibold uppercase tracking-wide text-red-700">Terminal Auto Body</p>
             <h1 className="mt-2 text-3xl font-semibold tracking-normal sm:text-4xl">Admin Dashboard</h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
               Production maintenance for the public-safe knowledge base.
             </p>
           </div>
           <Link
-            className="inline-flex w-fit rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:border-emerald-600 hover:text-slate-950"
+            className="inline-flex w-fit rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:border-red-600 hover:text-slate-950"
             href="/"
           >
             Back to search
@@ -436,7 +436,7 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
                         Public document URLs
                         <textarea
                           id="shop-doc-urls"
-                          className="mt-2 min-h-32 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                          className="mt-2 min-h-32 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100"
                           value={shopDocsUrls}
                           onChange={(event) => setShopDocsUrls(event.target.value)}
                         />
@@ -477,7 +477,7 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
                             Optional update key
                             <input
                               id="shop-doc-key"
-                              className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                              className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100"
                               placeholder="Defaults to the file name"
                               value={shopDocDocumentKey}
                               onChange={(event) => setShopDocDocumentKey(event.target.value)}
@@ -559,7 +559,7 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
                       Batch ID
                       <input
                         id="batch-id"
-                        className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                        className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100"
                         value={batchId}
                         onChange={(event) => setBatchId(event.target.value)}
                       />
@@ -568,7 +568,7 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
                       Type
                       <select
                         id="knowledge-type"
-                        className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                        className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100"
                         value={knowledgeType}
                         onChange={(event) => setKnowledgeType(event.target.value as KnowledgeType)}
                       >
@@ -582,7 +582,7 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
 
                   <div className="flex flex-wrap gap-2">
                     <button
-                      className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-emerald-600 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-red-600 disabled:cursor-not-allowed disabled:opacity-50"
                       disabled={maintenanceBusy || !fileContent}
                       type="button"
                       onClick={() => void runImport(true)}
@@ -691,7 +691,7 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
                         <div className="font-medium text-slate-950">{source.title}</div>
                         <div className="mt-1 text-slate-600">{source.category}</div>
                         {source.sourceUrl ? (
-                          <a className="mt-1 inline-block text-emerald-700 hover:text-emerald-900" href={source.sourceUrl}>
+                          <a className="mt-1 inline-block text-red-700 hover:text-red-900" href={source.sourceUrl}>
                             Open source
                           </a>
                         ) : null}
@@ -784,7 +784,7 @@ function IcbcResultPanel({
         <div className="flex flex-wrap items-center gap-2">
           <span
             className={`rounded-md px-2 py-1 text-xs font-semibold uppercase tracking-wide ${
-              checkResult.status === "up_to_date" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"
+              checkResult.status === "up_to_date" ? "bg-red-100 text-red-800" : "bg-amber-100 text-amber-800"
             }`}
           >
             {checkResult.status === "up_to_date" ? "Up to date" : "Updates found"}
@@ -808,7 +808,7 @@ function IcbcResultPanel({
         <ResultList title="New ICBC topics">
           {comparison.missingFromKnowledgeBase.slice(0, 8).map((entry) => (
             <li key={entry.topicId}>
-              <a className="font-medium text-emerald-700 hover:text-emerald-900" href={entry.sourceUrl}>
+              <a className="font-medium text-red-700 hover:text-red-900" href={entry.sourceUrl}>
                 {entry.title}
               </a>
             </li>
@@ -830,14 +830,14 @@ function IcbcResultPanel({
 function IcbcRefreshResultPanel({ result }: { result: IcbcRefreshUiResult }) {
   return (
     <div className="space-y-4">
-      <div className="rounded-md border border-emerald-200 bg-emerald-50 p-4">
+      <div className="rounded-md border border-red-200 bg-red-50 p-4">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-md bg-emerald-100 px-2 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-800">
+          <span className="rounded-md bg-red-100 px-2 py-1 text-xs font-semibold uppercase tracking-wide text-red-800">
             Refresh complete
           </span>
-          <span className="text-sm text-emerald-900">{formatDate(result.refreshedAt)}</span>
+          <span className="text-sm text-red-900">{formatDate(result.refreshedAt)}</span>
         </div>
-        <p className="mt-3 text-sm leading-6 text-emerald-950">{result.summary}</p>
+        <p className="mt-3 text-sm leading-6 text-red-950">{result.summary}</p>
       </div>
 
       <div className="grid gap-2 sm:grid-cols-3">
@@ -902,7 +902,7 @@ function ShopDocumentsTable({
                 <td className="px-4 py-3 align-top text-slate-700">{formatDate(document.importedAt)}</td>
                 <td className="px-4 py-3 align-top">
                   {document.sourceUrl ? (
-                    <a className="text-emerald-700 hover:text-emerald-900" href={document.sourceUrl}>
+                    <a className="text-red-700 hover:text-red-900" href={document.sourceUrl}>
                       Open
                     </a>
                   ) : (
@@ -1000,7 +1000,7 @@ function ToolTabButton({
 function SignalCard({ signal }: { signal: AdminSignal }) {
   const toneClass =
     signal.tone === "good"
-      ? "border-emerald-200 bg-emerald-50 text-emerald-900"
+      ? "border-red-200 bg-red-50 text-red-900"
       : signal.tone === "warn"
         ? "border-amber-200 bg-amber-50 text-amber-900"
         : "border-slate-200 bg-white text-slate-800";
