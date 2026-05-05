@@ -1,5 +1,8 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
+import { isValidAdminBypassToken } from "@/lib/auth/adminBypass";
+import { ADMIN_BYPASS_QUERY_PARAM } from "@/lib/auth/adminBypassConstants";
+
 const isProtectedRoute = createRouteMatcher(["/admin(.*)"]);
 
 export default clerkMiddleware(async (auth, request) => {
@@ -8,6 +11,10 @@ export default clerkMiddleware(async (auth, request) => {
   }
 
   if (isProtectedRoute(request)) {
+    if (isValidAdminBypassToken(request.nextUrl.searchParams.get(ADMIN_BYPASS_QUERY_PARAM))) {
+      return;
+    }
+
     await auth.protect();
   }
 });

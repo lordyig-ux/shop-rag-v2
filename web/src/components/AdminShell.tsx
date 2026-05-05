@@ -2,7 +2,7 @@
 
 import { useQuery } from "convex/react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { AdminAiHealth, AdminOverview, AdminSignal } from "@/lib/admin/contracts";
 import { deriveAdminSignals } from "@/lib/admin/adminStatus";
@@ -11,6 +11,7 @@ import type { IcbcRefreshResult } from "@/lib/admin/icbcRefresh";
 import { jsonResponseErrorMessage, readJsonResponse } from "@/lib/admin/jsonResponse";
 import type { MitchellCegRefreshResult } from "@/lib/admin/mitchellCeg";
 import { COLLISION_PROGRAM_GUIDE_URL, type ShopDocsImportResult } from "@/lib/admin/shopDocs";
+import { ADMIN_BYPASS_HEADER } from "@/lib/auth/adminBypassConstants";
 import { convexFunctions } from "@/lib/convexReferences";
 import type { KnowledgeType } from "@/lib/knowledge/normalizeChunk";
 
@@ -32,7 +33,7 @@ type ShopDocsUiResult = ShopDocsImportResult & {
   oldChunksDeleted?: number;
 };
 
-export function AdminShell() {
+export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: string }) {
   const overview = useQuery(convexFunctions.adminOverview, {});
   const [aiHealth, setAiHealth] = useState<AdminAiHealth | null>(null);
   const [aiError, setAiError] = useState("");
@@ -57,11 +58,15 @@ export function AdminShell() {
   const [maintenanceError, setMaintenanceError] = useState("");
   const [maintenanceResult, setMaintenanceResult] = useState<Record<string, unknown> | null>(null);
   const [deletingBatch, setDeletingBatch] = useState("");
+  const adminFetch = useCallback(
+    (input: RequestInfo | URL, init: RequestInit = {}) => fetch(input, withAdminBypassHeader(init, adminBypassToken)),
+    [adminBypassToken],
+  );
 
   useEffect(() => {
     let active = true;
 
-    fetch("/api/admin/ai-health")
+    adminFetch("/api/admin/ai-health")
       .then(async (response) => {
         const health = await readJsonResponse<AdminAiHealth>(response, "AI health check failed");
         if (!response.ok) {
@@ -83,7 +88,7 @@ export function AdminShell() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [adminFetch]);
 
   const signals = useMemo(() => deriveAdminSignals(overview, aiHealth), [overview, aiHealth]);
   const latestIcbcCheckRun = overview?.maintenanceRuns.find((run) => run.jobType === "icbc_check") || null;
@@ -110,7 +115,7 @@ export function AdminShell() {
     setMaintenanceResult(null);
 
     try {
-      const response = await fetch("/api/admin/imports", {
+      const response = await adminFetch("/api/admin/imports", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -139,7 +144,7 @@ export function AdminShell() {
     setIcbcRefreshResult(null);
 
     try {
-      const response = await fetch("/api/admin/icbc/check", { method: "GET" });
+      const response = await adminFetch("/api/admin/icbc/check", { method: "GET" });
       const body = await readJsonResponse<IcbcCheckUiResult | { error?: string }>(response, "ICBC update check failed");
       if (!response.ok) {
         throw new Error(jsonResponseErrorMessage(body, "ICBC update check failed"));
@@ -167,7 +172,7 @@ export function AdminShell() {
     setIcbcRefreshResult(null);
 
     try {
-      const response = await fetch("/api/admin/icbc/refresh", { method: "POST" });
+      const response = await adminFetch("/api/admin/icbc/refresh", { method: "POST" });
       const body = await readJsonResponse<IcbcRefreshUiResult | { error?: string }>(response, "ICBC refresh failed");
       if (!response.ok) {
         throw new Error(jsonResponseErrorMessage(body, "ICBC refresh failed"));
@@ -186,7 +191,7 @@ export function AdminShell() {
     setShopDocsResult(null);
 
     try {
-      const response = await fetch("/api/admin/shop-docs/import", {
+      const response = await adminFetch("/api/admin/shop-docs/import", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ urls: shopDocsUrls }),
@@ -209,7 +214,7 @@ export function AdminShell() {
     setMitchellResult(null);
 
     try {
-      const response = await fetch("/api/admin/mitchell-ceg/refresh", { method: "POST" });
+      const response = await adminFetch("/api/admin/mitchell-ceg/refresh", { method: "POST" });
       const body = await readJsonResponse<MitchellCegRefreshResult | { error?: string }>(
         response,
         "Mitchell CEG refresh failed",
@@ -235,7 +240,7 @@ export function AdminShell() {
     setMaintenanceResult(null);
 
     try {
-      const response = await fetch(`/api/admin/batches/${encodeURIComponent(targetBatchId)}`, {
+      const response = await adminFetch(`/api/admin/batches/${encodeURIComponent(targetBatchId)}`, {
         method: "DELETE",
       });
       const body = await readJsonResponse<Record<string, unknown>>(response, "Delete failed");
@@ -871,4 +876,14 @@ function formatDate(value: number) {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
+}
+
+function withAdminBypassHeader(init: RequestInit, token: string): RequestInit {
+  if (!token) {
+    return init;
+  }
+
+  const headers = new Headers(init.headers);
+  headers.set(ADMIN_BYPASS_HEADER, token);
+  return { ...init, headers };
 }
