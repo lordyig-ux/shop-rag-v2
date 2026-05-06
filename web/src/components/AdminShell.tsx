@@ -15,13 +15,6 @@ import { ADMIN_BYPASS_HEADER } from "@/lib/auth/adminBypassConstants";
 import { convexFunctions } from "@/lib/convexReferences";
 import type { KnowledgeType } from "@/lib/knowledge/normalizeChunk";
 
-const typeLabels: Record<keyof AdminOverview["chunksByKnowledgeType"], string> = {
-  sop: "SOPs",
-  insurance_policy: "Insurance policy",
-  shop_doc: "Shop docs",
-  reference: "Reference",
-};
-
 type ToolTab = "icbc" | "shop_docs" | "mitchell_ceg";
 type IcbcCheckUiResult = IcbcCheckResult & {
   logStored?: boolean;
@@ -621,19 +614,7 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
               <Metric label="Latest import" value={overview.latestImportAt ? formatDate(overview.latestImportAt) : "None"} />
             </section>
 
-            <section className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-              <Panel title="Knowledge Mix">
-                <div className="space-y-3">
-                  {(Object.keys(typeLabels) as Array<keyof AdminOverview["chunksByKnowledgeType"]>).map((type) => (
-                    <div key={type} className="grid grid-cols-[1fr_auto_auto] gap-3 text-sm">
-                      <span className="font-medium text-slate-700">{typeLabels[type]}</span>
-                      <span className="text-slate-500">{overview.sourcesByKnowledgeType[type]} sources</span>
-                      <span className="font-semibold text-slate-950">{overview.chunksByKnowledgeType[type]} chunks</span>
-                    </div>
-                  ))}
-                </div>
-              </Panel>
-
+            <section>
               <Panel title="Import Batches">
                 {overview.batches.length ? (
                   <div className="space-y-3">
