@@ -9,9 +9,9 @@ import { shapeSearchResponse } from "@/lib/search/shapeResults";
 import { AnswerPanel } from "./AnswerPanel";
 
 const examples = [
-  "What is our SOP for aluminum repair?",
-  "What does the insurance policy say about pre-repair scans?",
-  "What should staff check before releasing a vehicle?",
+  "What is the aluminum repair rate for bcaa?",
+  "Determine if an ICBC review is required?",
+  "ICBC’s animal-impact policy?",
 ];
 
 export function SearchShell() {
