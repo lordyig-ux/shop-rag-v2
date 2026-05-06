@@ -357,16 +357,18 @@ export const adminOverview = queryGeneric({
 
     const sourcesByKnowledgeType = countByKnowledgeType(sources);
     const chunksByKnowledgeType = countByKnowledgeType(chunks);
-    const batchMap = new Map<string, { sources: Set<string>; chunks: number; importedAt: number }>();
+    const batchMap = new Map<string, { sources: Set<string>; chunks: number; importedAt: number; titles: Map<string, number> }>();
 
     for (const source of sources) {
       const batch = batchMap.get(source.importedBatchId) || {
         sources: new Set<string>(),
         chunks: 0,
         importedAt: 0,
+        titles: new Map<string, number>(),
       };
       batch.sources.add(source.sourceId);
       batch.importedAt = Math.max(batch.importedAt, source.importedAt);
+      batch.titles.set(source.title, (batch.titles.get(source.title) || 0) + 1);
       batchMap.set(source.importedBatchId, batch);
     }
 
@@ -375,6 +377,7 @@ export const adminOverview = queryGeneric({
         sources: new Set<string>(),
         chunks: 0,
         importedAt: 0,
+        titles: new Map<string, number>(),
       };
       batch.chunks += 1;
       batch.importedAt = Math.max(batch.importedAt, chunk.importedAt);
@@ -384,6 +387,7 @@ export const adminOverview = queryGeneric({
     const batches = Array.from(batchMap.entries())
       .map(([batchId, batch]) => ({
         batchId,
+        label: batchLabel(batchId, batch.titles),
         sources: batch.sources.size,
         chunks: batch.chunks,
         importedAt: batch.importedAt,
@@ -555,6 +559,23 @@ function countByKnowledgeType<T extends { knowledgeType: KnowledgeTypeValue }>(r
 
 function documentKeyFromSourceRef(sourceRef: string) {
   return sourceRef.startsWith("shop-doc-upload:") ? sourceRef.slice("shop-doc-upload:".length) : sourceRef;
+}
+
+function batchLabel(batchId: string, titles: Map<string, number>) {
+  const orderedTitles = Array.from(titles.entries())
+    .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
+    .map(([title]) => title.trim())
+    .filter(Boolean);
+
+  if (!orderedTitles.length) {
+    return batchId;
+  }
+
+  if (orderedTitles.length === 1) {
+    return orderedTitles[0];
+  }
+
+  return `${orderedTitles[0]} + ${orderedTitles.length - 1} more`;
 }
 
 function isIcbcSource(sourceRef: string, sourceUrl: string | null) {

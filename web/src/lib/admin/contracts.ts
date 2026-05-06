@@ -7,6 +7,7 @@ export type AdminCountByKnowledgeType = {
 
 export type AdminBatchSummary = {
   batchId: string;
+  label: string;
   sources: number;
   chunks: number;
   importedAt: number;

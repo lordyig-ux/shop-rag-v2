@@ -641,7 +641,10 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
                       <div key={batch.batchId} className="rounded-md border border-slate-200 bg-slate-50 p-3 text-sm">
                         <div className="flex items-start justify-between gap-3">
                           <div>
-                            <div className="font-semibold text-slate-950">{batch.batchId}</div>
+                            <div className="font-semibold text-slate-950">{batch.label}</div>
+                            {batch.label !== batch.batchId ? (
+                              <div className="mt-0.5 break-all text-xs text-slate-500">{batch.batchId}</div>
+                            ) : null}
                             <div className="mt-1 text-slate-600">
                               {batch.sources} sources, {batch.chunks} chunks, imported {formatDate(batch.importedAt)}
                             </div>
