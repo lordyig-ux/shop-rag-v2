@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { ClerkProvider, Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import Link from "next/link";
+import { ClerkProvider, Show, UserButton } from "@clerk/nextjs";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -21,10 +22,12 @@ export default function RootLayout({
           <ClerkProvider publishableKey={publishableKey}>
             <header className="border-b border-slate-200 bg-white px-4 py-3 text-slate-950 sm:px-6 lg:px-8">
               <div className="mx-auto flex max-w-6xl items-center justify-end gap-3">
-                <Show when="signed-out">
-                  <SignInButton />
-                  <SignUpButton />
-                </Show>
+                <Link
+                  className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:border-[var(--brand-red)] hover:text-slate-950"
+                  href="/admin"
+                >
+                  Admin
+                </Link>
                 <Show when="signed-in">
                   <UserButton />
                 </Show>

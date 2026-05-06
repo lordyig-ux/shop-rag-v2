@@ -9,7 +9,7 @@ import { shapeSearchResponse } from "@/lib/search/shapeResults";
 import { AnswerPanel } from "./AnswerPanel";
 
 const examples = [
-  "What is the aluminum repair rate for bcaa?",
+  "When does the structural aluminum repair rate apply?",
   "Determine if an ICBC review is required?",
   "ICBC’s animal-impact policy?",
 ];
@@ -104,7 +104,7 @@ export function SearchShell() {
             <p className="text-sm font-black uppercase tracking-wide text-[var(--brand-red)]">Terminal Auto Body</p>
             <h1 className="mt-2 text-3xl font-semibold tracking-normal sm:text-4xl">Knowledge Base</h1>
             <p className="mt-3 max-w-xl text-sm leading-6 text-slate-600">
-              Public-safe proof of concept for searching company knowledge, SOPs, and insurance-policy material.
+              Search Terminal Auto Body procedures, insurance rules, and shop reference documents.
             </p>
           </header>
 

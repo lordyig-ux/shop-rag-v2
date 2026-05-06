@@ -20,7 +20,7 @@ export function AnswerPanel({ response }: { response: SearchResponse }) {
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-lg font-semibold text-slate-950">Answer</h2>
           <span className="text-xs font-medium text-slate-500">
-            {response.usedAi ? "Ollama Cloud" : "Source excerpts"} · {response.resultCount} result
+            {response.usedAi ? "Source-backed answer" : "Source excerpts"} - {response.resultCount} source
             {response.resultCount === 1 ? "" : "s"}
           </span>
         </div>
@@ -48,8 +48,7 @@ export function AnswerPanel({ response }: { response: SearchResponse }) {
                       [{index + 1}] {citation.title}
                     </h3>
                     <p className="mt-1 text-xs text-slate-500">
-                      {citation.category} · {citation.knowledgeType.replace("_", " ")} · Score{" "}
-                      {citation.score.toFixed(2)}
+                      {citation.category} - {citation.knowledgeType.replace("_", " ")}
                     </p>
                   </div>
                   {href ? (
