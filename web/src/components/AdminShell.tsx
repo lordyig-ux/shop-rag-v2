@@ -34,6 +34,9 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
   const [aiError, setAiError] = useState("");
   const [usageAnalytics, setUsageAnalytics] = useState<UsageAnalyticsInput | null>(null);
   const [usageAnalyticsError, setUsageAnalyticsError] = useState("");
+  const [summaryRebuildBusy, setSummaryRebuildBusy] = useState(false);
+  const [summaryRebuildError, setSummaryRebuildError] = useState("");
+  const [summaryRebuildResult, setSummaryRebuildResult] = useState<Record<string, unknown> | null>(null);
   const [activeTool, setActiveTool] = useState<ToolTab>("icbc");
   const [icbcBusy, setIcbcBusy] = useState(false);
   const [icbcError, setIcbcError] = useState("");
@@ -340,6 +343,25 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
     }
   }
 
+  async function rebuildAdminSummaries() {
+    setSummaryRebuildBusy(true);
+    setSummaryRebuildError("");
+    setSummaryRebuildResult(null);
+
+    try {
+      const response = await adminFetch("/api/admin/overview/rebuild", { method: "POST" });
+      const body = await readJsonResponse<Record<string, unknown> | { error?: string }>(response, "Summary rebuild failed");
+      if (!response.ok) {
+        throw new Error(jsonResponseErrorMessage(body, "Summary rebuild failed"));
+      }
+      setSummaryRebuildResult(body as Record<string, unknown>);
+    } catch (error) {
+      setSummaryRebuildError(error instanceof Error ? error.message : "Summary rebuild failed");
+    } finally {
+      setSummaryRebuildBusy(false);
+    }
+  }
+
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-6 text-slate-950 sm:px-6 lg:px-8">
       <section className="mx-auto max-w-6xl space-y-6">
@@ -371,6 +393,35 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
           </div>
         ) : (
           <>
+            {overview.summaryNeedsRebuild || summaryRebuildResult || summaryRebuildError ? (
+              <Panel title="Admin Summary Status">
+                <div className="space-y-3 text-sm">
+                  {overview.summaryNeedsRebuild ? (
+                    <p className="text-slate-600">
+                      Dashboard summaries have not been built yet. Rebuild once so the admin dashboard can avoid scanning full
+                      knowledge-base chunks.
+                    </p>
+                  ) : (
+                    <p className="text-slate-600">Dashboard summaries are available. Rebuild after bulk data maintenance if counts look stale.</p>
+                  )}
+                  <button
+                    className="rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+                    disabled={summaryRebuildBusy}
+                    type="button"
+                    onClick={() => void rebuildAdminSummaries()}
+                  >
+                    {summaryRebuildBusy ? "Rebuilding..." : "Rebuild Admin Summaries"}
+                  </button>
+                  {summaryRebuildError ? <div className="rounded-md border border-red-200 bg-red-50 p-3 text-red-800">{summaryRebuildError}</div> : null}
+                  {summaryRebuildResult ? (
+                    <pre className="max-h-48 overflow-auto rounded-md border border-slate-200 bg-slate-950 p-3 text-xs leading-5 text-white">
+                      {JSON.stringify(summaryRebuildResult, null, 2)}
+                    </pre>
+                  ) : null}
+                </div>
+              </Panel>
+            ) : null}
+
             <Panel title="Knowledge Base Tools">
               <div className="flex flex-wrap gap-2">
                 <ToolTabButton active={activeTool === "icbc"} onClick={() => setActiveTool("icbc")}>

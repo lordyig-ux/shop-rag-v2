@@ -1,6 +1,7 @@
 import { mutationGeneric, queryGeneric } from "convex/server";
 import { v } from "convex/values";
 
+import { buildAdminOverviewSummaries, emptyKnowledgeCounts } from "./adminOverviewSummary";
 import { assertImportSecret } from "./importSecret";
 
 const knowledgeType = v.union(
@@ -40,7 +41,6 @@ const chunkInput = v.object({
 });
 
 const searchKnowledgeType = v.union(v.literal("all"), knowledgeType);
-type KnowledgeTypeValue = "sop" | "insurance_policy" | "shop_doc" | "reference";
 const maintenanceJobType = v.union(
   v.literal("icbc_check"),
   v.literal("icbc_refresh"),
@@ -362,118 +362,30 @@ export const search = queryGeneric({
 export const adminOverview = queryGeneric({
   args: {},
   handler: async (ctx) => {
-    const [sources, chunks, recentQueries, recentMaintenanceRuns] = await Promise.all([
-      ctx.db.query("sources").collect(),
-      ctx.db.query("chunks").collect(),
+    const [stats, batches, shopDocuments, sourceSamples, recentQueries, recentMaintenanceRuns] = await Promise.all([
+      ctx.db.query("adminStats").withIndex("by_key", (q) => q.eq("key", "overview")).first(),
+      ctx.db.query("importBatchSummaries").withIndex("by_importedAt").order("desc").take(20),
+      ctx.db.query("shopDocumentSummaries").withIndex("by_importedAt").order("desc").take(100),
+      ctx.db.query("sources").withIndex("by_importedAt").order("desc").take(12),
       ctx.db.query("queryLogs").withIndex("by_createdAt").order("desc").take(12),
       ctx.db.query("maintenanceRuns").withIndex("by_createdAt").order("desc").take(8),
     ]);
 
-    const sourcesByKnowledgeType = countByKnowledgeType(sources);
-    const chunksByKnowledgeType = countByKnowledgeType(chunks);
-    const batchMap = new Map<string, { sources: Set<string>; chunks: number; importedAt: number; titles: Map<string, number> }>();
-
-    for (const source of sources) {
-      const batch = batchMap.get(source.importedBatchId) || {
-        sources: new Set<string>(),
-        chunks: 0,
-        importedAt: 0,
-        titles: new Map<string, number>(),
-      };
-      batch.sources.add(source.sourceId);
-      batch.importedAt = Math.max(batch.importedAt, source.importedAt);
-      batch.titles.set(source.title, (batch.titles.get(source.title) || 0) + 1);
-      batchMap.set(source.importedBatchId, batch);
-    }
-
-    for (const chunk of chunks) {
-      const batch = batchMap.get(chunk.importedBatchId) || {
-        sources: new Set<string>(),
-        chunks: 0,
-        importedAt: 0,
-        titles: new Map<string, number>(),
-      };
-      batch.chunks += 1;
-      batch.importedAt = Math.max(batch.importedAt, chunk.importedAt);
-      batchMap.set(chunk.importedBatchId, batch);
-    }
-
-    const batches = Array.from(batchMap.entries())
-      .map(([batchId, batch]) => ({
-        batchId,
-        label: batchLabel(batchId, batch.titles),
-        sources: batch.sources.size,
+    return {
+      sourceCount: stats?.sourceCount || 0,
+      chunkCount: stats?.chunkCount || 0,
+      queryCount: recentQueries.length,
+      latestImportAt: stats?.latestImportAt || null,
+      chunksByKnowledgeType: stats?.chunksByKnowledgeType || emptyKnowledgeCounts(),
+      sourcesByKnowledgeType: stats?.sourcesByKnowledgeType || emptyKnowledgeCounts(),
+      summaryNeedsRebuild: !stats,
+      batches: batches.map((batch) => ({
+        batchId: batch.batchId,
+        label: batch.label,
+        sources: batch.sources,
         chunks: batch.chunks,
         importedAt: batch.importedAt,
-      }))
-      .sort((left, right) => right.importedAt - left.importedAt);
-
-    const sourceSamples = sources
-      .slice()
-      .sort((left, right) => right.importedAt - left.importedAt)
-      .slice(0, 12)
-      .map((source) => ({
-        title: source.title,
-        category: source.category,
-        knowledgeType: source.knowledgeType,
-        sourceUrl: source.sourceUrl,
-        importedBatchId: source.importedBatchId,
-        importedAt: source.importedAt,
-      }));
-
-    const chunkCountsBySourceRef = new Map<string, number>();
-    for (const chunk of chunks) {
-      chunkCountsBySourceRef.set(chunk.sourceRef, (chunkCountsBySourceRef.get(chunk.sourceRef) || 0) + 1);
-    }
-
-    const shopDocumentMap = new Map<
-      string,
-      {
-        documentKey: string;
-        title: string;
-        fileType: string;
-        sourceRef: string;
-        sourceUrl: string | null;
-        sourceCount: number;
-        chunkCount: number;
-        importedBatchId: string;
-        importedAt: number;
-        modifiedAt: string;
-      }
-    >();
-
-    for (const source of sources) {
-      if (source.knowledgeType !== "shop_doc") {
-        continue;
-      }
-
-      const current = shopDocumentMap.get(source.sourceRef);
-      const importedAt = Math.max(current?.importedAt || 0, source.importedAt);
-      const sourceUrl = source.sourceUrl?.split("#page=")[0] || null;
-      shopDocumentMap.set(source.sourceRef, {
-        documentKey: documentKeyFromSourceRef(source.sourceRef),
-        title: importedAt === source.importedAt ? source.title : current?.title || source.title,
-        fileType: importedAt === source.importedAt ? source.fileType : current?.fileType || source.fileType,
-        sourceRef: source.sourceRef,
-        sourceUrl: sourceUrl || current?.sourceUrl || null,
-        sourceCount: (current?.sourceCount || 0) + 1,
-        chunkCount: chunkCountsBySourceRef.get(source.sourceRef) || current?.chunkCount || 0,
-        importedBatchId: importedAt === source.importedAt ? source.importedBatchId : current?.importedBatchId || source.importedBatchId,
-        importedAt,
-        modifiedAt: importedAt === source.importedAt ? source.modifiedAt : current?.modifiedAt || source.modifiedAt,
-      });
-    }
-
-    const shopDocuments = Array.from(shopDocumentMap.values()).sort((left, right) => right.importedAt - left.importedAt);
-
-    return {
-      sourceCount: sources.length,
-      chunkCount: chunks.length,
-      queryCount: recentQueries.length,
-      latestImportAt: batches[0]?.importedAt || null,
-      chunksByKnowledgeType,
-      sourcesByKnowledgeType,
-      batches,
+      })),
       recentQueries: recentQueries.map((query) => ({
         question: query.question,
         resultCount: query.resultCount,
@@ -481,8 +393,26 @@ export const adminOverview = queryGeneric({
         warnings: query.warnings,
         createdAt: query.createdAt,
       })),
-      sourceSamples,
-      shopDocuments,
+      sourceSamples: sourceSamples.map((source) => ({
+        title: source.title,
+        category: source.category,
+        knowledgeType: source.knowledgeType,
+        sourceUrl: source.sourceUrl,
+        importedBatchId: source.importedBatchId,
+        importedAt: source.importedAt,
+      })),
+      shopDocuments: shopDocuments.map((document) => ({
+        documentKey: document.documentKey,
+        title: document.title,
+        fileType: document.fileType,
+        sourceRef: document.sourceRef,
+        sourceUrl: document.sourceUrl,
+        sourceCount: document.sourceCount,
+        chunkCount: document.chunkCount,
+        importedBatchId: document.importedBatchId,
+        importedAt: document.importedAt,
+        modifiedAt: document.modifiedAt,
+      })),
       maintenanceRuns: recentMaintenanceRuns.map((run) => ({
         jobType: run.jobType,
         status: run.status,
@@ -655,41 +585,63 @@ export const adminUsageAnalytics = queryGeneric({
   },
 });
 
-function countByKnowledgeType<T extends { knowledgeType: KnowledgeTypeValue }>(rows: T[]) {
-  const counts = {
-    sop: 0,
-    insurance_policy: 0,
-    shop_doc: 0,
-    reference: 0,
-  };
+export const rebuildAdminOverviewSummaries = mutationGeneric({
+  args: {
+    importSecret: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    assertImportSecret(args.importSecret);
 
-  for (const row of rows) {
-    counts[row.knowledgeType] += 1;
-  }
+    const [sources, chunks] = await Promise.all([ctx.db.query("sources").collect(), ctx.db.query("chunks").collect()]);
+    const summaries = buildAdminOverviewSummaries(
+      sources.map((source) => ({
+        sourceId: source.sourceId,
+        title: source.title,
+        category: source.category,
+        sourceRef: source.sourceRef,
+        sourceUrl: source.sourceUrl,
+        fileType: source.fileType,
+        knowledgeType: source.knowledgeType,
+        modifiedAt: source.modifiedAt,
+        importedBatchId: source.importedBatchId,
+        importedAt: source.importedAt,
+      })),
+      chunks.map((chunk) => ({
+        chunkId: chunk.chunkId,
+        sourceRef: chunk.sourceRef,
+        knowledgeType: chunk.knowledgeType,
+        importedBatchId: chunk.importedBatchId,
+        importedAt: chunk.importedAt,
+      })),
+    );
 
-  return counts;
-}
+    for (const existing of await ctx.db.query("adminStats").collect()) {
+      await ctx.db.delete(existing._id);
+    }
+    for (const existing of await ctx.db.query("importBatchSummaries").collect()) {
+      await ctx.db.delete(existing._id);
+    }
+    for (const existing of await ctx.db.query("shopDocumentSummaries").collect()) {
+      await ctx.db.delete(existing._id);
+    }
 
-function documentKeyFromSourceRef(sourceRef: string) {
-  return sourceRef.startsWith("shop-doc-upload:") ? sourceRef.slice("shop-doc-upload:".length) : sourceRef;
-}
+    await ctx.db.insert("adminStats", summaries.stats);
+    for (const batch of summaries.batches) {
+      await ctx.db.insert("importBatchSummaries", batch);
+    }
+    for (const document of summaries.shopDocuments) {
+      await ctx.db.insert("shopDocumentSummaries", document);
+    }
 
-function batchLabel(batchId: string, titles: Map<string, number>) {
-  const orderedTitles = Array.from(titles.entries())
-    .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
-    .map(([title]) => title.trim())
-    .filter(Boolean);
-
-  if (!orderedTitles.length) {
-    return batchId;
-  }
-
-  if (orderedTitles.length === 1) {
-    return orderedTitles[0];
-  }
-
-  return `${orderedTitles[0]} + ${orderedTitles.length - 1} more`;
-}
+    return {
+      sourceCount: summaries.stats.sourceCount,
+      chunkCount: summaries.stats.chunkCount,
+      batches: summaries.batches.length,
+      shopDocuments: summaries.shopDocuments.length,
+      updatedAt: summaries.stats.updatedAt,
+    };
+  },
+});
 
 function isIcbcSource(sourceRef: string, sourceUrl: string | null) {
   const values = [sourceRef, sourceUrl || ""].map((value) => value.toLowerCase());

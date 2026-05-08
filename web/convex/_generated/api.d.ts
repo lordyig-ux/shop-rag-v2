@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as adminOverviewSummary from "../adminOverviewSummary.js";
 import type * as importSecret from "../importSecret.js";
 import type * as knowledge from "../knowledge.js";
 
@@ -18,6 +19,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  adminOverviewSummary: typeof adminOverviewSummary;
   importSecret: typeof importSecret;
   knowledge: typeof knowledge;
 }>;

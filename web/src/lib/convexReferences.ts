@@ -69,6 +69,20 @@ export const convexFunctions = {
     "knowledge:adminUsageAnalytics",
   ),
 
+  rebuildAdminOverviewSummaries: makeFunctionReference<
+    "mutation",
+    {
+      importSecret?: string;
+    },
+    {
+      sourceCount: number;
+      chunkCount: number;
+      batches: number;
+      shopDocuments: number;
+      updatedAt: number;
+    }
+  >("knowledge:rebuildAdminOverviewSummaries"),
+
   upsertImportedChunks: makeFunctionReference<
     "mutation",
     {

@@ -33,6 +33,13 @@ const usageTopSource = v.object({
   rank: v.number(),
 });
 
+const knowledgeCounts = v.object({
+  sop: v.number(),
+  insurance_policy: v.number(),
+  shop_doc: v.number(),
+  reference: v.number(),
+});
+
 export default defineSchema({
   sources: defineTable({
     sourceId: v.string(),
@@ -50,6 +57,7 @@ export default defineSchema({
     .index("by_sourceId", ["sourceId"])
     .index("by_knowledgeType", ["knowledgeType"])
     .index("by_importedBatchId", ["importedBatchId"])
+    .index("by_importedAt", ["importedAt"])
     .searchIndex("search_title", {
       searchField: "title",
       filterFields: ["knowledgeType", "importedBatchId"],
@@ -131,4 +139,39 @@ export default defineSchema({
   })
     .index("by_createdAt", ["createdAt"])
     .index("by_jobType_createdAt", ["jobType", "createdAt"]),
+
+  adminStats: defineTable({
+    key: v.string(),
+    sourceCount: v.number(),
+    chunkCount: v.number(),
+    latestImportAt: v.union(v.number(), v.null()),
+    sourcesByKnowledgeType: knowledgeCounts,
+    chunksByKnowledgeType: knowledgeCounts,
+    updatedAt: v.number(),
+  }).index("by_key", ["key"]),
+
+  importBatchSummaries: defineTable({
+    batchId: v.string(),
+    label: v.string(),
+    sources: v.number(),
+    chunks: v.number(),
+    importedAt: v.number(),
+  })
+    .index("by_batchId", ["batchId"])
+    .index("by_importedAt", ["importedAt"]),
+
+  shopDocumentSummaries: defineTable({
+    documentKey: v.string(),
+    title: v.string(),
+    fileType: v.string(),
+    sourceRef: v.string(),
+    sourceUrl: v.union(v.string(), v.null()),
+    sourceCount: v.number(),
+    chunkCount: v.number(),
+    importedBatchId: v.string(),
+    importedAt: v.number(),
+    modifiedAt: v.string(),
+  })
+    .index("by_sourceRef", ["sourceRef"])
+    .index("by_importedAt", ["importedAt"]),
 });

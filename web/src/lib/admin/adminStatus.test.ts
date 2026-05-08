@@ -20,6 +20,7 @@ const overview: AdminOverview = {
     shop_doc: 0,
     reference: 0,
   },
+  summaryNeedsRebuild: false,
   batches: [],
   recentQueries: [],
   sourceSamples: [],

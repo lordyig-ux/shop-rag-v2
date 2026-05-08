@@ -14,6 +14,7 @@ import {
   shopDocsNoRecordsError,
   type ShopDocsImportResult,
 } from "@/lib/admin/shopDocs";
+import { rebuildAdminOverviewSummaries } from "@/lib/admin/rebuildOverviewSummaries";
 import {
   detectUploadedShopDocKind,
   documentKeyFromFileName,
@@ -94,6 +95,7 @@ export async function POST(request: Request) {
 
   const imported = await importRecords(client, importSecret, records);
   const deleted = await deleteOldSourceRefs(client, importSecret, batchId, sourceRefs);
+  await rebuildAdminOverviewSummaries(client, importSecret);
   const result: ShopDocsImportResult = {
     batchId,
     importedAt: Date.now(),

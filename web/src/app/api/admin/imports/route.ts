@@ -1,6 +1,7 @@
 import { ConvexHttpClient } from "convex/browser";
 
 import { parseMaintenanceImportRequest } from "@/lib/admin/maintenanceImport";
+import { rebuildAdminOverviewSummaries } from "@/lib/admin/rebuildOverviewSummaries";
 import { adminAccessErrorResponse, requireAdminAccess } from "@/lib/auth/requireAdminAccess";
 import { convexFunctions } from "@/lib/convexReferences";
 import { parseChunkJsonl } from "@/lib/knowledge/jsonlImport";
@@ -59,6 +60,7 @@ export async function POST(request: Request) {
     chunksUpserted += result.chunksUpserted;
     sourcesUpserted += result.sourcesUpserted;
   }
+  await rebuildAdminOverviewSummaries(client, importSecret);
 
   return Response.json({
     mode: "import",

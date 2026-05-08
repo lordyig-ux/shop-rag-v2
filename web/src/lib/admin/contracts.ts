@@ -59,6 +59,7 @@ export type AdminOverview = {
   latestImportAt: number | null;
   chunksByKnowledgeType: AdminCountByKnowledgeType;
   sourcesByKnowledgeType: AdminCountByKnowledgeType;
+  summaryNeedsRebuild: boolean;
   batches: AdminBatchSummary[];
   recentQueries: AdminRecentQuery[];
   sourceSamples: AdminSourceSample[];

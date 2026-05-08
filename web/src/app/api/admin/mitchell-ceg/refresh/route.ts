@@ -8,6 +8,7 @@ import {
   MITCHELL_CEG_START_URL,
   type MitchellCegRefreshResult,
 } from "@/lib/admin/mitchellCeg";
+import { rebuildAdminOverviewSummaries } from "@/lib/admin/rebuildOverviewSummaries";
 import { adminAccessErrorResponse, requireAdminAccess } from "@/lib/auth/requireAdminAccess";
 import { convexFunctions } from "@/lib/convexReferences";
 import type { NormalizedChunkRecord } from "@/lib/knowledge/normalizeChunk";
@@ -67,6 +68,7 @@ export async function POST() {
 
     const imported = await importRecords(client, importSecret, records);
     const deleted = await deleteOldMitchell(client, importSecret, batchId);
+    await rebuildAdminOverviewSummaries(client, importSecret);
     const pagesImported = new Set(records.map((record) => record.source.sourceRef)).size;
     const result: MitchellCegRefreshResult = {
       batchId,

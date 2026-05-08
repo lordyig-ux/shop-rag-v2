@@ -1,5 +1,6 @@
 import { ConvexHttpClient } from "convex/browser";
 
+import { rebuildAdminOverviewSummaries } from "@/lib/admin/rebuildOverviewSummaries";
 import { adminAccessErrorResponse, requireAdminAccess } from "@/lib/auth/requireAdminAccess";
 import { convexFunctions } from "@/lib/convexReferences";
 
@@ -43,6 +44,7 @@ export async function POST(request: Request) {
     hasMore = result.hasMore;
     iterations += 1;
   }
+  await rebuildAdminOverviewSummaries(client, importSecret);
 
   return Response.json({
     sourceRef,

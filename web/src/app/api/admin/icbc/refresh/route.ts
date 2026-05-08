@@ -11,6 +11,7 @@ import {
   type IcbcRefreshFailure,
   type IcbcRefreshResult,
 } from "@/lib/admin/icbcRefresh";
+import { rebuildAdminOverviewSummaries } from "@/lib/admin/rebuildOverviewSummaries";
 import { adminAccessErrorResponse, requireAdminAccess } from "@/lib/auth/requireAdminAccess";
 import { convexFunctions } from "@/lib/convexReferences";
 import type { NormalizedChunkRecord } from "@/lib/knowledge/normalizeChunk";
@@ -75,6 +76,7 @@ export async function POST() {
     const imported = await importRecords(client, importSecret, records);
     importedNewBatch = true;
     const deleted = await deleteOldIcbcSources(client, importSecret, batchId);
+    await rebuildAdminOverviewSummaries(client, importSecret);
     const result: IcbcRefreshResult = {
       batchId,
       refreshedAt: Date.now(),
