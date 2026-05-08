@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="sources-layout">
+  <div class="panel">
+    <h1>Sources</h1>
+    <form id="source-search-form" class="compact-form">
+      <input id="source-search" type="search" placeholder="Search indexed source titles and chunks">
+      <button type="submit">Search</button>
+    </form>
+  </div>
+  <section id="sources-results" class="source-results" aria-live="polite"></section>
+</section>
+{% endblock %}

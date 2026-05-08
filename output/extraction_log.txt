@@ -1,0 +1,19 @@
+2026-04-28 19:57:06,431 INFO Fetching nav XML from https://mdp.partners.icbc.com/maps/nav_DAMG-MP-NRP91J-vendors.xml
+2026-04-28 19:57:06,698 INFO Received 101,291 bytes
+2026-04-28 19:57:06,701 INFO Map title: MD partner procedures
+2026-04-28 19:57:06,702 INFO Extracted 589 topic references
+2026-04-28 19:57:06,702 INFO Unique topics: 589 (removed 0 duplicates)
+2026-04-28 19:57:06,705 INFO Saved to output\all_links.json
+2026-04-28 19:57:06,705 INFO Category breakdown:
+2026-04-28 19:57:06,705 INFO   Repairs: 267 topics
+2026-04-28 19:57:06,705 INFO   Vehicle damage: 58 topics
+2026-04-28 19:57:06,705 INFO   Total losses and salvage: 57 topics
+2026-04-28 19:57:06,705 INFO   Repair facilities program: 51 topics
+2026-04-28 19:57:06,705 INFO   Non-drivable vehicles and tows: 50 topics
+2026-04-28 19:57:06,705 INFO   Glass: 48 topics
+2026-04-28 19:57:06,705 INFO   Loss of Use management: 37 topics
+2026-04-28 19:57:06,706 INFO   Occupational health and safety: 10 topics
+2026-04-28 19:57:06,706 INFO   (top-level): 9 topics
+2026-04-28 19:57:06,706 INFO   Vendors and suppliers: 2 topics
+2026-04-28 19:57:06,706 INFO Verifying sample topic: https://mdp.partners.icbc.com/topics/DAMG-CO-KLH43Y-ndv-vehs-tows.html
+2026-04-28 19:57:06,946 INFO   Status: 200, Size: 4,130 bytes

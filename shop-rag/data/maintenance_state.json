@@ -1,0 +1,708 @@
+{
+  "last_checked": "2026-04-29T02:56:52.526054+00:00",
+  "last_check": {
+    "checked_at": "2026-04-29T02:56:52.526054+00:00",
+    "new_count": 16,
+    "removed_count": 8,
+    "changed_count": 59,
+    "new_topics": [
+      {
+        "id": "CLMS-PD-0C83E4-broken-class-clean-up",
+        "title": "Handle broken glass cleanup on a collision estimate",
+        "url": "https://mdp.partners.icbc.com/topic/CLMS-PD-0C83E4-broken-class-clean-up?map=DAMG-MP-NRP91J-vendors",
+        "category": "Glass > Policies > Labour times for claims involving glass ",
+        "content_url": "https://mdp.partners.icbc.com/topics/CLMS-PD-0C83E4-broken-class-clean-up.html"
+      },
+      {
+        "id": "7A0793E85BBB23ED5035A208498518A7",
+        "title": "Autosource",
+        "url": "https://mdp.partners.icbc.com/topic/7A0793E85BBB23ED5035A208498518A7?map=DAMG-MP-NRP91J-vendors",
+        "category": "Total losses and salvage > Actual cash value policy",
+        "content_url": "https://mdp.partners.icbc.com/topics/7A0793E85BBB23ED5035A208498518A7.html"
+      },
+      {
+        "id": "C4DD0636F80B3834802B7911438CA175",
+        "title": "Create interim payment on total loss settlement",
+        "url": "https://mdp.partners.icbc.com/topic/C4DD0636F80B3834802B7911438CA175?map=DAMG-MP-NRP91J-vendors",
+        "category": "Total losses and salvage > Total loss settlement dispute policy",
+        "content_url": "https://mdp.partners.icbc.com/topics/C4DD0636F80B3834802B7911438CA175.html"
+      },
+      {
+        "id": "f42adb7d-c252-4220-a224-52bdd9f693ce",
+        "title": "What is an electronic authorization",
+        "url": "https://mdp.partners.icbc.com/topic/f42adb7d-c252-4220-a224-52bdd9f693ce?map=DAMG-MP-NRP91J-vendors",
+        "category": "Total losses and salvage > Salvage > Obtain a signed Vehicle Ownership Transfer Agreement ",
+        "content_url": "https://mdp.partners.icbc.com/topics/f42adb7d-c252-4220-a224-52bdd9f693ce.html"
+      },
+      {
+        "id": "f42adb7d-c252-4220-a224-52bdd9f693ce-0",
+        "title": "What is an electronic authorization",
+        "url": "https://mdp.partners.icbc.com/topic/f42adb7d-c252-4220-a224-52bdd9f693ce-0?map=DAMG-MP-NRP91J-vendors",
+        "category": "Total losses and salvage > Salvage > Salvage designation policy",
+        "content_url": "https://mdp.partners.icbc.com/topics/f42adb7d-c252-4220-a224-52bdd9f693ce-0.html"
+      },
+      {
+        "id": "d3433337-f584-41d1-ab70-44ccd347f7df",
+        "title": " Requirements for aluminum material sublet charge on Audi vehicles",
+        "url": "https://mdp.partners.icbc.com/topic/d3433337-f584-41d1-ab70-44ccd347f7df?map=DAMG-MP-NRP91J-vendors",
+        "category": "Repairs > Light duty estimates > Estimating technical > Pre-priced vehicle items",
+        "content_url": "https://mdp.partners.icbc.com/topics/d3433337-f584-41d1-ab70-44ccd347f7df.html"
+      },
+      {
+        "id": "50CBF8B994B539D601815B01FC497FD5",
+        "title": "Replacement parts where depreciation does not apply",
+        "url": "https://mdp.partners.icbc.com/topic/50CBF8B994B539D601815B01FC497FD5?map=DAMG-MP-NRP91J-vendors",
+        "category": "Repairs > Supplier",
+        "content_url": "https://mdp.partners.icbc.com/topics/50CBF8B994B539D601815B01FC497FD5.html"
+      },
+      {
+        "id": "C17B574FA692A606F6828FE7279337A1",
+        "title": "Alternative Transportation Service Standards",
+        "url": "https://mdp.partners.icbc.com/topic/C17B574FA692A606F6828FE7279337A1?map=DAMG-MP-NRP91J-vendors",
+        "category": "Repair facilities program > Alternative Transportation Service",
+        "content_url": "https://mdp.partners.icbc.com/topics/C17B574FA692A606F6828FE7279337A1.html"
+      },
+      {
+        "id": "A411BCC4520979BFB6C0119C341CD494",
+        "title": "Alternative Transportation Service replacement vehicle criteria",
+        "url": "https://mdp.partners.icbc.com/topic/A411BCC4520979BFB6C0119C341CD494?map=DAMG-MP-NRP91J-vendors",
+        "category": "Repair facilities program > Alternative Transportation Service > Alternative Transportation Service Standards",
+        "content_url": "https://mdp.partners.icbc.com/topics/A411BCC4520979BFB6C0119C341CD494.html"
+      },
+      {
+        "id": "73ED517B2B31C2AC74D228A2D6B3EE0A",
+        "title": "Coverage for Alternative Transportation Service vehicle",
+        "url": "https://mdp.partners.icbc.com/topic/73ED517B2B31C2AC74D228A2D6B3EE0A?map=DAMG-MP-NRP91J-vendors",
+        "category": "Repair facilities program > Alternative Transportation Service > Alternative Transportation Service Standards",
+        "content_url": "https://mdp.partners.icbc.com/topics/73ED517B2B31C2AC74D228A2D6B3EE0A.html"
+      },
+      {
+        "id": "Policy-on-managing-existing-fpp-assignments",
+        "title": "Policy on managing existing Financial Partners Program assignments",
+        "url": "https://mdp.partners.icbc.com/topic/Policy-on-managing-existing-fpp-assignments?map=DAMG-MP-NRP91J-vendors",
+        "category": "Vehicle damage > Estimates > Complete a commercial estimate for a non-network repair facility > Accountants and Economists",
+        "content_url": "https://mdp.partners.icbc.com/topics/Policy-on-managing-existing-fpp-assignments.html"
+      },
+      {
+        "id": "Financial-partners-program-overview-for-existing-assignments",
+        "title": "Financial Partners Program overview for existing assignments",
+        "url": "https://mdp.partners.icbc.com/topic/Financial-partners-program-overview-for-existing-assignments?map=DAMG-MP-NRP91J-vendors",
+        "category": "Vehicle damage > Estimates > Complete a commercial estimate for a non-network repair facility > Accountants and Economists > Policy on managing existing Financial Partners Program assignments",
+        "content_url": "https://mdp.partners.icbc.com/topics/Financial-partners-program-overview-for-existing-assignments.html"
+      },
+      {
+        "id": "Policy-on-work-phase-reqts-for-existing-fpp-assignments",
+        "title": "Policy on work phase requirements for existing Financial Partners Program assignments",
+        "url": "https://mdp.partners.icbc.com/topic/Policy-on-work-phase-reqts-for-existing-fpp-assignments?map=DAMG-MP-NRP91J-vendors",
+        "category": "Vehicle damage > Estimates > Complete a commercial estimate for a non-network repair facility > Accountants and Economists > Policy on managing existing Financial Partners Program assignments",
+        "content_url": "https://mdp.partners.icbc.com/topics/Policy-on-work-phase-reqts-for-existing-fpp-assignments.html"
+      },
+      {
+        "id": "Document-initial-file-handling-decisions-for-existing-fpp-assignments",
+        "title": "Document initial file handling decisions for existing Financial Partners Program assignments ",
+        "url": "https://mdp.partners.icbc.com/topic/Document-initial-file-handling-decisions-for-existing-fpp-assignments?map=DAMG-MP-NRP91J-vendors",
+        "category": "Vehicle damage > Estimates > Complete a commercial estimate for a non-network repair facility > Accountants and Economists > Policy on managing existing Financial Partners Program assignments",
+        "content_url": "https://mdp.partners.icbc.com/topics/Document-initial-file-handling-decisions-for-existing-fpp-assignments.html"
+      },
+      {
+        "id": "Request-addtl-hours-for-an-existing-fpp-assignment",
+        "title": "Request additional hours for an existing Financial Partners Program assignment",
+        "url": "https://mdp.partners.icbc.com/topic/Request-addtl-hours-for-an-existing-fpp-assignment?map=DAMG-MP-NRP91J-vendors",
+        "category": "Vehicle damage > Estimates > Complete a commercial estimate for a non-network repair facility > Accountants and Economists > Policy on managing existing Financial Partners Program assignments",
+        "content_url": "https://mdp.partners.icbc.com/topics/Request-addtl-hours-for-an-existing-fpp-assignment.html"
+      },
+      {
+        "id": "Allocate-file-to-a-different-work-phase-for-an-existing-fpp-assignment",
+        "title": "Allocate file to a different work phase for an existing Financial Partners Program assignment",
+        "url": "https://mdp.partners.icbc.com/topic/Allocate-file-to-a-different-work-phase-for-an-existing-fpp-assignment?map=DAMG-MP-NRP91J-vendors",
+        "category": "Vehicle damage > Estimates > Complete a commercial estimate for a non-network repair facility > Accountants and Economists > Policy on managing existing Financial Partners Program assignments",
+        "content_url": "https://mdp.partners.icbc.com/topics/Allocate-file-to-a-different-work-phase-for-an-existing-fpp-assignment.html"
+      }
+    ],
+    "removed_topics": [
+      {
+        "id": "CLMS-PL-5GJ5JX-policy-accelerated-depreciation",
+        "title": "Accelerated depreciation policy",
+        "category": "Repairs > Light duty estimates > Estimating technical > Depreciation policy > Depreciation > Categories of accelerated depreciation "
+      },
+      {
+        "id": "DFD42C857E788637F5851A15F60CC52C",
+        "title": "Categories of accelerated depreciation",
+        "category": "Repairs > Light duty estimates > Estimating technical > Depreciation policy > Depreciation"
+      },
+      {
+        "id": "763E8BA5DC8A54B658A0DBE1797127BD",
+        "title": "Determine if vehicle is repairable",
+        "category": "Repairs > Light duty estimates > Estimating"
+      },
+      {
+        "id": "F431C2038EF6E5F6715413CDFEB6E1C7",
+        "title": "Handle a claim with manufacturer\u2019s defect or faulty workmanship",
+        "category": "Repairs > Light duty estimates > Estimating"
+      },
+      {
+        "id": "461CF0F176EF5AA380452797575FD7F3",
+        "title": "Investigate manufacturer's defect",
+        "category": "Repairs > Light duty estimates > Estimating"
+      },
+      {
+        "id": "89C7DA646F2642708609C757B67B43ED",
+        "title": "Manufacturer\u2019s defects policy",
+        "category": "Repairs > Light duty estimates > Estimating"
+      },
+      {
+        "id": "40D0E5917DB6CFFB9DFD01C913E1304A",
+        "title": "Sublet repair rates",
+        "category": "Repairs > Light duty estimates > Estimating > Sublet repair"
+      },
+      {
+        "id": "7A06D5D6FDD90562678BB23B3055FDB6",
+        "title": "Sublet repairs policy",
+        "category": "Repairs > Light duty estimates > Estimating > Sublet repair"
+      }
+    ],
+    "changed_topics": [
+      {
+        "id": "CLMS-PL-7WWF4W-custaccfeettowcompolicy",
+        "changes": {
+          "title": {
+            "old": "Management of customer vehicle access fees charged by towing companies policy",
+            "new": "Management of customer vehicle access fees charged by towing companies  policy"
+          }
+        }
+      },
+      {
+        "id": "DAMG-PL-1VK04N-pol-cus-res-tow-storage",
+        "changes": {
+          "title": {
+            "old": "Vehicle owner's responsibility for towing and storage fees policy",
+            "new": "Policy on customer responsibility for towing and storage fees"
+          }
+        }
+      },
+      {
+        "id": "Requirements-for-sublet-towing-service-billing",
+        "changes": {
+          "title": {
+            "old": "Requirements for sublet towing service billing",
+            "new": "Requirements for sublet towing service billing "
+          }
+        }
+      },
+      {
+        "id": "456ABECFD36D9A689F6AE710DEB38ADB",
+        "changes": {
+          "title": {
+            "old": "Labour times for claims involving glass policy",
+            "new": "Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "E7F92ABE9BA3C70D5E2343BD3507DD82",
+        "changes": {
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "5E74396E7841C155016AA8EF95AF436E",
+        "changes": {
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "9ABF9F224F0B63B9343976FD1B97A5F9",
+        "changes": {
+          "title": {
+            "old": "Correct glass pricing",
+            "new": "Correct glass pricing "
+          },
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "0FC07362480615D3C59C5374FA1AA5E9",
+        "changes": {
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "F52D00E3D8F8A103081A7BFD5211AECA",
+        "changes": {
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "6128E0C142520DD54E937B961F9F8763",
+        "changes": {
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "1741660C4F7CDDE24F69E2E6FC9FD84C",
+        "changes": {
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "36C767CDA57570DDFCC8F385E24F8115",
+        "changes": {
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "AF93F261AAC1ACB980FC78BBAD438533",
+        "changes": {
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "5E704D5FFE1839CBAFB170831F01DB48",
+        "changes": {
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "C50A65D1545119FE6D9EB7B9C5772B28",
+        "changes": {
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "8734288D695CAC6393C35CCE4C8A990E",
+        "changes": {
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "E89CFCC470953F5069C70D1858D187DB",
+        "changes": {
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "E4652DF445B4A0A2348D80C0E2BD9308",
+        "changes": {
+          "title": {
+            "old": "Rain sensor removal and installation",
+            "new": "Rain sensor removal and\n    installation"
+          },
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "D0774C3BEC7EC362BE75770810780682",
+        "changes": {
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "60C82E0D7085F6704F45F7F96FB54F4C",
+        "changes": {
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy > Propane and natural gas decals",
+            "new": "Glass > Policies > Labour times for claims involving glass  > Propane and natural gas decals"
+          }
+        }
+      },
+      {
+        "id": "D502E26A805210A1F18CBF6C0D2F678E",
+        "changes": {
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "C55D7F11B6F72E38FF2C3B8A4F17AE31",
+        "changes": {
+          "category": {
+            "old": "Glass > Policies > Labour times for claims involving glass policy",
+            "new": "Glass > Policies > Labour times for claims involving glass "
+          }
+        }
+      },
+      {
+        "id": "012509502D9413599F79CFF5EE854E42",
+        "changes": {
+          "title": {
+            "old": "Processing Loss of Use on glass claims",
+            "new": "Processing Loss of Use on glass claims "
+          }
+        }
+      },
+      {
+        "id": "23708E4FDD136615ED47C56989A9C5E0",
+        "changes": {
+          "title": {
+            "old": "Actual cash value",
+            "new": "Actual cash value "
+          }
+        }
+      },
+      {
+        "id": "36F5FA02C487848AC4C3056BA1CA9D0D",
+        "changes": {
+          "title": {
+            "old": "Total loss settlement for New Vehicle Replacement Plus",
+            "new": "Total loss settlement for New Vehicle Replacement Plus "
+          }
+        }
+      },
+      {
+        "id": "8E082D368DDA196323C59D2CF65848A5",
+        "changes": {
+          "title": {
+            "old": "Total loss settlement under Limited Depreciation Endorsement",
+            "new": "Total loss settlement under Limited Depreciation Endorsement "
+          }
+        }
+      },
+      {
+        "id": "61463FB65CB18CCE1C7DEC69D631C79C",
+        "changes": {
+          "title": {
+            "old": "Total loss settlement under Replacement Cost Endorsement",
+            "new": "Total loss settlement under Replacement Cost Endorsement "
+          }
+        }
+      },
+      {
+        "id": "5FEA4362F0B9AF2D072BD26A405345EC",
+        "changes": {
+          "title": {
+            "old": "Dealership, rental provider, garage service operator, or lessor (closed lease)",
+            "new": "Dealership, rental provider, garage service operator, or lessor (closed lease) "
+          }
+        }
+      },
+      {
+        "id": "B029215C34907BFC4E6687F00E465D00",
+        "changes": {
+          "title": {
+            "old": "ICBC salvage facilities in British Columbia",
+            "new": "ICBC salvage facilities in British Columbia "
+          }
+        }
+      },
+      {
+        "id": "obtain-physical-electronic-or-explicit-verbal-authorization-for-a-written-off-agreement",
+        "changes": {
+          "title": {
+            "old": "Obtain a signed Vehicle Ownership Transfer Agreement",
+            "new": "Obtain a signed Vehicle Ownership Transfer Agreement "
+          }
+        }
+      },
+      {
+        "id": "53FF52D7011DF8219E6B43AF10D333FC",
+        "changes": {
+          "title": {
+            "old": "Salvage designations and vehicle registration codes",
+            "new": "Salvage designations and vehicle registration codes "
+          }
+        }
+      },
+      {
+        "id": "736AE41C69D806DAE0AA473450292B69",
+        "changes": {
+          "title": {
+            "old": "Major electrical components",
+            "new": "Major electrical components "
+          }
+        }
+      },
+      {
+        "id": "CLMS-RF-V5S6EF-labour-rates-under-8800kg",
+        "changes": {
+          "title": {
+            "old": "Commercial labour rate application on light commercial vehicles",
+            "new": "Commercial labour rate application on light commercial vehicles "
+          }
+        }
+      },
+      {
+        "id": "CLMS-PS-2PVD6R-manageestimateissuepayment",
+        "changes": {
+          "title": {
+            "old": "Managing a commercial estimate in Mitchell TruckMax to issue a payment",
+            "new": "Managing a commercial estimate in Mitchell TruckMax to issue a payment "
+          }
+        }
+      },
+      {
+        "id": "7B2E29C57CF8D287C70F902070182474",
+        "changes": {
+          "title": {
+            "old": "Completing a specialty vehicle appraisal repair facility estimate",
+            "new": "Completing a specialty vehicle appraisal repair facility estimate "
+          }
+        }
+      },
+      {
+        "id": "7F3AB9EB4655FBFF5080600253863B43",
+        "changes": {
+          "title": {
+            "old": "Cash settlement requirements",
+            "new": "Cash settlement requirements and approvals"
+          }
+        }
+      },
+      {
+        "id": "d4568307-7f45-41a9-bd72-440056646c6c",
+        "changes": {
+          "category": {
+            "old": "Repairs > Light duty estimates > Estimating > Cash settlement requirements",
+            "new": "Repairs > Light duty estimates > Estimating > Cash settlement requirements and approvals"
+          }
+        }
+      },
+      {
+        "id": "E67F76C14FAD6CB88315983DD0C46C1A",
+        "changes": {
+          "category": {
+            "old": "Repairs > Light duty estimates > Estimating > Cash settlement requirements",
+            "new": "Repairs > Light duty estimates > Estimating > Cash settlement requirements and approvals"
+          }
+        }
+      },
+      {
+        "id": "db5b1545-8013-4bf0-9b08-8841c83299d7",
+        "changes": {
+          "category": {
+            "old": "Repairs > Light duty estimates > Estimating > Cash settlement requirements",
+            "new": "Repairs > Light duty estimates > Estimating > Cash settlement requirements and approvals"
+          }
+        }
+      },
+      {
+        "id": "DFF2074F7E6C103DB05B2FF157EF913B-0",
+        "changes": {
+          "category": {
+            "old": "Repairs > Light duty estimates > Estimating > Cash settlement requirements",
+            "new": "Repairs > Light duty estimates > Estimating > Cash settlement requirements and approvals"
+          }
+        }
+      },
+      {
+        "id": "bacb00a9-20c5-48b1-9d41-e28a489144d9-0",
+        "changes": {
+          "category": {
+            "old": "Repairs > Light duty estimates > Estimating > Cash settlement requirements > Unsafe vehicle",
+            "new": "Repairs > Light duty estimates > Estimating > Cash settlement requirements and approvals > Unsafe vehicle"
+          }
+        }
+      },
+      {
+        "id": "AD5EB9ABCF203DD1B7CC9A1CDFF3BB5A",
+        "changes": {
+          "title": {
+            "old": "Co-insurance on a material damage claim",
+            "new": "Co-insurance on a material damage claim "
+          }
+        }
+      },
+      {
+        "id": "d647b944-618b-4ca9-b922-9eab80f70069",
+        "changes": {
+          "title": {
+            "old": "Coverage for declared value vehicle equipment",
+            "new": "Coverage for declared value vehicle equipment "
+          }
+        }
+      },
+      {
+        "id": "e6a29a49-4820-498d-bd23-f27e67cdbf64",
+        "changes": {
+          "title": {
+            "old": "Coverage for tow truck equipment",
+            "new": "Coverage for tow truck equipment "
+          }
+        }
+      },
+      {
+        "id": "E2C87F6095B95175F1A9609D94F1222B",
+        "changes": {
+          "title": {
+            "old": "Water damaged vehicle policy",
+            "new": "Water damaged vehicle policy "
+          }
+        }
+      },
+      {
+        "id": "736AE41C69D806DAE0AA473450292B69-0",
+        "changes": {
+          "title": {
+            "old": "Major electrical components",
+            "new": "Major electrical components "
+          }
+        }
+      },
+      {
+        "id": "72D52478DA6AAFB7AEF5EFCA65E59D1F",
+        "changes": {
+          "title": {
+            "old": "Parts selection and pricing policy",
+            "new": "Parts selection and pricing policy "
+          }
+        }
+      },
+      {
+        "id": "986A50B497A67F522DDBD8DA1EEB3D9F",
+        "changes": {
+          "title": {
+            "old": "Alloy wheel identification stamping",
+            "new": "Alloy wheel identification stamping "
+          }
+        }
+      },
+      {
+        "id": "7B188D08700A12535F6386BA60E75CA3",
+        "changes": {
+          "title": {
+            "old": "Standards of performance for repair facilities on alloy wheel repair",
+            "new": "Standards of performance for repair facilities on alloy wheel repair "
+          }
+        }
+      },
+      {
+        "id": "EDE9D0672F17C7D5A8B73102B7D9002C",
+        "changes": {
+          "title": {
+            "old": "Paint and rust protection warranty",
+            "new": "Paint and rust protection warranty "
+          }
+        }
+      },
+      {
+        "id": "3141013AE3E81FD8C03DA973129CEBCB",
+        "changes": {
+          "title": {
+            "old": "Three and four-stage refinishing",
+            "new": "Three and four-stage refinishing "
+          }
+        }
+      },
+      {
+        "id": "DAMG-PL-JAL815-policy-feather-prime-block",
+        "changes": {
+          "title": {
+            "old": "Feather, prime and block allowance policy",
+            "new": "Policy on feather, prime and block allowance"
+          }
+        }
+      },
+      {
+        "id": "14FC23DDBAC69EE135B17DAC40F48814",
+        "changes": {
+          "title": {
+            "old": "Additional collision repair program estimate policy",
+            "new": "Additional collision repair program estimate  policy"
+          }
+        }
+      },
+      {
+        "id": "9A3F40FEF6FD906A1380BE888AC0FF76",
+        "changes": {
+          "title": {
+            "old": "In-stock decals and stripes and the collision repair program",
+            "new": "In-stock decals and stripes and the collision repair program "
+          }
+        }
+      },
+      {
+        "id": "E2397C21CCDD170D0DBAC1545CEF3B75",
+        "changes": {
+          "title": {
+            "old": "Managing the customer's alternative transportation entitlements and needs",
+            "new": "\n    Managing the customer's alternative transportation entitlements and needs"
+          }
+        }
+      },
+      {
+        "id": "DAMG-PL-Q9NNO0-policy-rpr-prog-fac-empl-cons",
+        "changes": {
+          "title": {
+            "old": "Repair program facility employee storage information policy",
+            "new": " Repair program facility employee storage information policy"
+          }
+        }
+      },
+      {
+        "id": "f27f9252-9f61-4e18-9c0f-41f26e4906ae",
+        "changes": {
+          "title": {
+            "old": "Handle a stereo claim",
+            "new": "Handle a stereo claim "
+          }
+        }
+      },
+      {
+        "id": "8165F95AEE38753FE713F96B81F125F1",
+        "changes": {
+          "title": {
+            "old": "Truck frame repair times",
+            "new": "Truck frame repair times "
+          }
+        }
+      },
+      {
+        "id": "CVRG-PD-KEP7HH-hdl-unins-mtr-veh-dmg-ec-claim",
+        "changes": {
+          "title": {
+            "old": "Handle an uninsured motorist vehicle damage Enhanced Care claim",
+            "new": "Determine coverage for an uninsured parked vehicle"
+          }
+        }
+      }
+    ]
+  },
+  "last_refreshed": "2026-04-29T03:11:08.536333+00:00",
+  "next_recommended_check": "2026-05-29"
+}

@@ -1,0 +1,726 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "Map.dtd"[]>
+<map id="mapDamagePartners" ditaarch:DITAArchVersion="1.3" domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   " class="- map/map " title="MD partner procedures" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <title class="- topic/title ">MD partner procedures</title>
+  <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-CO-KLH43Y-ndv-vehs-tows" navtitle="Non-drivable vehicles and tows">
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PL-2A2B82-poli-when-vehi-ndv" navtitle="Non-drivable vehicle determination guideline" />
+    <topicref format="dita" scope="local" class="- map/topicref " href="CLMS-CO-C9BM6B-towinginformationmanagement" navtitle="Towing Information Management (TIM)" />
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PS-Z15FP6-hand-ndv-befo-tow-icbc" navtitle="Handling a non-drivable vehicle before it is towed to ICBC" />
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-9BCM13-towing" navtitle="Towing">
+      <topicref scope="local" format="dita" class="- map/topicref " href="67BC11BE0086B0863CEE42B740A94C20" navtitle="Base towing supplier requirements">
+        <topicref scope="local" format="dita" class="- map/topicref " href="D2E12FA3A0A9B0E178DAB18D6F74BF0D" navtitle="Emergency Roadside Expense Repayment tow invoice codes" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="004661A058DC31FE7AB2E96A2284DFAE" navtitle="Towing and Recovery Plus supplier requirements" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="FA9FD5F1D87364A148C01C43ECF402A2" navtitle="Towing and Recovery Plus service concern resolution" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="5FF4E1B6EC56229049828BEA4D7EF43C" navtitle="Legal and regulatory requirements for towing suppliers" />
+        <topicref href="CLMS-PL-7WWF4W-custaccfeettowcompolicy" format="dita" scope="local" navtitle="Management of customer vehicle access fees charged by towing companies  policy" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="Complex-tow-requirements" navtitle="Complex tow requirements" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-F92SWW-storage" navtitle="Storage">
+        <topicref scope="local" format="dita" linking="none" class="- map/topicref " href="gca8a8a2-4838-4bc0-bd30-ba49548f44bc" navtitle="Claim required tows and storage payment policy" />
+        <topicref format="dita" scope="local" navtitle="Policy on customer responsibility for towing and storage fees" class="- map/topicref " href="DAMG-PL-1VK04N-pol-cus-res-tow-storage" />
+        <topicref scope="local" format="dita" linking="none" class="- map/topicref " href="ac310e10-d467-4551-8217-7c58543fe43a" navtitle="Tow and storage coverage for own damage claims" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="gfa2d95a-5a48-4a3f-99e2-e8de3b935740" navtitle="Requirements for towing a vehicle to a storage facility" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="d4c75ab4-65d0-4f93-be20-f2ed01b342ac" navtitle="Requirements to qualify suppliers’ storage yards and buildings" />
+        <topicref scope="local" format="dita" linking="none" class="- map/topicref " href="c66a4f22-6a31-47c6-b0ce-0ae77d8a52c8" navtitle="Daily storage rate" />
+        <topicref scope="local" format="dita" linking="none" class="- map/topicref " href="g3861fe9-fa86-43b3-ac64-1f566434a6d9" navtitle="Tow dispatch" />
+        <topicref scope="local" format="dita" linking="none" class="- map/topicref " href="bf412508-6afd-4d4e-a2ad-e8c77d62b29a" navtitle="Handle vehicle damage incurred at tow storage facility" />
+        <topicref scope="local" format="dita" linking="none" class="- map/topicref " href="f0d290ec-61b6-4e97-8fc3-a3a500306309" navtitle="Invoice for storage facility access" />
+        <topicref scope="local" format="dita" linking="none" class="- map/topicref " href="b29ac749-5d85-4190-a653-e1ba004ae58a" navtitle="Vehicle holds in a storage facility" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="5EB747643FB87F5F048019F10311416C" navtitle="Sublet services">
+        <topicref scope="local" format="dita" class="- map/topicref " href="Sublet-towing-service-urgent-and-non-urgent-recoveries" navtitle="Sublet towing service urgent and non-urgent recoveries" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="Trade-discounts-on-sublet-services" navtitle="Trade discounts on sublet services" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="Requirements-for-sublet-towing-service-billing" navtitle="Requirements for sublet towing service billing " />
+        <topicref scope="local" format="dita" class="- map/topicref " href="What-is-a-markup-charge" navtitle="Markup charge" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="7DD96B14AB063FCE2E1C2267881D6A15" navtitle="Tow the vehicle">
+        <topicref scope="local" format="dita" class="- map/topicref " href="C6511FE3FFEBF4D139836D24675F2116" navtitle="Check the tow invoice details" />
+        <topicref format="dita" scope="local" class="- map/topicref " href="Request-tow" navtitle="Request a tow" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="C4228AEC81781E208C84CD37EA31E2C6" navtitle="Towing vehicle requirements" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="8D5CEC64A7BBB845D592691CAA17E246" navtitle="Tow propane, natural gas, and fire damaged vehicles" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="56D8D0349EBEC23512CC396ECF9E7430" navtitle="Manage a tow request for transporting a non-driveable vehicle over a body of water" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="0A0585A6153AE02E0F482EC7C8DCF7CA" navtitle="Tow vehicle from a customer’s residence" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="52565A61F41C415FC8CEF22C5775CE40" navtitle="Tow request activity">
+          <topicref scope="local" format="dita" class="- map/topicref " href="BBF34B8D248F83CCC7E67DA900707192" navtitle="Check the tow details on a tow request" />
+        </topicref>
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="959E0FC3C2495E46C47E77030F98B031" navtitle="Tow service level requirements">
+        <topicref scope="local" format="dita" class="- map/topicref " href="08084829BEB5E6270D5FD05026D10185" navtitle="Primary tow services" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="Additonal-tow-services" navtitle="Additional tow services">
+          <topicref href="5311D3E093C8129FD661406E3F9B06BD" format="dita" scope="local" navtitle="Scene clean-up charge policy" />
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="394A99BD78C5B037B7DB6E9A12B375EE" navtitle="Tow service delays" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="34AE55D4AE01E1340AC11188F605E26E" navtitle="Provide tow instructions to the tow company" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="8DF8A97DB176EFA0799BFB3391EB1771" navtitle="Tow recovery scene photos" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="Tow-rate-categories" navtitle="Tow rate categories">
+        <topicref scope="local" format="dita" class="- map/topicref " href="a9c4ce39-b015-4d89-ae5d-7a677ebb8c1d" navtitle="Towing, Storage Rate Payment Schedule and Towing Distance Guides" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="D84F96A9D32B03C8C72E95D26DA28C98" navtitle="Tow rotation list">
+        <topicref scope="local" format="dita" class="- map/topicref " href="4E786588E6D407A604E37C95CBB236B2" navtitle="Select a tow company from the tow rotation list" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="ICBC-non-captive-rotation" navtitle="ICBC Non-captive tow rotation list" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="8726DFB89154DFCA6CAD6050A4F5A727" navtitle="Manage the tow rotation list" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="3B2F56D104B7A30F91B9891563521495" navtitle="Managing tow company lot lists" />
+      </topicref>
+    </topicref>
+  </topicref>
+  <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-E37117-glass-stem" navtitle="Glass">
+    <topicref format="dita" scope="local" navtitle="Managing a roof glass claim at a glass repair program facility" class="- map/topicref " href="DAMG-PS-4ERP1G-roof-glass-claim-proc" />
+    <topicref scope="local" format="dita" class="- map/topicref " href="Policy-on-windshield-repair" navtitle="Windshield repair policy">
+      <topicref scope="local" format="dita" class="- map/topicref " href="74689190BCD1B8A6057682EA4424BF32" navtitle="Process claim for split windshield" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="Policy-on-failed-windshield-repair" navtitle="Failed windshield repair" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="C95A3850AF97FCA85D8F61F3C7939B4F" navtitle="Flat laminated windshield installation times not in systems" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="1F9BDE431FE47FA0CC5001E97835F119" navtitle="Flat laminated windshield pricing" />
+    </topicref>
+    <topicref scope="local" format="dita" class="- map/topicref " href="c0e7edc3-d9d8-4069-9398-926f775aad1c" navtitle="Apply taxes to glass only claim at a glass repair program facility" />
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-T2AEM9-glass-general" navtitle="General">
+      <topicref scope="local" format="dita" class="- map/topicref " href="BF5F7ABE38DBBF15335D16FD710CCA34" navtitle="Optional glass parts to a glass estimate" />
+    </topicref>
+    <topicref locktitle="yes" format="dita" scope="local" class="- map/topicref " href="DAMG-TP-DALSDX-glass-policies" navtitle="Policies">
+      <topicref scope="local" format="dita" class="- map/topicref " href="24F2B4236D9F4601256F19C5B44856BB" navtitle="Windshield deductible policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="23587700BAAB890E0185432E865A293B" navtitle="Glass only sublet policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="8648415CD917E8182833F75A2ED97B14" navtitle="Glass claims and vehicle ownership transfer policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="002AD85D3C89D132C093D52AD6C65C8B" navtitle="Private or auction house sale vehicles for glass claims" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="65D30230E019C552D2B834B375473B2A" navtitle="Returning a vehicle to the leasing company with a glass claim policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="97139231CBF148B49C2939ADFAFE4182" navtitle="Initiating glass claim on trade-in vehicles policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="B055E11B1A1A1784A84A54FB38EE9CD8" navtitle="Glass deductible for trade-in vehicles policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="456ABECFD36D9A689F6AE710DEB38ADB" navtitle="Labour times for claims involving glass ">
+        <topicref scope="local" format="dita" class="- map/topicref " href="E7F92ABE9BA3C70D5E2343BD3507DD82" navtitle="Glass pricing and billing" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="5E74396E7841C155016AA8EF95AF436E" navtitle="National Auto Glass Specifications Glass pricing" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="9ABF9F224F0B63B9343976FD1B97A5F9" navtitle="Correct glass pricing " />
+        <topicref scope="local" format="dita" class="- map/topicref " href="0FC07362480615D3C59C5374FA1AA5E9" navtitle="Original Equipment Manufacturer glass" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="F52D00E3D8F8A103081A7BFD5211AECA" navtitle="Special endorsements on glass claims" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="6128E0C142520DD54E937B961F9F8763" navtitle="Recycled glass clean-up and testing" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="1741660C4F7CDDE24F69E2E6FC9FD84C" navtitle="Class A bus and tour bus windshield installation times" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="36C767CDA57570DDFCC8F385E24F8115" navtitle="Glass material allowances" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="AF93F261AAC1ACB980FC78BBAD438533" navtitle="Glass freight allowances" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="5E704D5FFE1839CBAFB170831F01DB48" navtitle="Glass moulding and clips allowances" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="C50A65D1545119FE6D9EB7B9C5772B28" navtitle="Moulding allowance document requirements" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="8734288D695CAC6393C35CCE4C8A990E" navtitle="Aftermarket tinting rules" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="E89CFCC470953F5069C70D1858D187DB" navtitle="Attached part allowances for antennae and dash cameras attached to glass" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="E4652DF445B4A0A2348D80C0E2BD9308" navtitle="Rain sensor removal and&#xA;    installation" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="D0774C3BEC7EC362BE75770810780682" navtitle="Propane and natural gas decals">
+          <topicref scope="local" format="dita" class="- map/topicref " href="60C82E0D7085F6704F45F7F96FB54F4C" navtitle="Replace propane or natural gas decal" />
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="D502E26A805210A1F18CBF6C0D2F678E" navtitle="Removal and installation of external sun visors" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="C55D7F11B6F72E38FF2C3B8A4F17AE31" navtitle="Remove and install vinyl tops to facilitate glass work" />
+        <topicref href="CLMS-PD-0C83E4-broken-class-clean-up" format="dita" scope="local" navtitle="Handle broken glass cleanup on a collision estimate" />
+      </topicref>
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PL-R2AEOH-policy-adv-dss-cali-glass-cl" navtitle="Advanced driver assistance systems calibrations for glass claims" />
+    </topicref>
+    <topicref locktitle="yes" format="dita" scope="local" class="- map/topicref " href="DAMG-TP-J3BE8G-glass-procedures" navtitle="Procedures">
+      <topicref scope="local" format="dita" class="- map/topicref " href="c0e7edc3-d9d8-4069-9398-926f775aad1c-0" navtitle="Apply taxes to glass only claim at a glass repair program facility" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="27E232F205D5CC59D663CA2C3441ECC2" navtitle="Authorize repairs on glass claim with additional damage" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-RF-4IXQZW-glass-claim-reporting" navtitle="Glass claim reporting" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="0EB922518F0D80C3351B33B7417C4E3D" navtitle="Handle Glass Estimate from ineligible supplier" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="012509502D9413599F79CFF5EE854E42" navtitle="Processing Loss of Use on glass claims " />
+      <topicref scope="local" format="dita" class="- map/topicref " href="f7e9f998-71d8-48d2-bbea-bc28df1ea2ca" navtitle="Manage failed Glass repair program claim" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="b80c366c-6034-4f17-81ee-384adbc365bf" navtitle="Managing glass claim when Glass Web Express is unavailable" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="f98dfc0e-a268-450f-a4c6-7396aad9818b" navtitle="Processing split windshield claims" />
+    </topicref>
+    <topicref scope="local" format="dita" class="- map/topicref " href="f7e9f998-71d8-48d2-bbea-bc28df1ea2ca-0" navtitle="Manage failed Glass repair program claim" />
+  </topicref>
+  <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-CO-PKY9BV-loss-of-use-management" navtitle="Loss of Use management">
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PL-PX00OS-policy-lou-extn-vhcl-settmts" navtitle="Loss of use extension for vehicle settlements policy" />
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-RF-3Q60EJ-loss-of-use-priority-coverage" navtitle="Loss of Use priority of payment">
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PD-S0A6WN-confirm-eligibility-for-lou" navtitle="Confirm eligibility for Loss of Use coverage" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PD-T8O63Y-conf-elig-lou-due-to-theft" navtitle="Confirm eligibility for Loss of Use due to theft" />
+    </topicref>
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-CO-29M1P1-rental-veh-rates-other-charges" navtitle="Rental vehicle rates and other charges">
+      <topicref format="dita" scope="local" class="- map/topicref " href="Rates-for-preferred-rental-vehicles" navtitle="Rates for preferred rental vehicles">
+        <topicref href="CLMS-RF-Y998MC-rental-central-interior-cariboo" navtitle="Central Interior and Cariboo rental rates" />
+        <topicref href="CLMS-RF-8UY6T3-rental-central-kootenay" navtitle="Central Kootenay rental rates" />
+        <topicref href="CLMS-RF-LKT4D3-lower-mainland-victoria" navtitle="Greater Victoria, Lower Mainland, and Squamish rental rates" />
+        <topicref href="CLMS-RF-KQY629-rental-northern-bc" navtitle="Northern B.C. rental rates" />
+        <topicref href="CLMS-RF-TK9872-rental-thompson-okanagan" navtitle="Select Southern Interior rental rates" />
+        <topicref href="CLMS-RF-LKSH52-rental-vancouver-island" navtitle="Select Vancouver Island rental rates" />
+        <topicref href="CLMS-RF-K4CJH7-rental-slct-van-island-south-int" navtitle="Select Vancouver Island and Southern Interior rental rates" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="Policy-on-vehicle-rental-rates" navtitle="Vehicle rental rates policy">
+        <topicref href="CLMS-RF-MANJGF-rental-vehicle-makes-models" navtitle="Rental vehicle makes and models" />
+        <topicref href="CLMS-RF-JL5TM7-partner-disclaimer-rental-veh" navtitle="Partner disclaimer for rental vehicles" />
+        <topicref href="CLMS-RF-HGBT91-invoice-structure-budget" navtitle="Invoicing structure of the preferred supplier agreement between ICBC and Budget Car and Truck Rentals" />
+        <topicref href="CLMS-RF-G453D7-invoice-structure-enterprise" navtitle="Invoicing structure of the preferred supplier agreement between ICBC and Enterprise Rent-A-Car" />
+        <topicref href="CLMS-RF-87LKJN-invoice-structure-practicar" navtitle="Invoicing structure of the preferred supplier agreement between ICBC and Practicar Car and Truck Rentals" />
+      </topicref>
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PL-XD5S18-policy-rent-veh-fuel-main" navtitle="Substitute vehicle expense reimbursement policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="DAMG-RF-8K3B7T-00-large-rental-vehicles" navtitle="Large rental vehicles" />
+    </topicref>
+    <topicref class="- map/topicref " href="DAMG-CO-2M694B-reimb-lou-rntg-subst-mtr-vhcl" navtitle="Reimbursement under loss of use for the expense in renting a substitute motor vehicle">
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-CO-G32VXO-pref-rental-veh-supp-overview" navtitle="Preferred rental vehicle suppliers overview">
+        <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-RF-H0ZEFC-00-pref-rent-veh-prov-by-city" navtitle="Preferred rental vehicle provider by city" />
+        <topicref format="dita" scope="local" class="- map/topicref " href="E777C8F0A594D6794F560C8FC237B4DB" navtitle="Preferred rental vehicle service features" />
+        <topicref format="dita" scope="local" class="- map/topicref " href="c660478e-7f94-4299-ae09-8f1368baf73a" navtitle="Preferred rental vehicle customer requirements" />
+      </topicref>
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-CO-29M1P1-rental-veh-rates-other-charges-0" navtitle="Rental vehicle rates and other charges">
+        <topicref scope="local" format="dita" class="- map/topicref " href="Policy-on-vehicle-rental-rates-0" navtitle="Vehicle rental rates policy" />
+        <topicref format="dita" scope="local" class="- map/topicref " href="Rates-for-preferred-rental-vehicles-0" navtitle="Rates for preferred rental vehicles" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="DAMG-RF-8K3B7T-00-large-rental-vehicles-0" navtitle="Large rental vehicles" />
+      </topicref>
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-CO-42N280-rental-veh-auth-ext-and-final" navtitle="Rental vehicle authorizations, extensions and finalizations">
+        <topicref format="dita" scope="local" class="- map/topicref " href="d32182f7-3d4e-4301-8c1d-9db3a1f2a16a" navtitle="Authorize an initial rental vehicle request during first notice of loss" />
+        <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PL-FM3776-policy-lou-authorizations" navtitle="Loss of Use authorizations policy" />
+        <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PD-9PC29P-rev-enter-rent-veh-ext" navtitle="Review an Enterprise Rent-A-Car extension request" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="cb9653b0-63d3-4fa5-8af6-edb3602a4618" navtitle="Policy on Vehicle Licensing Fees for non-preferred rental vehicle providers" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PL-XD5S18-policy-rent-veh-fuel-main-0" navtitle="Substitute vehicle expense reimbursement policy" />
+    </topicref>
+    <topicref class="- map/topicref " href="DAMG-CO-YQ7X2Y-reimbmt-lou-taxi-publc-transpt" navtitle="Expense reimbursement for taxis or public transportation use" />
+  </topicref>
+  <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-935MDJ-occupational-health-safety-stem" navtitle="Occupational health and safety">
+    <topicref format="dita" scope="local" class="- map/topicref " href="F05D78274CB8049E0E4E04A703B1A743" navtitle="Biohazard inspection and cleaning of a vehicle">
+      <topicref scope="local" format="dita" class="- map/topicref " href="9C9D4AB9D037B3931F2A3E490E19EDF6" navtitle="Perform biohazard inspection and cleaning" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="E1EF51D34B6D7EFF277636AC3EDE9030" navtitle="Handle biohazard inspection and cleaning" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="0B46BBB615B2F4CF8C5F90059A8B56F9" navtitle="Handle solid bio-hazardous material" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="F7A697E6488D8B2CA7BBF11F249169B9" navtitle="Bio-hazard inspection and cleaning by qualified ICBC supplier" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="F601D20F92856EB5B59E4838F6FED739" navtitle="Handle and dispose of biohazardous materials" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="D4B130B1927690744E74EFF8E10BFAE7" navtitle="Handle direct biohazard exposure to biohazard materials" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="C5B6D1350C357B154D6A7A03593F0E6F" navtitle="Safety requirements for working with burned vehicles">
+        <topicref scope="local" format="dita" class="- map/topicref " href="2F7A9B2601DB3F440FD4F74318FEE02E" navtitle="Handle a burned vehicle" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="38C7E91A023A3FF317BE1B219473F7BE" navtitle="Equipment for working with contaminated vehicles" />
+      </topicref>
+    </topicref>
+  </topicref>
+  <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-2XBBEL-total-loss" navtitle="Total losses and salvage">
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-2T35ER-repairable-total-loss" navtitle="Repair versus total loss">
+      <topicref scope="local" format="dita" class="- map/topicref " href="3BC1119FAB50E9A7BE13C4EA0020231D" navtitle="Determine a total loss using applicable labour rate" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="f3a30a85-2291-4b9d-9e43-86df0e37dbf3" navtitle="Apply alternative estimating" />
+    </topicref>
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PS-ENF652-00-obtain-a-valuation" navtitle="Obtaining a valuation" />
+    <topicref scope="local" format="dita" class="- map/topicref " href="19C558BD77A1414D5219270E1E3E4EF2" navtitle="Actual cash value policy">
+      <topicref scope="local" format="dita" class="- map/topicref " href="23708E4FDD136615ED47C56989A9C5E0" navtitle="Actual cash value " />
+      <topicref scope="local" format="dita" class="- map/topicref " href="What-is-the-WCTLVR" navtitle="WorkCenter Total Loss Valuation Report" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="0CC74F7230A20100BD512796322F2DE9" navtitle="Determine manual actual cash value for commercial vehicle" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="A901EACAE2021CF245DBC052C82F2D30" navtitle="Actual cash value for rebuilt vehicles" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="327E78BE79DC4FE5E779D10F2C85C144" navtitle="Actual cash value source manuals" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="8DBAAD83A057C2B35A954100EA6EC149" navtitle="Determine value of collector vehicle" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="D3D3B720A6FE2067881834EA52273901" navtitle="Specialty Vehicle Appraisal unit assignment policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="7A0793E85BBB23ED5035A208498518A7" navtitle="Autosource" />
+    </topicref>
+    <topicref scope="local" format="dita" class="- map/topicref " href="FCD5B2C46C88BD2E8FFB29EB668A72BB" navtitle="Settle total loss with endorsement">
+      <topicref scope="local" format="dita" class="- map/topicref " href="36F5FA02C487848AC4C3056BA1CA9D0D" navtitle="Total loss settlement for New Vehicle Replacement Plus " />
+      <topicref scope="local" format="dita" class="- map/topicref " href="8E082D368DDA196323C59D2CF65848A5" navtitle="Total loss settlement under Limited Depreciation Endorsement " />
+      <topicref scope="local" format="dita" class="- map/topicref " href="61463FB65CB18CCE1C7DEC69D631C79C" navtitle="Total loss settlement under Replacement Cost Endorsement " />
+    </topicref>
+    <topicref scope="local" format="dita" class="- map/topicref " href="A05141CF4C0666381AE71A85E4E6AA17" navtitle="Settle a total loss on a leased vehicle" />
+    <topicref scope="local" format="dita" class="- map/topicref " href="3BF2E419E14A9EE7CA8F232509FA22C3" navtitle="Total loss settlement for government vehicles policy" />
+    <topicref scope="local" format="dita" class="- map/topicref " href="11D6DFD6CD10B045693FC1FA28575678" navtitle="Declared value vehicles">
+      <topicref scope="local" format="dita" class="- map/topicref " href="415F4D2C9698EE20BA7522CDA3CE38EB" navtitle="Settlement of a total loss on a recreational vehicle" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="A59F8BA499947643C7452F11C71B822E" navtitle="Complete motorcycle or snowmobile total loss worksheet" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="A1D35CC8CCCF20F64475092FF1738A9E" navtitle="U-bilt vehicle total loss settlement guidelines" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="AB98036A57B2E9201BC2E68F377F0990" navtitle="Declared value ranges for heavy commercial vehicles" />
+    </topicref>
+    <topicref scope="local" format="dita" class="- map/topicref " href="7C93CA77E77CBB87CF904D7C3C1F8369" navtitle="Total loss settlement policy">
+      <topicref scope="local" format="dita" class="- map/topicref " href="B306DAF2C13BC3D2E4DE26F7097F86FD" navtitle="Total loss settlement review requirements" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="5FEA4362F0B9AF2D072BD26A405345EC" navtitle="Dealership, rental provider, garage service operator, or lessor (closed lease) " />
+    </topicref>
+    <topicref scope="local" format="dita" class="- map/topicref " href="3B9562A6E06445EFC8EF3F340E491E53" navtitle="Conditions for issuing a total loss settlement cheque" />
+    <topicref scope="local" format="dita" class="- map/topicref " href="3A697CCBC7CB029226627CBE9E665430" navtitle="Lien search policy" />
+    <topicref scope="local" format="dita" class="- map/topicref " href="3CC52AF3C732E33ECFD80986096DFAED" navtitle="Insurance policy cancellation or transfer" />
+    <topicref scope="local" format="dita" class="- map/topicref " href="8899234C4CA511A77FCBCC1E37726DFB" navtitle="Total loss settlement by Electronic Funds Transfer payment criteria" />
+    <topicref scope="local" format="dita" class="- map/topicref " href="BFB0274C5DCA7A417676F7D0CEE858A7" navtitle="Total loss settlement dispute policy">
+      <topicref scope="local" format="dita" class="- map/topicref " href="Manage-customer-dissatisfied-with-total-loss-settlement" navtitle="Managing a total loss settlement dispute" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="1B5491DCCA55FDD1F2AA3E31C334A342" navtitle="Contents of a documents only arbitration package" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="C4DD0636F80B3834802B7911438CA175" navtitle="Create interim payment on total loss settlement" />
+    </topicref>
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-1SHR02-salvage" navtitle="Salvage">
+      <topicref scope="local" format="dita" class="- map/topicref " href="g89bf80d-6c10-4b01-8702-bc5e1878a1ac" navtitle="Salvage overview">
+        <topicref scope="local" format="dita" class="- map/topicref " href="B029215C34907BFC4E6687F00E465D00" navtitle="ICBC salvage facilities in British Columbia " />
+        <topicref href="CLMS-PD-5WH7K8-salvage-late-payment" format="dita" scope="local" navtitle="Handle overdue salvage payments" />
+        <topicref href="CLMS-CO-1VMT35-salvage-performance-management" format="dita" scope="local" navtitle="Salvage Buyer Performance Management" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="obtain-physical-electronic-or-explicit-verbal-authorization-for-a-written-off-agreement" navtitle="Obtain a signed Vehicle Ownership Transfer Agreement ">
+        <topicref scope="local" format="dita" class="- map/topicref " href="f42adb7d-c252-4220-a224-52bdd9f693ce" navtitle="What is an electronic authorization" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="0B2356530307CAD44378512D6560E089" navtitle="Salvage designation policy">
+        <topicref scope="local" format="dita" class="- map/topicref " href="53FF52D7011DF8219E6B43AF10D333FC" navtitle="Salvage designations and vehicle registration codes " />
+        <topicref scope="local" format="dita" class="- map/topicref " href="79E1B6C9275ECA00CBC357855C35DCE3" navtitle="Salvage designation criteria" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="DFF2074F7E6C103DB05B2FF157EF913B" navtitle="Unsafe vehicle" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="bacb00a9-20c5-48b1-9d41-e28a489144d9" navtitle="Unsafe vehicle classification and criteria" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="FC9D030DE6D6DE4F105507EDF0B562BF" navtitle="Water damage considerations" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="736AE41C69D806DAE0AA473450292B69" navtitle="Major electrical components " />
+        <topicref scope="local" format="dita" class="- map/topicref " href="CEEAAB0D766E8F5A5AA2AC861F293DA7" navtitle="Crushing vehicles policy" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="f42adb7d-c252-4220-a224-52bdd9f693ce-0" navtitle="What is an electronic authorization" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="c09e03dd-9959-4bab-a6a2-0f61a5834a0f" navtitle="Rules on owner retention of salvage">
+        <topicref scope="local" format="dita" class="- map/topicref " href="Owner-rentention-and-salvage-purchase" navtitle="Owner retention and owner buy back comparison" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="b073ce2e-c544-42d4-a6e0-91c593775549" navtitle="Rules on owner buy back of salvage">
+        <topicref scope="local" format="dita" class="- map/topicref " href="d4456406-f030-4e29-8bbb-de4945b9c136" navtitle="Complete an owner buy back request for a commerical vehicle" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="b96426ff-59bf-479c-800d-8aa891c6c157" navtitle="Taxes on the sale of salvage policy" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="g8691218-bc46-47cf-bfd1-1161d34f789a" navtitle="Sale of salvage to qualified organizations policy" />
+      </topicref>
+    </topicref>
+  </topicref>
+  <topicref scope="local" format="dita" class="- map/topicref " href="DAMG-TP-G5W9E2-repairs-stem" navtitle="Repairs">
+    <topicref href="CLMS-TP-3SW6W3-commercial-claims-stem" format="dita" scope="local" navtitle="Commercial claims">
+      <topicref href="CLMS-RF-V5S6EF-labour-rates-under-8800kg" format="dita" scope="local" navtitle="Commercial labour rate application on light commercial vehicles " />
+      <topicref href="CLMS-PS-5GM7D2-createestimateinmcti" format="dita" scope="local" navtitle="Creating an estimate in Mitchell TruckMax" />
+      <topicref href="CLMS-PD-7ABN72-manage-heavy-equipment-claim" format="dita" scope="local" navtitle="Manage a heavy equipment or commercial vehicle claim" />
+      <topicref href="CLMS-PS-2PVD6R-manageestimateissuepayment" format="dita" scope="local" navtitle="Managing a commercial estimate in Mitchell TruckMax to issue a payment " />
+      <topicref href="CLMS-PS-3KVP0E-managingestimatepackmcti" format="dita" scope="local" navtitle="Managing estimate submission in Mitchell TruckMax" />
+      <topicref href="CLMS-PS-1N98H8-managnondrivecommvehpottotloss" format="dita" scope="local" navtitle="Managing a potential total loss at a commercial collision repair program facility" />
+      <topicref href="CLMS-PD-VC61GF-loaner-hood-commercial" format="dita" scope="local" navtitle="Apply loaner parts to a Commercial claim estimate" />
+      <topicref href="CLMS-PL-5DKJD9-eqp-prts-cmrcl-trctr-clms-plcy" format="dita" scope="local" navtitle="Handling equipment or parts upgrade requests on commercial tractor claims" />
+    </topicref>
+    <topicref locktitle="yes" format="dita" scope="local" class="- map/topicref " href="DAMG-TP-B6V29N-light-duty-estimates" navtitle="Light duty estimates">
+      <topicref scope="local" format="dita" class="- map/topicref " href="E4C87A54464593C57164E8289D3DDB11" navtitle="Environmental commitment policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="A8D8097AA9117457B177D276124CBBF5" navtitle="ICBC reinspection program policy" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-5LWL89-light-duty-est-estimates" navtitle="Estimates">
+        <topicref scope="local" format="dita" class="- map/topicref " href="3B2FCF57081BDA69777A6A3C057613BC" navtitle="Estimate form">
+          <topicref scope="local" format="dita" platform="workcenter" class="- map/topicref " href="MDVE-CO-D5RER7-estimate-appraisal-form-term" navtitle="Estimate/appraisal form terms">
+            <topicref scope="local" format="dita" class="- map/topicref " href="C1203804530E4B46A1A74D4448B34913" navtitle="Overhaul on a vehicle" />
+            <topicref scope="local" format="dita" class="- map/topicref " href="291610CAE0720BC3A1B77C76DF0914B8" navtitle="Overlap estimate" />
+            <topicref scope="local" format="dita" class="- map/topicref " href="D43BDC3034B645E9C325621BC72B5183" navtitle="Removal and installation time and estimates" />
+          </topicref>
+          <topicref scope="local" format="dita" class="- map/topicref " href="7A4BA73D793248D44E968AC87E6450CC" navtitle="Repair Estimate abbreviations" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="E4A969E71E272BE2F194DB19EF1691CA" navtitle="Estimate explanation requirement" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="81356D03C45F391CC806B39304573B5B" navtitle="Estimate identification protocol" />
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="E5D6FA4006A71183C71CE83D272DCE15" navtitle="Supplement">
+          <topicref scope="local" format="dita" class="- map/topicref " href="976CDF3DCF8B696735720C98B00E4D94" navtitle="Allowable items on a repair estimate supplement" />
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="b06d9aaa-c60e-41d7-8f20-ed3046d2dc39" navtitle="Vehicle Identification Number" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="A6588B515C835D9C46271F34BF744471" navtitle="Vehicle teardown operations">
+          <topicref href="7F1C2AC7B7E74A83A5B4099FE8B659ED" format="dita" scope="local" navtitle="Authorize vehicle teardown estimate" />
+          <topicref href="MDVE-PD-4T3RH-complete-vehicle-teardown-estimate" format="dita" scope="local" navtitle="Complete a vehicle teardown estimate" />
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="85C4B6BF17F0E3588FFC58DF63FA43FB" navtitle="Contact Specialty Vehicle Appraisal Unit">
+          <topicref scope="local" format="dita" class="- map/topicref " href="7B2E29C57CF8D287C70F902070182474" navtitle="Completing a specialty vehicle appraisal repair facility estimate " />
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="72EF8AA8EEE6841167CCC6F7C905763F" navtitle="Transferring repair estimates for returned leased vehicles policy" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="4D5656FB29E1C9269F81328A8AAB2594" navtitle="Transferring repair estimates to dealership or commercial vehicle repair facility policy" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="83170C25E139AEB9A1DAAB08EAA835FC" navtitle="Transferring repair estimates for vehicles sold privately policy" />
+      </topicref>
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-J4VH2N-light-duty-est-estimating" navtitle="Estimating">
+        <topicref href="CLMS-PD-3L6RPE-applyrepairplandocumfee" format="dita" scope="local" navtitle="Apply the repair planning and documentation fee to an estimate">
+          <topicref href="CLMS-RF-SBX5DF-documentreqforrepplandocfee" format="dita" scope="local" navtitle="Documentation required to apply for the repair planning and documentation fee" />
+        </topicref>
+        <topicref href="CLMS-PS-DRPJ2F-applytlhandlingtoestimate" format="dita" scope="local" navtitle="Apply the total loss handling fee to an estimate" />
+        <topicref href="CLMS-PD-TVVS1K-applytowinhandlingfee" format="dita" scope="local" navtitle="Apply the tow-in handling fee to an estimate" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="3F61755413D6849A6546003BA323EBFC" navtitle="Negate vehicle damage" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="f3a30a85-2291-4b9d-9e43-86df0e37dbf3-0" navtitle="Apply alternative estimating" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="2FA7C9F2C9194E6AA6DE9FD86E6B0041" navtitle="Take digital images">
+          <topicref scope="local" format="dita" class="- map/topicref " href="147615B1DA0A2E296DCF0361C2207963-new" navtitle="Vehicle damage image specifications" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="83E5FADC84D192DD7FA161803997E2F4" navtitle="Digital image requirements" />
+        </topicref>
+        <topicref href="CLMS-PD-1D8GVF-interlock-program" format="dita" scope="local" navtitle="Manage an Ignition Interlock device" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="4546135D7055B528A690F7D04AAF5962" navtitle="Handle faulty workmanship" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="3618EFBE3967809A87D4302F1869DE15" navtitle="Process for conducting a fire investigation" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="7EE5E01D8F38610D5F262AC4C499D067" navtitle="Partial theft estimating requirements" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="213476BBF7F04761C8D07CE4855A7038" navtitle="Obtaining a customer's authorization for diagnostic inspection" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="14A5F5958D1701EC915F9CD7C21AFBBD" navtitle="Claims amount limits" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="7F3AB9EB4655FBFF5080600253863B43" navtitle="Cash settlement requirements and approvals">
+          <topicref scope="local" format="dita" class="- map/topicref " href="d4568307-7f45-41a9-bd72-440056646c6c" navtitle="Cash settle a driveable total loss" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="E67F76C14FAD6CB88315983DD0C46C1A" navtitle="Apply deductible when cash settling a claim" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="db5b1545-8013-4bf0-9b08-8841c83299d7" navtitle="Approve commercial vehicle cash settlement" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="DFF2074F7E6C103DB05B2FF157EF913B-0" navtitle="Unsafe vehicle">
+            <topicref scope="local" format="dita" class="- map/topicref " href="bacb00a9-20c5-48b1-9d41-e28a489144d9-0" navtitle="Unsafe vehicle classification and criteria" />
+          </topicref>
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="5C79B30A648336E3A4514EFDB5C73405" navtitle="Sublet repair">
+          <topicref scope="local" format="dita" class="- map/topicref " href="6E1F812D847B6A0FEDF8C41DBFF9CE06" navtitle="Frame repairs not completed by collision repair facility processing customer repair estimate" />
+        </topicref>
+      </topicref>
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-J9GCVJ-estimating-technical" navtitle="Estimating technical">
+        <topicref format="dita" scope="local" class="- map/topicref " href="Policy-on-pre-repair-and-post-repair-scanning" navtitle="Pre-repair and post-repair scanning policy" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="DAMG-PL-744I4J-policy-app-headlamp-adj" navtitle="Approval of headlamp aim or adjustment policy" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="60F060F9A36A111D11DE135FDA48207A" navtitle="Parts damaged in removal, repair or reinstallation policy" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="294CC29C4268E7E1E761F735A712AEE8" navtitle="Panel sectioning">
+          <topicref scope="local" format="dita" class="- map/topicref " href="F8736C01834FEC31F664A442D0175E40" navtitle="Panel bonding and welding policy" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="E49BCDB17FDA796A2D95750C13B3ADC6" navtitle="Recycled parts trim time policy" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="Apply-judgement-time-to-replacement-part-modifications" navtitle="Apply judgement time to replacement part modifications" />
+        </topicref>
+        <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-XDV9JT-wheels-tires-alignment" navtitle="Wheels, Tires and Alignment">
+          <topicref scope="local" format="dita" class="- map/topicref " href="472538A5DFBE5E9C7771BDED8B5705F7" navtitle="Tire replacement policy" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="E89BBAD926F368A81B127C06D97BD296" navtitle="Tire replacement considerations" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="28848730A1C175B0ABAF35C591E7A851" navtitle="Wheel alignment coverage qualification and rates" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="7D65D3BC51954C460B590F80BDCAF20D" navtitle="Mounting and balancing wheels" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="1C54E24C8DFACE0FA9DECE2635F40D56" navtitle="Determine whether to replace undamaged tires" />
+          <topicref format="dita" scope="local" navtitle="Tire advance disposal fees and tread codes" class="- map/topicref " href="dbe6e4fc-a6bb-4efb-a699-343f159b99b9">
+            <topicref format="dita" scope="local" navtitle="Tire advance disposal fees and tire types" class="- map/topicref " href="e0ec83e4-3e6f-4a93-bb8b-431a5c6ce47e" />
+          </topicref>
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="fc352df6-4ad6-480b-9fbf-66c5c4edc250" navtitle="Vehicle decals and wraps">
+          <topicref scope="local" format="dita" class="- map/topicref " href="bbb76a31-c13d-4fe0-8c39-7ac24f09a843" navtitle="Full/partial vehicle decals, panel decals and vehicle wraps" />
+        </topicref>
+        <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PL-SKP3B6-policy-depreciation" navtitle="Depreciation policy">
+          <topicref scope="local" format="dita" class="- map/topicref " href="0E7DF781748219ADDF13B70FCC852CB0" navtitle="Depreciation">
+            <topicref scope="local" format="dita" class="- map/topicref " href="8A2886A279315326C52350FCAE9160FD" navtitle="Collision Repair Program participant depreciation application process" />
+            <topicref scope="local" format="dita" class="- map/topicref " href="F813468EF60CC4C932BAAEB916EFA418" navtitle="Upgrade or substitution for glass only claims policy" />
+            <topicref scope="local" format="dita" class="- map/topicref " href="EC876A43B8FFBEE8153689EC07F25923" navtitle="Depreciation requirements on own damage claims" />
+          </topicref>
+          <topicref scope="local" format="dita" class="- map/topicref " href="91AA6839F22C97A780B289F0A37D17BE" navtitle="Allowance">
+            <topicref scope="local" format="dita" class="- map/topicref " href="99D9FD848B4D3906571E5F507C297AF3" navtitle="Apply repair allowance" />
+            <topicref scope="local" format="dita" class="- map/topicref " href="0116D11369C1EDE81581925D8CB1BC7F" navtitle="Body repair material allowances">
+              <topicref href="CLMS-PD-RFGXA4-applybodyrepairmateriallow" format="dita" scope="local" navtitle="Add the additional materials allowance to an estimate" />
+            </topicref>
+            <topicref scope="local" format="dita" class="- map/topicref " href="92CD017D576D6520D92E4F109AED56E8" navtitle="Fuel removal time allowance" />
+            <topicref scope="local" format="dita" class="- map/topicref " href="Fee-allowances-for-car-seats" navtitle="Set amounts for child car seats" />
+          </topicref>
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="822E1F193B737673828CF67FEC4B9BA2" navtitle="Pre-priced vehicle items">
+          <topicref scope="local" format="dita" class="- map/topicref " href="db8f44a2-4bff-43a1-a7ee-f88a02cf1956" navtitle="Structural aluminum repair rate guidelines" />
+          <topicref format="dita" scope="local" navtitle=" Requirements for aluminum material sublet charge on Audi vehicles" class="- map/topicref " href="d3433337-f584-41d1-ab70-44ccd347f7df" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="8A7FBF641749CDE1E079059E25DAD608" navtitle="Incorrect and manual labour codes in estimating system" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="E1ABDFBD4650254A19F2A04B11EA8015" navtitle="Apply appropriate rate to pull and align repairs" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="80DBFDD690BC9D20155537A01D30240C" navtitle="Frame rate application to unibody vehicle repairs" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="EF9BD61394CBC163836062B83CB6002A" navtitle="Delayed repairs labour rate" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="EC4967C1AE3719DE1EC43AE9A2F4CFCF" navtitle="Lock cylinder recoding rates" />
+          <topicref format="dita" scope="local" class="- map/topicref " href="fd50835a-f191-4014-9f08-1e4caf9bb9db" navtitle="Environmental handling charges and electronic handling fees">
+            <topicref scope="local" format="dita" class="- map/topicref " href="c9edfacd-374a-4244-967b-1855b5f18a55" navtitle="Apply the environmental charges/electronic fees in the estimating system" />
+            <topicref scope="local" format="dita" class="- map/topicref " href="e4bf3435-cc1b-4cc4-9be6-c6133952918a" navtitle="Electronic handling fees" />
+            <topicref scope="local" format="dita" class="- map/topicref " href="eccd3b18-f845-43c0-9b4d-0d0ef8c7d01b" navtitle="Environmental handling charges" />
+          </topicref>
+          <topicref scope="local" format="dita" class="- map/topicref " href="37AD410885FB16687223E29632814DA4" navtitle="Air conditioning operations">
+            <topicref scope="local" format="dita" class="- map/topicref " href="FBD4F701A2D5DFAF03E628DAC0779328" navtitle="Completing air conditioning operations in-house policy" />
+          </topicref>
+          <topicref scope="local" format="dita" class="- map/topicref " href="a9c4ce39-b015-4d89-ae5d-7a677ebb8c1d-0" navtitle="Towing, Storage Rate Payment Schedule and Towing Distance Guides" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="e6c401c8-2b5e-4b06-9dfe-ef9b1b95f1af" navtitle="Commercial mechanical rates" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="be3d8e55-0953-4717-ad90-db46f5d6bf9e" navtitle="Material damage vendor rates and allowance schedules" />
+        </topicref>
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="11D6DFD6CD10B045693FC1FA28575678-0" navtitle="Declared value vehicles">
+        <topicref scope="local" format="dita" class="- map/topicref " href="BB71B03CCC23294DF198253203BAE3CC" navtitle="Co-insurance" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="AD5EB9ABCF203DD1B7CC9A1CDFF3BB5A" navtitle="Co-insurance on a material damage claim " />
+        <topicref scope="local" format="dita" class="- map/topicref " href="d647b944-618b-4ca9-b922-9eab80f70069" navtitle="Coverage for declared value vehicle equipment " />
+        <topicref scope="local" format="dita" class="- map/topicref " href="e6a29a49-4820-498d-bd23-f27e67cdbf64" navtitle="Coverage for tow truck equipment " />
+        <topicref scope="local" format="dita" class="- map/topicref " href="AB98036A57B2E9201BC2E68F377F0990-0" navtitle="Declared value ranges for heavy commercial vehicles" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="E2C87F6095B95175F1A9609D94F1222B" navtitle="Water damaged vehicle policy ">
+        <topicref scope="local" format="dita" class="- map/topicref " href="FC9D030DE6D6DE4F105507EDF0B562BF-0" navtitle="Water damage considerations" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="162DCBA6DCBFEB6CBFF18068DB8CEEBD" navtitle="Flood damaged vehicle policy" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="390C7C884B00B2A095F53BF81F906AA4" navtitle="Flood damaged vehicle description" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="61EE50A01A16C760B00C65ADD48AC20F" navtitle="Determine the repairs of a water damaged vehicle" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="BA16284399AF147F7AFA58E9B58989A5" navtitle="Handle a water damage claim" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="DFF2074F7E6C103DB05B2FF157EF913B-1" navtitle="Unsafe vehicle">
+        <topicref scope="local" format="dita" class="- map/topicref " href="736AE41C69D806DAE0AA473450292B69-0" navtitle="Major electrical components " />
+        <topicref scope="local" format="dita" class="- map/topicref " href="20487FE546305B9FCA0E3760C87B7DD4" navtitle="Unsafe vehicles policy" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="bacb00a9-20c5-48b1-9d41-e28a489144d9-1" navtitle="Unsafe vehicle classification and criteria" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="824E6D687F5913E52CB8F51D93007D4F" navtitle="Unsafe vehicles reporting process" />
+      </topicref>
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-R9HNHA-safety-considerations" navtitle="Safety considerations">
+        <topicref scope="local" format="dita" class="- map/topicref " href="FD26F9C7E367D20650F6AA786FCB678C" navtitle="Battery disconnection policy" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="AFF7817CAD9B8DAC5EF920A9AD90E526" navtitle="Fire risk hazards for a vehicle" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="801322E37E2323066386F7BBA226F197" navtitle="Disconnect a battery" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="57BB8922B624809DF664317DF4AC8C1A" navtitle="Disconnect a car battery" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="9AA30100F9751633F17C293F7E3EE1ED" navtitle="Handle inaccessible battery" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="EC3BDAD0610AA76CB589C8A312E0828C" navtitle="Disconnect a motorcycle battery" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="1842C72EE6168292EF1F7D2C7ACB8FFA" navtitle="Storing propane and natural gas fuelled vehicles policy" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="C4C9AE332F1DF0104BCDABC3CC4620EA" navtitle="Estimate a propane- or natural gas-fuelled vehicle" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="7E0EF8120814E5B8B6D36ADDFDE44CA0" navtitle="Handle natural gas or propane leak" />
+      </topicref>
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-4E9GMV-sound-communication" navtitle="Sound and communication">
+        <topicref scope="local" format="dita" class="- map/topicref " href="A8B8D9CC8C24239A19B73E9C688C375A" navtitle="Estimate sound and communication equipment" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="14A5F5958D1701EC915F9CD7C21AFBBD-0" navtitle="Claims amount limits" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="CFD5724AE4B37BA0D8921FE359C2B784" navtitle="Sound and communication equipment allowances" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="E4CB482A160B3781A62CB07770F0D809" navtitle="Replacement policy on automotive audio-visual electronic equipment" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="331C6EC250056AC29BAFC8C47CCBA1BE" navtitle="Permanently attached equipment" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="6B44D70D479A78D03964E3B864BC1A25" navtitle="Replacement policy on mobile phones" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="14B55F42A083F92D2535E49063D9FAF4" navtitle="Complete a taxi estimate">
+        <topicref scope="local" format="dita" class="- map/topicref " href="8B655DD6CFA1F2E2D88C089D555BB9F9" navtitle="Maximum taxi van conversion allowance" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="D12612B1486CD3C97A97B263EAD35FE0" navtitle="Taxi refinish exceptions" />
+      </topicref>
+    </topicref>
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-BK62PV-parts" navtitle="Parts">
+      <topicref scope="local" format="dita" class="- map/topicref " href="7C86B638771BCE1F3A28749B0A34E09A" navtitle="Obsolete parts policy" />
+      <topicref href="CLMS-PL-SLT13M-pricingaltpartspartisourced" format="dita" scope="local" navtitle="Pricing for participant sourced alternate parts policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="e644758c-c206-4ae1-bf19-febaa7a87abe" navtitle="Part mark-up policy" />
+      <topicref href="CLMS-PL-K56JES-replpartwvisiblemanuflogopoli" format="dita" scope="local" navtitle="Parts with a visible manufacturer’s logo replacement policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="52C189F5A0A0256C5D866C43D6A90AF3" navtitle="In-stock parts policy" />
+      <topicref href="CLMS-PL-F39BNA-pre-priced-parts-policy" format="dita" scope="local" navtitle="ICBC Database Pre-Priced Parts" />
+      <topicref href="CLMS-PL-MATJC1-transferpartsrecycassemblies" format="dita" scope="local" navtitle="Transfer of parts to recycled assemblies policy" />
+      <topicref href="CLMS-PL-BSXAMS-restockingfeeandnonreturnpolic" format="dita" scope="local" navtitle="Restocking fee and non returnable parts policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="5FBF15911B21E6134672E688EEBDAA0B" navtitle="Freight charges on Original Equipment Manufacturer parts" />
+      <topicref href="CLMS-PL-5C6S03-freightallowancenorthbcpolicy" format="dita" scope="local" navtitle="Freight allowances for northern British Columbia (B.C.) policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="72D52478DA6AAFB7AEF5EFCA65E59D1F" navtitle="Parts selection and pricing policy ">
+        <topicref scope="local" format="dita" class="- map/topicref " navtitle="Captive and non-captive parts" href="b2c139ea-b9c7-4a42-868d-6daf13a02815" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="FC0C1F21820105355AB95DA3F96E6725" navtitle="Recycled parts requirements">
+        <topicref scope="local" format="dita" class="- map/topicref " href="EA4D1197E2E72BF80BC1FCA4978AF3D1" navtitle="Recycled parts purchases" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="3A1A50DCA2EE9B7A3AC370B8800D724B" navtitle="Estimator requirements for recycled parts" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="Cloned-8869a4b8-178a-478b-b98e-beda5e1e32de" navtitle="Repair facility requirements for recycled parts" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="gb35c5db-2a76-471b-89e5-251b69ed4faf" navtitle="Compensation for labour on recycled parts" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="E49BCDB17FDA796A2D95750C13B3ADC6-0" navtitle="Recycled parts trim time policy" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="909B67B30EF09AA894CE720A30B926F7" navtitle="Standards of performance for recycled parts suppliers" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="DC443E59513B7E30B57291A5A65FFCCA" navtitle="Freight and crating charges applied to recycled parts" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="A926020369E9AB9F55DA5F35EC2A35BD" navtitle="Warranties for recycled parts">
+          <topicref scope="local" format="dita" class="- map/topicref " href="f1da8c02-8b93-421b-97bf-4a530d362165" navtitle="Limitations of recycled part warranties" />
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="C9414CE6C9AE62E1ED2CC209C281BEE9" navtitle="Recycled parts exclusions policy" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="09CC20B0F637644777D3C73D736CA46B" navtitle="Standards of performance on vehicle parts">
+        <topicref scope="local" format="dita" class="- map/topicref " href="712A014F156F4AE91DC0D238FC7E4E6F" navtitle="Standards of performance for repair facilities on all parts" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="92A79E79E3D39796F232A7165D2939D0" navtitle="Standards of performance for alternative parts suppliers on all parts" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="80B3163F4DCB9FF810327C1AE375B27B" navtitle="Standards of performance for alternative parts suppliers on Original Equipment manufacturer surplus parts">
+          <topicref scope="local" format="dita" class="- map/topicref " href="48C416C45B3D90F4A6F319C4A89396FC" navtitle="Original Equipment Manufacturer surplus parts requirements" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="9DBADD839225B245431C3E448C69F36C" navtitle="Standards of performance for repair facilities on Original Equipment Manufacturer surplus parts" />
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="77520B9BB75DE3D4B64618DB54B82556" navtitle="Standards of performance for repair facilities on exchange parts">
+          <topicref scope="local" format="dita" class="- map/topicref " href="4F09D2CCD71281E3FF99DD6F56EA8B4A" navtitle="Standards of performance for suppliers on exchange parts" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="2EBC543F4E6F526ABB667361ACB381E7" navtitle="Response time and availability of exchange parts" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="6B7D62F031E0B188678EF3FD773503A7" navtitle="Exchange parts requirements" />
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="01F6C423FBB29DEE6AAF2568694863E5" navtitle="Standards of performance on aftermarket parts">
+          <topicref scope="local" format="dita" class="- map/topicref " href="BCE718FB8963DC8661082837D0AF5982" navtitle="Standards of performance for alternative parts suppliers on aftermarket parts" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="3004E9EBEAA2260784EA891C0193AEC5" navtitle="Heavy equipment aftermarket parts" />
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="1B6025C08906D0DB087B3196D6B6F3A9" navtitle="Radiators and air conditioning parts requirements">
+          <topicref scope="local" format="dita" class="- map/topicref " href="5D5DB71D0E4CF20986414E9C7FAF26EE" navtitle="Standards of performance for repair facilities on radiator and air conditioner parts" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="40DBC38702A1ACE44B35104006E5B1C5" navtitle="Standards of performance for suppliers on radiator and air conditioner parts" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="6AAA3BFB5014EF4558F68A2F02B4AC7A" navtitle="Standards of performance for estimators on radiator and air conditioner parts" />
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="ECB88FABF8744CCC78A1FADBB4443D08" navtitle="Approved alloy wheel repair facilities">
+          <topicref scope="local" format="dita" class="- map/topicref " href="C843BB8C96E58F06A6AD2C79814478A8" navtitle="Alloy wheel damage severity codes" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="986A50B497A67F522DDBD8DA1EEB3D9F" navtitle="Alloy wheel identification stamping " />
+          <topicref scope="local" format="dita" class="- map/topicref " href="758A2DF8073EB662CD3F1BC15ACEC690" navtitle="Alloy wheel repair allowances" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="B465C06F3BE6BC8426777C2B0E1682EB" navtitle="Alloy wheel repair and refinish standards of performance" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="8A0BD37747A2D6750C45BA1193E8434F" navtitle="Estimate an alloy wheel repair" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="7B188D08700A12535F6386BA60E75CA3" navtitle="Standards of performance for repair facilities on alloy wheel repair " />
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="FB73AA27CC8FE1328422697A7AC635EE" navtitle="Warranty on alternative parts" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="3E764B99ECAB5A25020F6C664D84D301" navtitle="Back-ordered parts policy">
+          <topicref scope="local" format="dita" class="- map/topicref " href="9162389F29CE16B7E13F5CE8AFE0148A" navtitle="Manage back-ordered parts for a collision repair program facility" />
+          <topicref href="CLMS-PS-M4DBHW-managebackordpartnotinstalled" format="dita" scope="local" navtitle="Managing a back-ordered part for a collision repair program facility when the part cannot be installed" />
+        </topicref>
+      </topicref>
+    </topicref>
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-AR3CSW-refinishing" navtitle="Refinishing">
+      <topicref scope="local" format="dita" class="- map/topicref " href="28503221C289EC8ACB733ED7F7F57316" navtitle="Refinish times and guidelines">
+        <topicref scope="local" format="dita" class="- map/topicref " href="0731ECC7D721ABFE224002A47F247508" navtitle="Inner refinishing times on repaired panels" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="6899529EA08514D71537571396B3D5BD" navtitle="Acceptable component refinishing times" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="7F272A4E550B9A8C7BD7D84B5BCC193C" navtitle="Interior trim guidelines" />
+        <topicref href="CLMS-RF-4R5VRK-matte-paint-finishes" format="dita" scope="local" navtitle="Application of matte paint finishes" />
+        <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PL-8KB46X-policy-veh-paint-mitch-esti" navtitle="Painting a vehicle not found in the Mitchell database policy">
+          <topicref scope="local" format="dita" class="- map/topicref " href="4BDD31B6B74230F886B36D3AE64D28A4" navtitle="ICBC refinish times not in the database" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="668D81D48A4239FB1886D26733EB406D" navtitle="ICBC refinish times not in the database for vans" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="608F7C952E4142B3C9749F5DAE33E322" navtitle="ICBC refinish times not in the database for pick-up trucks" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="541414C9431AF5DE744F514D0F09E4D0" navtitle="ICBC refinish times not in the database for cars" />
+        </topicref>
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " navtitle="Refinish allowance" href="5DF0D6F9737919104636869E0734063E">
+        <topicref scope="local" format="dita" class="- map/topicref " href="1C69B813982D9937292351E3DB723131" navtitle="Custom refinish allowance" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="CE808F3235F5A0BACD5CA1014B1AC2AE" navtitle="Pinchweld refinish allowance" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="251AF88C0F4C88909773EA8B0553BABE" navtitle="Additional refinish allowance on vandalism claim" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="EB7669F0A99745D7E22053857C674C82" navtitle="Spot refinishing allowance" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="A55BD97090E79E1AF5137372E13E4D94" navtitle="Burn-in refinishing allowances" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="07FB270E8AE277D4B5D17E389BC76A9C" navtitle="Minimum refinish allowance" />
+        <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PL-7WHN94-policy-for-tint-colour-allow" navtitle="Tint colour allowance policy" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="2BC7A8D6108BAF7EB376D4627B11F346" navtitle="Removal of parts for refinishing">
+        <topicref scope="local" format="dita" class="- map/topicref " href="3335AF0FCB7EB9D74914F1845FF4A8F8" navtitle="Allowable removal and installation times" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="B5D9429603D718152B04CFABBB0CEC1B" navtitle="Excluded items for removing parts during refinishing" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="4CE0CF16EFD3693D7A9D28953B7B8E58" navtitle="Removal and installation of non-reusable scripts" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="e5d59103-080c-4699-9ae5-d53ad76da895" navtitle="Refinish blend">
+        <topicref scope="local" format="dita" class="- map/topicref " href="A662DA9D87B0EE8D7B34295B4A00B9EB" navtitle="Refinish blend allowances" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="D2341CE821F5A630B6CD6C6B8B852938" navtitle="Bumper retexturing and refinish time" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="d42fa3e8-d343-4b42-8325-3fd8ef46480e" navtitle="Prepare raw plastic parts" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="Extension-of-clear-coat" navtitle="Extension of clear coat" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="1D8DBB3CCBA209D6C38FED97C0CF8F11" navtitle="Pinstripe prices and rates" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="EDE9D0672F17C7D5A8B73102B7D9002C" navtitle="Paint and rust protection warranty " />
+      <topicref scope="local" format="dita" class="- map/topicref " href="2C5C1633A2D91D6DEA4AF17E27C50993" navtitle="Single stage refinish" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="3141013AE3E81FD8C03DA973129CEBCB" navtitle="Three and four-stage refinishing ">
+        <topicref href="CLMS-PD-7R81J9-four-stage-refin-calc" format="dita" scope="local" navtitle="Document a four-stage refinish" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="1532AEABA3208AEF9CF0DCC28386A01E" navtitle="Finish, sand, and buff">
+        <topicref scope="local" format="dita" class="- map/topicref " href="C1FE82E234ECCAF6DB87205650B8AC27" navtitle="Add finish, sand, and buff labour time to an estimate" />
+      </topicref>
+      <topicref href="CLMS-PL-CX3E41-denib-policy" format="dita" scope="local" navtitle="De-nib and finesse policy">
+        <topicref href="CLMS-PD-2V3M03-calculate-denib" format="dita" scope="local" navtitle="Apply de-nib and finesse to an estimate" />
+      </topicref>
+      <topicref format="dita" scope="local" navtitle="Policy on feather, prime and block allowance" class="- map/topicref " href="DAMG-PL-JAL815-policy-feather-prime-block">
+        <topicref format="dita" scope="local" navtitle="Add feather, prime and block time to an estimate" class="- map/topicref " href="DAMG-PD-WH68BD-addfeatherprimeblock" />
+      </topicref>
+    </topicref>
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-BHM3AP-repair-facility" navtitle="Repair facility">
+      <topicref scope="local" format="dita" class="- map/topicref " href="47B3888D1396353A5520EBC870E92330" navtitle="Confirm repair facility for a Vendor Unit repair" />
+    </topicref>
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-84R5JL-specialty-vehicle-repairs" navtitle="Specialty vehicle repairs">
+      <topicref scope="local" format="dita" class="- map/topicref " href="abc30d3e-f187-424c-81e0-6b9e22c1f10b" navtitle="Specialty Vehicle Appraisal (SVA) region overview">
+        <topicref href="DAMG-RF-172L75-vehicle-list-criteria-sva-unit" format="dita" scope="local" navtitle="Vehicle list for the specialty vehicle appraisal (SVA) unit" />
+      </topicref>
+      <topicref href="CLMS-PL-E54G65-exotic-veh-repair-rate-policy" format="dita" scope="local" navtitle="Exotic vehicle repair rate policy">
+        <topicref href="CLMS-PD-90SPK9-apply-exotic-rate-estimate" format="dita" scope="local" navtitle="Apply the exotic vehicle repair rate to an estimate" />
+      </topicref>
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PL-5X1AGK-policy-tesla-toolbox" navtitle="Perform Tesla Diagnostics policy" />
+    </topicref>
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-K6TPHF-supplier" navtitle="Supplier">
+      <topicref scope="local" format="dita" class="- map/topicref " href="50CBF8B994B539D601815B01FC497FD5" navtitle="Replacement parts where depreciation does not apply" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="B38D647168CFB94A47B20D071FD946AD" navtitle="Supplier trade qualification policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="9EFF56A99F35C6FAA0862502111C9FCA" navtitle="ICBC proprietary marks usage policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="D853B129F75D08B5CDDBE209C6721FE2" navtitle="Supplier surcharges policy" />
+      <topicref format="dita" class="- map/topicref " href="00AE2953ADCC92DDB03569C949F4B0CD" navtitle="Supplier invoice discrepancies policy">
+        <topicref scope="local" format="dita" class="- map/topicref " href="DE31CB7387F42FCBFB7A00E26CE42D2D" navtitle="Handle a billing discrepancy" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="65BFECD2566F58ECC89FBE00436768FF" navtitle="Repair period policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="B48D91A8DA5A5E1CFC7153B0E06439E0" navtitle="Supplier incentives and promotions policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="0ACE1B1560069E0E8A12CC63C835E104" navtitle="Collecting deductible, depreciation and taxes by suppliers policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="38F9E290E6BA139A80B1EDB90453F2B7" navtitle="Communication with suppliers" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="F2470D68D73545B7FB27B4E8BF381C33" navtitle="Handle a Garnishee Order" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-RF-F8P931-md-supplier-reqmnts" navtitle="ICBC Material Damage Supplier requirements">
+        <topicref scope="local" format="dita" class="- map/topicref " href="9C322754978A63DC0B84B552F4B3D860" navtitle="Commercial supplier labour rate requirements" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="99CC613F5652077D1C256B7D7B205074" navtitle="Biohazard supplier invoice requirements" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="727E5F51EFE927200FC988CB330BB88C" navtitle="Billing ICBC by direct payment" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="6E9B6248EC350D4D4E3531D3EAAB0526" navtitle="Supplier billing restrictions" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="CE2DB5539863703717076522BAE57059" navtitle="Suppliers going out of business" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="CFE83288AD343042F08F499B859657D3" navtitle="ICBC supplier business types" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="F0CCA451046B242DC5033432BD9FA196" navtitle="ICBC supplier form requirements" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="9F71B1D5BE6688EBD27023C09BD529D3" navtitle="Supplier changes to ownership, name or location policy" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="5000D917A328E6DEE72BEDE889D50B1E" navtitle="Direct payment timeframes and documentation" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="AA05667C58B339B2B96EDF901780D290" navtitle="Requirements for invoices submitted by suppliers" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="supplier-conduct-committee" navtitle="Supplier Conduct Committee">
+        <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-RF-Z12699-resoltn-unsatis-unsafe-repairs" navtitle="Resolution of unsatisfactory or unsafe repairs" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="ad283d51-4e45-4b15-9147-b497fecb2327" navtitle="Terminate ICBC supplier number" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="Supplier-problem-action-process" navtitle="Supplier Conduct Committee submission request process" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="0CE708C35186BFE2D8D52FF82C6E4269" navtitle="Non-supplier invoice policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="2A78BD04CB955562F04F8AD86E8F5EF7" navtitle="Manage invoices from non-suppliers" />
+    </topicref>
+  </topicref>
+  <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-RF-AU8623-repair-facilities-program" navtitle="Repair facilities program">
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-RF-54X6WA-collision-repair-program" navtitle="Collision repair program">
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-RF-O9Z8B2-coll-rep-prgm-req" navtitle="Collision repair program requirements" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="CLMS-RF-KJG109-crf-eqpt-trng-reqs-crp" navtitle="Collision repair facility equipment and training requirements" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="8417EB7A95F68A6CEBED3E8FA8BA32F1" navtitle="Collision repair program services" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-CO-9M7F16-express-repair-requirements" navtitle="Collision repair requirements" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="CLMS-RF-SSENBP-allowiterepestsuppsubcrp" navtitle="Allowable items on a repair estimate or supplement submitted by a collision repair participant" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="8061BEB8237543F5B69E980101D5F632" navtitle="Claims excluded from the collision repair program" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PL-LN8YU7-pol-supplement-change-crp" navtitle="Supplement changes requiring the repair program participant to contact ICBC policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="14FC23DDBAC69EE135B17DAC40F48814" navtitle="Additional collision repair program estimate  policy" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="1BE0934C83A055620669C6BE8F3BCC39" navtitle="Customer referrals to ICBC" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="FB441ADA52573521309ED19CAEF473B7" navtitle="Request ICBC review of collision repair estimate">
+        <topicref href="CLMS-PL-VDWRAK-collrepestimatreviewrequestpol" format="dita" scope="local" navtitle="Collision repair estimate review request policy" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="715E34EAD185848743987224004FD71E" navtitle="Indicators to confirm the cause of loss" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="34DA216E2ACCB72A6C9160DEB15B194E" navtitle="Types of losses that collision repair program participants confirm" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="EBADB0E74E64F3C3BAB890297B185322" navtitle="Collision repair program participants handling a system outage" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="8A8779CB04DA8B98C8F92653A2DF2B25" navtitle="Manage inconsistent damage versus loss type at a collision repair facility">
+        <topicref scope="local" format="dita" class="- map/topicref " href="B70DB9456C5199EE1048A81B090D2C6A" navtitle="Handle unrelated damage concern from collision repair program facility" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="192734C620D77F2DDA7FA67E4DE68D0E" navtitle="Effect of special endorsements on collision repair program facilities">
+        <topicref scope="local" format="dita" class="- map/topicref " href="83CD859C4E260C683CF103CE511C8973" navtitle="Handle repair network claim with New Vehicle Replacement (NVR+) policy" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="C5EB3F3CA2CBAA7DCFB5365D6B293AD3" navtitle="Parts in stock at a collision repair program facility">
+        <topicref scope="local" format="dita" class="- map/topicref " href="9A3F40FEF6FD906A1380BE888AC0FF76" navtitle="In-stock decals and stripes and the collision repair program " />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="a9419eb2-fd60-4e7b-a890-cd22876ea898" navtitle="Initiate hit and run claim by collision repair program facility" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="CLMS-PS-P6SRAJ-managetowreqfornondrvtotalloss" navtitle="Manage a tow request for a vehicle determined to be a total loss at a collision repair program facility" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="CLMS-PS-F11S2P-mantowreqbetweenrepfac" navtitle="Manage a tow request to a sublet repair facility" />
+    </topicref>
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-RF-7CWR13-glass-repair-program" navtitle="Glass repair program">
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-RF-3B2Y0R-glass-repair-program-req" navtitle="Glass repair program requirements" />
+      <topicref href="DAMG-RF-GH7417-policy-grp-tiering" format="dita" scope="local" navtitle="Glass repair program tiering policy" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-RF-I7QQ8P-shared-benefits-program" navtitle="Tier 1 Rebate Program" />
+    </topicref>
+    <topicref format="dita" scope="local" class="- map/topicref " href="CLMS-PL-T5FHC2-policy-digit-sign-claim-est" navtitle="Electronic signatures for claim estimates policy">
+      <topicref format="dita" scope="local" class="- map/topicref " href="CLMS-PS-1EV5W7-compldigsigforclaimestimate" navtitle="Completing an electronic signature for a claim estimate" />
+    </topicref>
+    <topicref scope="local" format="dita" class="- map/topicref " href="E78CF65546DE1F778DB6F36FDA164694" navtitle="Alternative Transportation Service">
+      <topicref scope="local" format="dita" class="- map/topicref " href="7F8E6023D11A918D34C58B472747CD35" navtitle="Collision repair program Alternative Transportation Service management policy">
+        <topicref scope="local" format="dita" class="- map/topicref " href="857E51DFD36CA705A5866ECB2217B97F" navtitle="Temporary substitute motor vehicle agreement policy">
+          <topicref scope="local" format="dita" class="- map/topicref " href="8BC7D1E03B67842A88F677B5D07692C3" navtitle="Temporary Substitute Motor Vehicle Agreement requirements" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="32EEA1B1A3A7283CECAB49F079A074BA" navtitle="Responsibility for deductible on Alternative Transportation Service vehicle" />
+        </topicref>
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="C17B574FA692A606F6828FE7279337A1" navtitle="Alternative Transportation Service Standards">
+        <topicref scope="local" format="dita" class="- map/topicref " href="A411BCC4520979BFB6C0119C341CD494" navtitle="Alternative Transportation Service replacement vehicle criteria" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="73ED517B2B31C2AC74D228A2D6B3EE0A" navtitle="Coverage for Alternative Transportation Service vehicle" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="E2397C21CCDD170D0DBAC1545CEF3B75" navtitle="&#xA;    Managing the customer's alternative transportation entitlements and needs" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="C2280C4869497DF5BA28B809ED99372F" navtitle="Requirements to supply an Alternative Transportation Service replacement vehicle prior to the Alternative Transportation Service Responsibility Date" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="BEA7576761971879BFCC31A532B6C4E6" navtitle="Alternative Transportation Service compensation">
+        <topicref scope="local" format="dita" class="- map/topicref " href="6F14365345BC32DFB69DAC290C542FBA" navtitle="Apply Alternative Transportation Service compensation" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="8430AAA8A85F2F4DC96DCE3055BB2A49" navtitle="Sublet conversion to Alternative Transportation Service hourly compensation" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="67E5202BEAE7B5DCDB7140B083549263" navtitle="Manage an unsafe vehicle driven to collision repair program facility" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="7E3B5B52E64119374684FAA90DE89019" navtitle="Late return of Alternative Transportation Service replacement vehicle" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="19E01A6586DD0183C99442791C16B113" navtitle="Alternative Transportation Service compensation and holds on total loss vehicle" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="C616D657D9D71090EC2134FFFF1B041D" navtitle="Alternative Transportation Service for vehicles deemed to be a total loss policy" />
+    </topicref>
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-RF-F8P931-md-supplier-reqmnts-0" navtitle="ICBC Material Damage Supplier requirements" />
+    <topicref format="dita" scope="local" navtitle="Entegral" class="- map/topicref " href="DAMG-RF-155VGL-entegral">
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-RF-ZF77MH-entegral-statuses" navtitle="Statuses in Entegral" />
+    </topicref>
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PL-Q9NNO0-policy-rpr-prog-fac-empl-cons" navtitle=" Repair program facility employee storage information policy" />
+  </topicref>
+  <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-LTNJ95-vehicle-damage-stem" navtitle="Vehicle damage">
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-9B7JPE-estimates" navtitle="Estimates">
+      <topicref href="CLMS-PL-FEBKJL-adascalibrationscollisonclaim" format="dita" scope="local" navtitle="Advanced driver assistance systems calibrations for collision claims">
+        <topicref href="CLMS-PD-NMB7DE-selectappcalibadascollclaim" format="dita" scope="local" navtitle="Select the appropriate calibration for an advanced driver assistance system in a collision claim" />
+      </topicref>
+      <topicref scope="local" format="dita" class="- map/topicref " href="DE417372BAFF297A2481CC034D4A1C6D" navtitle="Repair estimate two year limitation period" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="3CBF480C449983628ED48FCEBA08E0EE" navtitle="Re-inspection request" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PS-877OP3-00-change-a-repair-facility" navtitle="Changing a repair facility" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="4BEAA5D1BA971AB57E36C32B7DE08CBF" navtitle="Cash settlement enquiry or request" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PD-XT3NE2-hndl-acc-dep-enq-oop-not-resp" navtitle="Handle accelerated depreciation enquiry from an out of province non-responsible motorist" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="BF4F91EEA898F475CB3728765B32CCEE" navtitle="Estimate/Appraisal form inquiry" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="EF29ED571242EBA38ED1299904F85C09" navtitle="Request copy of Estimate/Appraisal" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="B1E50FB79DCF753BD3BE7FB250293955" navtitle="Replace a lost Estimate/Appraisal form" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="f27f9252-9f61-4e18-9c0f-41f26e4906ae" navtitle="Handle a stereo claim " />
+      <topicref scope="local" format="dita" class="- map/topicref " href="E5FB2C5BF70F19EE63D28DC09228F294" navtitle="Special Estimating Instructions" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="AC4FA5A8C6BBA166659E535A2781F2AA" navtitle="Request non-appointment estimate for customer unable to attend" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-RF-LG3W4Q-hold-status-on-a-claim" navtitle="Vehicle estimate hold" />
+      <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-PS-OZTM61-compl-express-hit-run-claim" navtitle="Completing an express hit and run claim" />
+      <topicref scope="local" format="dita" class="- map/topicref " href="6FC220BCB49144F3A33739858E21D95C" navtitle="Complete a commercial estimate for a non-network repair facility">
+        <topicref format="dita" scope="local" class="- map/topicref " href="CLMS-CO-97147L-parties-involved-commercial-tl" navtitle="Parties involved in commercial vehicle total loss settlements" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="CF36E0184C394DBDC8F68A47D8DBE420" navtitle="Initiate commercial repair estimate for a non-drivable vehicle" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="9AF7EB58746B4B2960442D4DB8456E48" navtitle="Access manual repair estimate in ClaimCenter" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="56691ABA7870309CFA3F8482757C30F3" navtitle="Manage direct truck repair estimate" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="FE113217E0F9E41FB5137D3A9DA25118" navtitle="Calculate the co-insurance amount for a declared value vehicle" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="39ADEE66F63AE149F0AF98969D4476F5" navtitle="Requirements for transferring estimate to dealership or commercial vehicle repair facility">
+          <topicref scope="local" format="dita" class="- map/topicref " href="857A8DACED9B828D36639658FE7C0585" navtitle="Manage heavy equipment non-supplier repair estimate" />
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="EC59D81E63EDD53B454FB78FDA5C1013" navtitle="Repairs of load-bearing components and structures policy" />
+        <topicref scope="local" format="dita" class="- map/topicref " href="9C322754978A63DC0B84B552F4B3D860-0" navtitle="Commercial supplier labour rate requirements">
+          <topicref scope="local" format="dita" class="- map/topicref " href="48B5863220B33DA2CEDD2DA4D2C5E140" navtitle="Repair facility move allowance" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="8165F95AEE38753FE713F96B81F125F1" navtitle="Truck frame repair times " />
+          <topicref scope="local" format="dita" class="- map/topicref " href="FC216DC2BE13C491686C93FD5173B4C7" navtitle="Heavy equipment front and rear axle wheel alignment allowances">
+            <topicref href="CLMS-PL-VL6TEJ-safetytestdriveoncommtraun" format="dita" scope="local" navtitle="Safety test drive allowance on commercial tractor unit policy" />
+          </topicref>
+          <topicref scope="local" format="dita" class="- map/topicref " href="AC225DD9398972829E9E194BDDDC0AAF" navtitle="Sheet molding compound panel allowance" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="30A8587E1D09D18E2BC61F29419D44C2" navtitle="Sublet repairs on commercial claims" />
+          <topicref format="dita" scope="local" navtitle="Apply commercial parts and sublet mark-up rates" class="- map/topicref " href="aec515c2-f773-4011-bcac-41268d88b440" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="5E27B7F3DAC9732F2A485559DF1A772F" navtitle="Heavy equipment repairs at non supplier facility" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="857A8DACED9B828D36639658FE7C0585-0" navtitle="Manage heavy equipment non-supplier repair estimate" />
+          <topicref href="CLMS-PL-RT8W9G-maskingbaggingpolicy" format="dita" scope="local" navtitle="Masking and bagging policy" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="CBB8A57E22F79B3B9D97BC0D011604B2" navtitle="Headlamp adjustments on heavy equipment" />
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="37AED162900556E65A4880C0988CC116" navtitle="Refinish operations allowances">
+          <topicref scope="local" format="dita" class="- map/topicref " href="E4F15DEDA6B8114096EE9FBE381CF658" navtitle="Commercial refinish times for cab and sleeper" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="1E3F5C909E2E5DB16C04ACAB45CA2C92" navtitle="Commercial refinish times on applying integrals" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="98B34E5B47488AB228A275A357425FA4" navtitle="Commercial refinish times for components" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="B25FE253946C4E0AA872DAD12278B445" navtitle="Commercial refinish times for additional applications" />
+        </topicref>
+        <topicref scope="local" format="dita" class="- map/topicref " href="What-is-the-fpp" navtitle="Accountants and Economists">
+          <topicref scope="local" format="dita" class="- map/topicref " href="Policy-on-when-to-assign-financial-prof-in-fpp" navtitle="When to assign an accountant or economist" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="Provide-initial-instructions-to-assigned-financial-prof" navtitle="Provide initial instructions to an assigned financial professional" />
+          <topicref scope="local" format="dita" class="- map/topicref " href="Policy-on-managing-existing-fpp-assignments" navtitle="Policy on managing existing Financial Partners Program assignments">
+            <topicref scope="local" format="dita" class="- map/topicref " href="Financial-partners-program-overview-for-existing-assignments" navtitle="Financial Partners Program overview for existing assignments" />
+            <topicref scope="local" format="dita" class="- map/topicref " href="Policy-on-work-phase-reqts-for-existing-fpp-assignments" navtitle="Policy on work phase requirements for existing Financial Partners Program assignments" />
+            <topicref scope="local" format="dita" class="- map/topicref " href="Document-initial-file-handling-decisions-for-existing-fpp-assignments" navtitle="Document initial file handling decisions for existing Financial Partners Program assignments " />
+            <topicref scope="local" format="dita" class="- map/topicref " href="Request-addtl-hours-for-an-existing-fpp-assignment" navtitle="Request additional hours for an existing Financial Partners Program assignment" />
+            <topicref scope="local" format="dita" class="- map/topicref " href="Allocate-file-to-a-different-work-phase-for-an-existing-fpp-assignment" navtitle="Allocate file to a different work phase for an existing Financial Partners Program assignment" />
+          </topicref>
+          <topicref scope="local" format="dita" class="- map/topicref " href="Pay-invoice-for-financial-prof-fpp" navtitle="Pay invoice for an assigned financial professional" />
+        </topicref>
+      </topicref>
+    </topicref>
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-07T1AG-inconsistent-damage" navtitle="Inconsistent damage" />
+    <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-6592EW-out-of-province-support" navtitle="Out of province support">
+      <topicref format="dita" class="- map/topicref " href="Vehicle-disposition-notification" navtitle="Vehicle disposition notification" />
+    </topicref>
+    <topicref href="CLMS-TP-0V5T5M-child-car-seats-stem" format="dita" scope="local" navtitle="Child car seats">
+      <topicref format="dita" scope="local" class="- map/topicref " href="Take-a-customer-enquiry-for-car-seat-reimbursement-replacement" navtitle="Take an enquiry for child car seat reimbursement or replacement" />
+    </topicref>
+    <topicref format="dita" scope="local" class="- map/topicref " href="CVRG-PD-KEP7HH-hdl-unins-mtr-veh-dmg-ec-claim" navtitle="Determine coverage for an uninsured parked vehicle" />
+  </topicref>
+  <topicref format="dita" scope="local" class="- map/topicref " href="DAMG-TP-2AD4WG-vendors-suppliers-stem" navtitle="Vendors and suppliers">
+    <topicref scope="local" format="dita" class="- map/topicref " href="Make-request-create-change-vendor-entry" navtitle="Make a request to create or change a vendor record" />
+    <topicref href="MLWC-RF-S9UZKI-wc-error-msg" navtitle="Mitchell Connect error messages" />
+  </topicref>
+</map>

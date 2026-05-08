@@ -1,0 +1,1 @@
+"""Shop RAG FastAPI application."""

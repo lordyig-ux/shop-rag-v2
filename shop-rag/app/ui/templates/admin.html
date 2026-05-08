@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="admin-dashboard">
+  <div class="admin-heading">
+    <p class="eyebrow">Terminal Autobody</p>
+    <h1>Admin Dashboard</h1>
+  </div>
+
+  <div class="panel command-panel">
+    <h2>Knowledge Base Tools</h2>
+    <div class="tab-list" role="tablist" aria-label="Knowledge base tools">
+      <button type="button" class="tab-button active" data-admin-tab="icbc">ICBC</button>
+      <button type="button" class="tab-button" data-admin-tab="shop-docs">Shop Docs</button>
+      <button type="button" class="tab-button" data-admin-tab="mitchell-ceg">Mitchell CEG</button>
+    </div>
+    <div class="tab-panels">
+      <section class="tab-panel active" data-admin-panel="icbc">
+        <h3>ICBC Maintenance</h3>
+        <p class="muted">Use Check ICBC Updates once a month. It compares the ICBC navigation map before you run a full refresh.</p>
+        <div class="button-row">
+          <button type="button" data-admin-job="icbc-check">Check ICBC Updates</button>
+          <button type="button" data-admin-job="icbc-refresh">Run Full ICBC Refresh</button>
+        </div>
+        <div id="admin-maintenance" class="status-list">Loading maintenance dates...</div>
+      </section>
+
+      <section class="tab-panel" data-admin-panel="shop-docs">
+        <h3>Shop Docs Ingestion</h3>
+        <p class="muted">Put PDFs, Word docs, Excel files, Markdown, text, saved HTML, or a urls.txt list in:</p>
+        <pre class="code-block">data\shop_docs\inbox</pre>
+        <p class="muted">The folder is the source of truth. Remove files from the folder and import again to remove them from search.</p>
+        <div class="button-row">
+          <button type="button" id="scan-shop-docs">Scan Shop Docs</button>
+          <button type="button" data-admin-job="shop-docs-import">Import Shop Docs</button>
+        </div>
+        <pre id="admin-shop-docs-scan" class="code-block">Scan results will appear here.</pre>
+      </section>
+
+      <section class="tab-panel" data-admin-panel="mitchell-ceg">
+        <h3>Mitchell CEG</h3>
+        <p class="muted">Downloads the Mitchell CEG Procedure Explanations pages from the approved CEG folder, saves them under data\shop_docs\inbox\mitchell_ceg, then rebuilds the shop-doc index.</p>
+        <p class="muted">Use only if your shop is allowed to use Mitchell CEG content internally.</p>
+        <div class="button-row">
+          <button type="button" data-admin-job="mitchell-ceg-refresh">Refresh Mitchell CEG</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Background Jobs</h2>
+    <p class="muted">Only one maintenance job runs at a time. Leave this page open to watch current progress.</p>
+    <pre id="admin-job-status" class="code-block">Loading job status...</pre>
+  </div>
+
+  <div class="panel">
+    <h2>Source Index</h2>
+    <form id="admin-source-index-form" class="compact-form">
+      <input id="admin-source-index-query" type="text" placeholder="Search URLs and documents">
+      <button type="submit">Search</button>
+    </form>
+    <div id="admin-source-index">Loading source index...</div>
+  </div>
+
+  <details class="panel advanced-panel">
+    <summary>Advanced Diagnostics</summary>
+    <div class="advanced-grid">
+      <section>
+        <h2>System Health</h2>
+        <div id="admin-health" class="status-list">Loading...</div>
+      </section>
+
+      <section>
+        <h2>Collections</h2>
+        <div id="admin-collections">Loading...</div>
+      </section>
+
+      <section>
+        <h2>Retrieval Test</h2>
+        <form id="admin-test-form" class="compact-form">
+          <input id="admin-test-question" type="text" placeholder="pre-repair scanning policy">
+          <button type="submit">Run</button>
+        </form>
+        <pre id="admin-test-result" class="code-block"></pre>
+      </section>
+
+      <section>
+        <h2>Recent Queries</h2>
+        <div id="admin-queries">Loading...</div>
+      </section>
+
+      <section>
+        <h2>Errors</h2>
+        <div id="admin-errors">Loading...</div>
+      </section>
+
+      <section>
+        <h2>Settings</h2>
+        <div id="admin-settings">API keys are never displayed.</div>
+      </section>
+
+      <section>
+        <h2>Staging Cleanup</h2>
+        <p class="muted">Deletes only Qdrant collections ending in _staging. Live collections are left alone.</p>
+        <button type="button" id="cleanup-staging-collections">Clean Up Staging Collections</button>
+        <pre id="cleanup-staging-result" class="code-block">Cleanup results will appear here.</pre>
+      </section>
+
+      <section class="wide">
+        <h2>Schema Inspection</h2>
+        <pre id="admin-schema" class="code-block">Loading...</pre>
+      </section>
+
+      <section class="wide">
+        <h2>Inspection Report</h2>
+        <pre id="admin-report" class="code-block">Loading...</pre>
+      </section>
+    </div>
+  </details>
+</section>
+{% endblock %}

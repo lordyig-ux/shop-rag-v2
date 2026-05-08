@@ -1,0 +1,6 @@
+archive/
+dist/
+shop-rag/.venv/
+shop-rag/.pytest_cache/
+**/__pycache__/
+*.pyc

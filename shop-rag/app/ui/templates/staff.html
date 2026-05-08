@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="search-home">
+  <div class="search-shell">
+    <p class="eyebrow">Terminal Autobody</p>
+    <h1>Knowledge Base</h1>
+    <form id="query-form" class="search-form" role="search">
+      <label class="visually-hidden" for="question">Search the knowledge base</label>
+      <div class="search-box">
+        <input id="question" name="question" type="search" autocomplete="off" placeholder="Search ICBC, Mitchell CEG, PDFs, SOPs, and shop docs" required>
+        <button class="primary-button" type="submit">Search</button>
+      </div>
+    </form>
+    <div class="example-row" aria-label="Example searches">
+      <button type="button" data-example-question="What does ICBC say about ATS?">What does ICBC say about ATS?</button>
+      <button type="button" data-example-question="What does Mitchell CEG say about quarter panel sectioning?">What does Mitchell CEG say about quarter panel sectioning?</button>
+      <button type="button" data-example-question="What is our SOP for aluminum repair?">What is our SOP for aluminum repair?</button>
+    </div>
+  </div>
+
+  <section id="answer-area" class="search-results" aria-live="polite">
+    <div class="empty-state">Search the indexed knowledge base.</div>
+  </section>
+</section>
+{% endblock %}
