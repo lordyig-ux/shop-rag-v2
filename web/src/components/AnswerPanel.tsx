@@ -1,6 +1,18 @@
 import type { SearchResponse } from "@/lib/search/contracts";
+import type { Citation } from "@/lib/search/contracts";
+import type { UsageFeedbackRating } from "@/lib/analytics/usageStats";
 
-export function AnswerPanel({ response }: { response: SearchResponse }) {
+export function AnswerPanel({
+  feedbackState = "idle",
+  onFeedback,
+  onSourceClick,
+  response,
+}: {
+  feedbackState?: "idle" | "sending" | "sent";
+  onFeedback?: (rating: UsageFeedbackRating) => void;
+  onSourceClick?: (citation: Citation, index: number) => void;
+  response: SearchResponse;
+}) {
   return (
     <section className="space-y-5" aria-live="polite">
       {response.warnings.length > 0 ? (
@@ -25,6 +37,26 @@ export function AnswerPanel({ response }: { response: SearchResponse }) {
           </span>
         </div>
         <p className="whitespace-pre-wrap text-sm leading-6 text-slate-800">{response.answer}</p>
+        <div className="mt-4 border-t border-slate-100 pt-4">
+          {feedbackState === "sent" ? (
+            <p className="text-sm font-medium text-slate-600">Thanks, your feedback was recorded.</p>
+          ) : (
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm font-medium text-slate-700">Was this helpful?</span>
+              {feedbackOptions.map((option) => (
+                <button
+                  key={option.rating}
+                  className="rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:border-[var(--brand-red)] disabled:cursor-not-allowed disabled:opacity-60"
+                  disabled={feedbackState === "sending" || !onFeedback}
+                  type="button"
+                  onClick={() => onFeedback?.(option.rating)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </article>
 
       <section className="space-y-3">
@@ -57,6 +89,7 @@ export function AnswerPanel({ response }: { response: SearchResponse }) {
                       href={href}
                       target="_blank"
                       rel="noreferrer"
+                      onClick={() => onSourceClick?.(citation, index)}
                     >
                       {pageLabel ? `Open page ${pageLabel}` : "Open source"}
                     </a>
@@ -75,3 +108,10 @@ export function AnswerPanel({ response }: { response: SearchResponse }) {
     </section>
   );
 }
+
+const feedbackOptions: Array<{ label: string; rating: UsageFeedbackRating }> = [
+  { label: "Helpful", rating: "helpful" },
+  { label: "Not helpful", rating: "not_helpful" },
+  { label: "Missing info", rating: "missing_info" },
+  { label: "Wrong source", rating: "wrong_source" },
+];

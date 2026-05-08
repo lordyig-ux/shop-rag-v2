@@ -1,17 +1,18 @@
 "use client";
 
 import { useMutation, useQuery } from "convex/react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { convexFunctions } from "@/lib/convexReferences";
-import type { SearchResponse } from "@/lib/search/contracts";
+import type { UsageFeedbackRating, UsageTopSource } from "@/lib/analytics/usageStats";
+import type { Citation, SearchResponse } from "@/lib/search/contracts";
 import { shapeSearchResponse } from "@/lib/search/shapeResults";
 import { AnswerPanel } from "./AnswerPanel";
 
 const examples = [
   "When does the structural aluminum repair rate apply?",
   "Determine if an ICBC review is required?",
-  "ICBC’s animal-impact policy?",
+  "ICBC's animal-impact policy?",
 ];
 
 export function SearchShell() {
@@ -19,7 +20,16 @@ export function SearchShell() {
   const [submittedQuestion, setSubmittedQuestion] = useState("");
   const [response, setResponse] = useState<SearchResponse | null>(null);
   const [error, setError] = useState("");
+  const [feedbackState, setFeedbackState] = useState<"idle" | "sending" | "sent">("idle");
+  const searchStartedAtRef = useRef(0);
+  const sessionIdRef = useRef("");
   const logQuery = useMutation(convexFunctions.logQuery);
+  const logSourceClick = useMutation(convexFunctions.logSourceClick);
+  const recordFeedback = useMutation(convexFunctions.recordFeedback);
+
+  useEffect(() => {
+    sessionIdRef.current = getOrCreateSearchSessionId();
+  }, []);
 
   const queryArgs = useMemo(
     () =>
@@ -67,12 +77,31 @@ export function SearchShell() {
           return;
         }
         setResponse(nextResponse);
-        void logQuery({
+        const topSources = topSourcesFromCitations(nextResponse.citations);
+        const logArgs: {
+          question: string;
+          resultCount: number;
+          usedAi: boolean;
+          warnings: string[];
+          sessionId?: string;
+          responseTimeMs?: number;
+          topSources?: UsageTopSource[];
+        } = {
           question: submittedQuestion,
           resultCount: nextResponse.resultCount,
           usedAi: nextResponse.usedAi,
           warnings: nextResponse.warnings,
-        });
+        };
+        if (sessionIdRef.current) {
+          logArgs.sessionId = sessionIdRef.current;
+        }
+        if (searchStartedAtRef.current) {
+          logArgs.responseTimeMs = Date.now() - searchStartedAtRef.current;
+        }
+        if (topSources.length) {
+          logArgs.topSources = topSources;
+        }
+        void logQuery(logArgs);
       })
         .catch((err: unknown) => {
           if (active) {
@@ -94,6 +123,64 @@ export function SearchShell() {
     setSubmittedQuestion(trimmed);
     setResponse(null);
     setError("");
+    setFeedbackState("idle");
+    searchStartedAtRef.current = Date.now();
+  }
+
+  function handleSourceClick(citation: Citation, index: number) {
+    const clickArgs: {
+      question: string;
+      chunkId: string;
+      title: string;
+      sourceUrl: string | null;
+      sourceRank: number;
+      sessionId?: string;
+    } = {
+      question: response?.question || submittedQuestion || question,
+      chunkId: citation.chunkId,
+      title: citation.title,
+      sourceUrl: citation.sourceUrlWithPage || citation.sourceUrl,
+      sourceRank: index + 1,
+    };
+    if (sessionIdRef.current) {
+      clickArgs.sessionId = sessionIdRef.current;
+    }
+    void logSourceClick(clickArgs);
+  }
+
+  async function handleFeedback(rating: UsageFeedbackRating) {
+    if (!response || feedbackState === "sending") {
+      return;
+    }
+
+    setFeedbackState("sending");
+    const topSource = response.citations[0];
+    const feedbackArgs: {
+      question: string;
+      answer: string;
+      rating: UsageFeedbackRating;
+      sessionId?: string;
+      topSourceTitle?: string;
+      topSourceRef?: string;
+    } = {
+      question: response.question,
+      answer: response.answer,
+      rating,
+    };
+    if (sessionIdRef.current) {
+      feedbackArgs.sessionId = sessionIdRef.current;
+    }
+    if (topSource) {
+      feedbackArgs.topSourceTitle = topSource.title;
+      feedbackArgs.topSourceRef = topSource.sourceRef;
+    }
+
+    try {
+      await recordFeedback(feedbackArgs);
+      setFeedbackState("sent");
+    } catch {
+      setFeedbackState("idle");
+    }
   }
 
   return (
@@ -164,9 +251,41 @@ export function SearchShell() {
               {submittedQuestion ? "Searching indexed public-safe sources..." : "Search results will appear here."}
             </div>
           ) : null}
-          {response ? <AnswerPanel response={response} /> : null}
+          {response ? (
+            <AnswerPanel
+              feedbackState={feedbackState}
+              response={response}
+              onFeedback={handleFeedback}
+              onSourceClick={handleSourceClick}
+            />
+          ) : null}
         </section>
       </section>
     </main>
   );
+}
+
+function getOrCreateSearchSessionId() {
+  if (typeof window === "undefined") {
+    return "";
+  }
+
+  const storageKey = "terminal-kb-usage-session";
+  const existing = window.sessionStorage.getItem(storageKey);
+  if (existing) {
+    return existing;
+  }
+
+  const next = window.crypto?.randomUUID?.() || `session-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  window.sessionStorage.setItem(storageKey, next);
+  return next;
+}
+
+function topSourcesFromCitations(citations: Citation[]): UsageTopSource[] {
+  return citations.slice(0, 8).map((citation, index) => ({
+    title: citation.title,
+    sourceRef: citation.sourceRef,
+    sourceUrl: citation.sourceUrlWithPage || citation.sourceUrl,
+    rank: index + 1,
+  }));
 }

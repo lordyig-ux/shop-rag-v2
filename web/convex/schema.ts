@@ -17,6 +17,22 @@ const maintenanceJobType = v.union(
 
 const maintenanceStatus = v.union(v.literal("running"), v.literal("succeeded"), v.literal("failed"));
 
+const feedbackRating = v.union(
+  v.literal("up"),
+  v.literal("down"),
+  v.literal("helpful"),
+  v.literal("not_helpful"),
+  v.literal("missing_info"),
+  v.literal("wrong_source"),
+);
+
+const usageTopSource = v.object({
+  title: v.string(),
+  sourceRef: v.string(),
+  sourceUrl: v.union(v.string(), v.null()),
+  rank: v.number(),
+});
+
 export default defineSchema({
   sources: defineTable({
     sourceId: v.string(),
@@ -78,14 +94,30 @@ export default defineSchema({
     resultCount: v.number(),
     usedAi: v.boolean(),
     warnings: v.array(v.string()),
+    sessionId: v.optional(v.string()),
+    responseTimeMs: v.optional(v.number()),
+    topSources: v.optional(v.array(usageTopSource)),
+    createdAt: v.number(),
+  }).index("by_createdAt", ["createdAt"]),
+
+  sourceClicks: defineTable({
+    question: v.string(),
+    chunkId: v.string(),
+    title: v.string(),
+    sourceUrl: v.union(v.string(), v.null()),
+    sourceRank: v.number(),
+    sessionId: v.optional(v.string()),
     createdAt: v.number(),
   }).index("by_createdAt", ["createdAt"]),
 
   feedback: defineTable({
     question: v.string(),
     answer: v.string(),
-    rating: v.union(v.literal("up"), v.literal("down")),
+    rating: feedbackRating,
     comment: v.optional(v.string()),
+    sessionId: v.optional(v.string()),
+    topSourceTitle: v.optional(v.string()),
+    topSourceRef: v.optional(v.string()),
     createdAt: v.number(),
   }).index("by_createdAt", ["createdAt"]),
 

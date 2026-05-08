@@ -48,6 +48,20 @@ const maintenanceJobType = v.union(
   v.literal("shop_docs_import"),
 );
 const maintenanceStatus = v.union(v.literal("running"), v.literal("succeeded"), v.literal("failed"));
+const feedbackRating = v.union(
+  v.literal("up"),
+  v.literal("down"),
+  v.literal("helpful"),
+  v.literal("not_helpful"),
+  v.literal("missing_info"),
+  v.literal("wrong_source"),
+);
+const usageTopSource = v.object({
+  title: v.string(),
+  sourceRef: v.string(),
+  sourceUrl: v.union(v.string(), v.null()),
+  rank: v.number(),
+});
 
 export const upsertImportedChunks = mutationGeneric({
   args: {
@@ -529,6 +543,9 @@ export const logQuery = mutationGeneric({
     resultCount: v.number(),
     usedAi: v.boolean(),
     warnings: v.array(v.string()),
+    sessionId: v.optional(v.string()),
+    responseTimeMs: v.optional(v.number()),
+    topSources: v.optional(v.array(usageTopSource)),
   },
   handler: async (ctx, args) => {
     await ctx.db.insert("queryLogs", {
@@ -537,8 +554,104 @@ export const logQuery = mutationGeneric({
       resultCount: args.resultCount,
       usedAi: args.usedAi,
       warnings: args.warnings,
+      ...(args.sessionId ? { sessionId: args.sessionId } : {}),
+      ...(typeof args.responseTimeMs === "number" ? { responseTimeMs: args.responseTimeMs } : {}),
+      ...(args.topSources ? { topSources: args.topSources } : {}),
       createdAt: Date.now(),
     });
+  },
+});
+
+export const logSourceClick = mutationGeneric({
+  args: {
+    question: v.string(),
+    chunkId: v.string(),
+    title: v.string(),
+    sourceUrl: v.union(v.string(), v.null()),
+    sourceRank: v.number(),
+    sessionId: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.insert("sourceClicks", {
+      question: args.question,
+      chunkId: args.chunkId,
+      title: args.title,
+      sourceUrl: args.sourceUrl,
+      sourceRank: args.sourceRank,
+      ...(args.sessionId ? { sessionId: args.sessionId } : {}),
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const recordFeedback = mutationGeneric({
+  args: {
+    question: v.string(),
+    answer: v.string(),
+    rating: feedbackRating,
+    comment: v.optional(v.string()),
+    sessionId: v.optional(v.string()),
+    topSourceTitle: v.optional(v.string()),
+    topSourceRef: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.insert("feedback", {
+      question: args.question,
+      answer: args.answer,
+      rating: args.rating,
+      ...(args.comment ? { comment: args.comment } : {}),
+      ...(args.sessionId ? { sessionId: args.sessionId } : {}),
+      ...(args.topSourceTitle ? { topSourceTitle: args.topSourceTitle } : {}),
+      ...(args.topSourceRef ? { topSourceRef: args.topSourceRef } : {}),
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const adminUsageAnalytics = queryGeneric({
+  args: {
+    importSecret: v.optional(v.string()),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    assertImportSecret(args.importSecret);
+
+    const limit = Math.max(1, Math.min(args.limit || 500, 1000));
+    const [queryLogs, sourceClicks, feedback] = await Promise.all([
+      ctx.db.query("queryLogs").withIndex("by_createdAt").order("desc").take(limit),
+      ctx.db.query("sourceClicks").withIndex("by_createdAt").order("desc").take(limit),
+      ctx.db.query("feedback").withIndex("by_createdAt").order("desc").take(limit),
+    ]);
+
+    return {
+      queryLogs: queryLogs.map((log) => ({
+        question: log.question,
+        normalizedQuestion: log.normalizedQuestion,
+        resultCount: log.resultCount,
+        usedAi: log.usedAi,
+        warnings: log.warnings,
+        createdAt: log.createdAt,
+        ...(typeof log.responseTimeMs === "number" ? { responseTimeMs: log.responseTimeMs } : {}),
+        topSources: log.topSources || [],
+      })),
+      sourceClicks: sourceClicks.map((click) => ({
+        question: click.question,
+        chunkId: click.chunkId,
+        title: click.title,
+        sourceUrl: click.sourceUrl,
+        sourceRank: click.sourceRank,
+        createdAt: click.createdAt,
+      })),
+      feedback: feedback.map((item) => ({
+        question: item.question,
+        answer: item.answer,
+        rating: item.rating,
+        ...(item.comment ? { comment: item.comment } : {}),
+        ...(item.topSourceTitle ? { topSourceTitle: item.topSourceTitle } : {}),
+        ...(item.topSourceRef ? { topSourceRef: item.topSourceRef } : {}),
+        createdAt: item.createdAt,
+      })),
+    };
   },
 });
 

@@ -11,6 +11,7 @@ import type { IcbcRefreshResult } from "@/lib/admin/icbcRefresh";
 import { jsonResponseErrorMessage, readJsonResponse } from "@/lib/admin/jsonResponse";
 import type { MitchellCegRefreshResult } from "@/lib/admin/mitchellCeg";
 import { COLLISION_PROGRAM_GUIDE_URL, type ShopDocsImportResult } from "@/lib/admin/shopDocs";
+import { summarizeUsageAnalytics, type UsageAnalyticsInput } from "@/lib/analytics/usageStats";
 import { ADMIN_BYPASS_HEADER } from "@/lib/auth/adminBypassConstants";
 import { convexFunctions } from "@/lib/convexReferences";
 import type { KnowledgeType } from "@/lib/knowledge/normalizeChunk";
@@ -31,6 +32,8 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
   const overview = useQuery(convexFunctions.adminOverview, {});
   const [aiHealth, setAiHealth] = useState<AdminAiHealth | null>(null);
   const [aiError, setAiError] = useState("");
+  const [usageAnalytics, setUsageAnalytics] = useState<UsageAnalyticsInput | null>(null);
+  const [usageAnalyticsError, setUsageAnalyticsError] = useState("");
   const [activeTool, setActiveTool] = useState<ToolTab>("icbc");
   const [icbcBusy, setIcbcBusy] = useState(false);
   const [icbcError, setIcbcError] = useState("");
@@ -87,7 +90,35 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
     };
   }, [adminFetch]);
 
+  useEffect(() => {
+    let active = true;
+
+    adminFetch("/api/admin/analytics")
+      .then(async (response) => {
+        const body = await readJsonResponse<UsageAnalyticsInput | { error?: string }>(response, "Usage analytics failed");
+        if (!response.ok) {
+          throw new Error(jsonResponseErrorMessage(body, "Usage analytics failed"));
+        }
+        return body as UsageAnalyticsInput;
+      })
+      .then((analytics) => {
+        if (active) {
+          setUsageAnalytics(analytics);
+        }
+      })
+      .catch((error: unknown) => {
+        if (active) {
+          setUsageAnalyticsError(error instanceof Error ? error.message : "Usage analytics failed");
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [adminFetch]);
+
   const signals = useMemo(() => deriveAdminSignals(overview, aiHealth), [overview, aiHealth]);
+  const usageSummary = useMemo(() => (usageAnalytics ? summarizeUsageAnalytics(usageAnalytics) : null), [usageAnalytics]);
   const latestIcbcCheckRun = overview?.maintenanceRuns.find((run) => run.jobType === "icbc_check") || null;
   const latestIcbcRefreshRun = overview?.maintenanceRuns.find((run) => run.jobType === "icbc_refresh") || null;
   const latestShopDocsRun = overview?.maintenanceRuns.find((run) => run.jobType === "shop_docs_import") || null;
@@ -614,6 +645,10 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
               <Metric label="Latest import" value={overview.latestImportAt ? formatDate(overview.latestImportAt) : "None"} />
             </section>
 
+            <Panel title="Usage Analytics">
+              <UsageAnalyticsPanel error={usageAnalyticsError} summary={usageSummary} />
+            </Panel>
+
             <section>
               <Panel title="Import Batches">
                 {overview.batches.length ? (
@@ -704,6 +739,60 @@ export function AdminShell({ adminBypassToken = "" }: { adminBypassToken?: strin
         </Panel>
       </section>
     </main>
+  );
+}
+
+function UsageAnalyticsPanel({ error, summary }: { error: string; summary: ReturnType<typeof summarizeUsageAnalytics> | null }) {
+  if (error) {
+    return <EmptyMessage>{error}</EmptyMessage>;
+  }
+
+  if (!summary) {
+    return <EmptyMessage>Loading usage analytics...</EmptyMessage>;
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+        <CompactMetric label="Searches" value={summary.totals.searches} />
+        <CompactMetric label="Source clicks" value={summary.totals.sourceClicks} />
+        <CompactMetric label="Helpful" value={summary.totals.helpful} />
+        <CompactMetric label="Needs review" value={summary.totals.needsReview} />
+        <CompactMetric label="Avg ms" value={summary.totals.averageResponseTimeMs} />
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-3">
+        <UsageList title="Top Searches" emptyMessage="No searches logged yet.">
+          {summary.topSearches.map((item) => (
+            <li key={item.question} className="flex items-start justify-between gap-3">
+              <span>{item.question}</span>
+              <span className="rounded bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600">{item.count}</span>
+            </li>
+          ))}
+        </UsageList>
+
+        <UsageList title="Needs Review" emptyMessage="No review candidates yet.">
+          {summary.reviewCandidates.map((candidate) => (
+            <li key={candidate.question}>{candidate.question}</li>
+          ))}
+        </UsageList>
+
+        <UsageList title="Most Clicked Sources" emptyMessage="No source clicks logged yet.">
+          {summary.mostClickedSources.map((source) => (
+            <li key={`${source.title}-${source.sourceUrl || "no-url"}`}>
+              {source.sourceUrl ? (
+                <a className="font-medium text-red-700 hover:text-red-900" href={source.sourceUrl} target="_blank" rel="noreferrer">
+                  {source.title}
+                </a>
+              ) : (
+                <span className="font-medium text-slate-950">{source.title}</span>
+              )}
+              <div className="mt-1 text-xs text-slate-500">{source.clicks} clicks</div>
+            </li>
+          ))}
+        </UsageList>
+      </div>
+    </div>
   );
 }
 
@@ -1033,6 +1122,25 @@ function ResultList({ children, title }: { children: React.ReactNode; title: str
     <div className="rounded-md border border-slate-200 bg-white p-4 text-sm">
       <div className="font-semibold text-slate-950">{title}</div>
       <ul className="mt-2 list-disc space-y-1 pl-5 text-slate-700">{children}</ul>
+    </div>
+  );
+}
+
+function UsageList({
+  children,
+  emptyMessage,
+  title,
+}: {
+  children: React.ReactNode;
+  emptyMessage: string;
+  title: string;
+}) {
+  const hasItems = Array.isArray(children) ? children.length > 0 : Boolean(children);
+
+  return (
+    <div className="rounded-md border border-slate-200 bg-slate-50 p-4 text-sm">
+      <div className="font-semibold text-slate-950">{title}</div>
+      {hasItems ? <ul className="mt-3 space-y-2 text-slate-700">{children}</ul> : <p className="mt-3 text-slate-500">{emptyMessage}</p>}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { makeFunctionReference } from "convex/server";
 
 import type { AdminOverview } from "@/lib/admin/contracts";
 import type { IcbcSourceSnapshot } from "@/lib/admin/icbcMaintenance";
+import type { UsageAnalyticsInput, UsageFeedbackRating, UsageTopSource } from "@/lib/analytics/usageStats";
 import type { NormalizedChunkRecord } from "@/lib/knowledge/normalizeChunk";
 import type { EvidenceChunk, KnowledgeFilter } from "@/lib/search/contracts";
 
@@ -30,9 +31,43 @@ export const convexFunctions = {
       resultCount: number;
       usedAi: boolean;
       warnings: string[];
+      sessionId?: string;
+      responseTimeMs?: number;
+      topSources?: UsageTopSource[];
     },
     null
   >("knowledge:logQuery"),
+
+  logSourceClick: makeFunctionReference<
+    "mutation",
+    {
+      question: string;
+      chunkId: string;
+      title: string;
+      sourceUrl: string | null;
+      sourceRank: number;
+      sessionId?: string;
+    },
+    null
+  >("knowledge:logSourceClick"),
+
+  recordFeedback: makeFunctionReference<
+    "mutation",
+    {
+      question: string;
+      answer: string;
+      rating: UsageFeedbackRating;
+      comment?: string;
+      sessionId?: string;
+      topSourceTitle?: string;
+      topSourceRef?: string;
+    },
+    null
+  >("knowledge:recordFeedback"),
+
+  adminUsageAnalytics: makeFunctionReference<"query", { importSecret?: string; limit?: number }, UsageAnalyticsInput>(
+    "knowledge:adminUsageAnalytics",
+  ),
 
   upsertImportedChunks: makeFunctionReference<
     "mutation",
