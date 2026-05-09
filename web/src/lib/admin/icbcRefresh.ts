@@ -37,6 +37,10 @@ export type IcbcRefreshResult = {
   chunksUpserted: number;
   oldSourcesDeleted: number;
   oldChunksDeleted: number;
+  notListedSourcesChecked?: number;
+  notListedSourcesPreserved?: number;
+  confirmedNotFoundSources?: number;
+  directCheckFailedSources?: number;
   skipped: IcbcRefreshFailure[];
   summary: string;
   logStored: boolean;

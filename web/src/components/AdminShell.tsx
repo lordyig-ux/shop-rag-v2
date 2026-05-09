@@ -901,6 +901,7 @@ function IcbcResultPanel({
   }
 
   const comparison = checkResult.comparison;
+  const notListedSources = comparison.notListedInNav || comparison.staleInKnowledgeBase || [];
 
   return (
     <div className="space-y-4">
@@ -924,7 +925,7 @@ function IcbcResultPanel({
         <CompactMetric label="Current sources" value={comparison.totalCurrent} />
         <CompactMetric label="Matched" value={comparison.unchangedCount} />
         <CompactMetric label="New topics" value={comparison.missingFromKnowledgeBase.length} />
-        <CompactMetric label="Stale sources" value={comparison.staleInKnowledgeBase.length} />
+        <CompactMetric label="Not in nav" value={notListedSources.length} />
         <CompactMetric label="Title changes" value={comparison.titleChanges.length} />
       </div>
 
@@ -940,10 +941,24 @@ function IcbcResultPanel({
         </ResultList>
       ) : null}
 
-      {comparison.staleInKnowledgeBase.length ? (
-        <ResultList title="Sources no longer in the ICBC nav">
-          {comparison.staleInKnowledgeBase.slice(0, 8).map((source) => (
-            <li key={`${source.importedBatchId}-${source.sourceRef}`}>{source.title}</li>
+      {notListedSources.length ? (
+        <ResultList title="Current sources not listed in ICBC nav">
+          {notListedSources.slice(0, 8).map((source) => (
+            <li key={`${source.importedBatchId}-${source.sourceRef}`} className="space-y-1">
+              <div className="font-medium text-slate-950">{source.title}</div>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
+                <span>{formatIcbcDirectStatus(source.directUrlStatus, source.httpStatus)}</span>
+                {source.checkedUrl ? (
+                  <a className="font-medium text-red-700 hover:text-red-900" href={source.checkedUrl} target="_blank" rel="noreferrer">
+                    Open source
+                  </a>
+                ) : null}
+                <a className="font-medium text-red-700 hover:text-red-900" href={icbcSearchUrl(source.title)} target="_blank" rel="noreferrer">
+                  Search ICBC
+                </a>
+              </div>
+              {source.checkError ? <div className="text-xs text-amber-700">{source.checkError}</div> : null}
+            </li>
           ))}
         </ResultList>
       ) : null}
@@ -970,6 +985,8 @@ function IcbcRefreshResultPanel({ result }: { result: IcbcRefreshUiResult }) {
         <CompactMetric label="Chunks imported" value={result.chunksUpserted} />
         <CompactMetric label="Old sources deleted" value={result.oldSourcesDeleted} />
         <CompactMetric label="Old chunks deleted" value={result.oldChunksDeleted} />
+        <CompactMetric label="Not-in-nav kept" value={result.notListedSourcesPreserved || 0} />
+        <CompactMetric label="Confirmed gone" value={result.confirmedNotFoundSources || 0} />
         <CompactMetric label="Seconds" value={Math.round(result.durationMs / 1000)} />
       </div>
 
@@ -1205,6 +1222,24 @@ function formatDate(value: number) {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
+}
+
+function formatIcbcDirectStatus(status: string, httpStatus: number | null) {
+  const suffix = typeof httpStatus === "number" ? ` (${httpStatus})` : "";
+  if (status === "live") {
+    return `Live - not listed in nav${suffix}`;
+  }
+  if (status === "not_found") {
+    return `Possibly retired${suffix}`;
+  }
+  if (status === "check_failed") {
+    return `Direct check failed${suffix}`;
+  }
+  return "Not checked";
+}
+
+function icbcSearchUrl(query: string) {
+  return `https://mdp.partners.icbc.com/search?query=${encodeURIComponent(query)}`;
 }
 
 function withAdminBypassHeader(init: RequestInit, token: string): RequestInit {

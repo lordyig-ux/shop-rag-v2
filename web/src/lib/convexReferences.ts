@@ -114,6 +114,7 @@ export const convexFunctions = {
     {
       importSecret?: string;
       keepBatchId: string;
+      preserveSourceRefs?: string[];
       limit?: number;
     },
     {

@@ -1,9 +1,13 @@
 import { ConvexHttpClient } from "convex/browser";
 
 import {
-  ICBC_NAV_XML_URL,
+  compareIcbcSources,
+  ICBC_MAPS,
+  icbcNavXmlUrl,
   parseIcbcNavEntries,
+  sourceRefsToPreserveAfterRefresh,
   type IcbcNavEntry,
+  verifyIcbcNotListedSources,
 } from "@/lib/admin/icbcMaintenance";
 import {
   buildIcbcRefreshRecords,
@@ -75,7 +79,13 @@ export async function POST() {
 
     const imported = await importRecords(client, importSecret, records);
     importedNewBatch = true;
-    const deleted = await deleteOldIcbcSources(client, importSecret, batchId);
+    const currentSources = await client.query(convexFunctions.icbcSourceSnapshot, {});
+    const comparison = compareIcbcSources(entries, currentSources);
+    const verifiedNotListed = await verifyIcbcNotListedSources(comparison.notListedInNav);
+    const preserveSourceRefs = sourceRefsToPreserveAfterRefresh(verifiedNotListed);
+    const confirmedNotFoundSources = verifiedNotListed.filter((source) => source.directUrlStatus === "not_found").length;
+    const directCheckFailedSources = verifiedNotListed.filter((source) => source.directUrlStatus === "check_failed").length;
+    const deleted = await deleteOldIcbcSources(client, importSecret, batchId, preserveSourceRefs);
     await rebuildAdminOverviewSummaries(client, importSecret);
     const result: IcbcRefreshResult = {
       batchId,
@@ -87,8 +97,12 @@ export async function POST() {
       chunksUpserted: imported.chunksUpserted,
       oldSourcesDeleted: deleted.sourcesDeleted,
       oldChunksDeleted: deleted.chunksDeleted,
+      notListedSourcesChecked: verifiedNotListed.length,
+      notListedSourcesPreserved: preserveSourceRefs.length,
+      confirmedNotFoundSources,
+      directCheckFailedSources,
       skipped: [],
-      summary: `Refreshed ${importedTopicIds.size} ICBC topics into ${records.length} chunks.`,
+      summary: `Refreshed ${importedTopicIds.size} ICBC topics into ${records.length} chunks. Preserved ${preserveSourceRefs.length} current source(s) not listed in nav; ${confirmedNotFoundSources} confirmed not found.`,
       logStored: true,
     };
 
@@ -126,18 +140,28 @@ export async function POST() {
 }
 
 async function fetchIcbcNavEntries() {
-  const navResponse = await fetch(ICBC_NAV_XML_URL, {
-    cache: "no-store",
-    headers: refreshHeaders(),
-  });
+  const entriesByTopicId = new Map<string, IcbcNavEntry>();
 
-  if (!navResponse.ok) {
-    throw new Error(`ICBC navigation map request failed: ${navResponse.status} ${navResponse.statusText}`);
+  for (const map of ICBC_MAPS) {
+    const navResponse = await fetch(icbcNavXmlUrl(map.mapName), {
+      cache: "no-store",
+      headers: refreshHeaders(),
+    });
+
+    if (!navResponse.ok) {
+      throw new Error(`ICBC navigation map request failed: ${navResponse.status} ${navResponse.statusText}`);
+    }
+
+    for (const entry of parseIcbcNavEntries(await navResponse.text(), map.mapName)) {
+      if (!entriesByTopicId.has(entry.topicId.toLowerCase())) {
+        entriesByTopicId.set(entry.topicId.toLowerCase(), entry);
+      }
+    }
   }
 
-  const entries = parseIcbcNavEntries(await navResponse.text());
+  const entries = Array.from(entriesByTopicId.values());
   if (!entries.length) {
-    throw new Error("ICBC navigation map did not contain any topic references.");
+    throw new Error("ICBC navigation maps did not contain any topic references.");
   }
 
   return entries;
@@ -220,7 +244,12 @@ async function importRecords(client: ConvexHttpClient, importSecret: string, rec
   return { chunksUpserted };
 }
 
-async function deleteOldIcbcSources(client: ConvexHttpClient, importSecret: string, keepBatchId: string) {
+async function deleteOldIcbcSources(
+  client: ConvexHttpClient,
+  importSecret: string,
+  keepBatchId: string,
+  preserveSourceRefs: string[],
+) {
   let chunksDeleted = 0;
   let sourcesDeleted = 0;
   let hasMore = true;
@@ -230,6 +259,7 @@ async function deleteOldIcbcSources(client: ConvexHttpClient, importSecret: stri
     const result = await client.mutation(convexFunctions.deleteIcbcSourcesExceptBatchPage, {
       importSecret,
       keepBatchId,
+      preserveSourceRefs,
       limit: 200,
     });
     chunksDeleted += result.chunksDeleted;

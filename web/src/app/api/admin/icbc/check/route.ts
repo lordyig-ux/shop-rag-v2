@@ -2,9 +2,12 @@ import { ConvexHttpClient } from "convex/browser";
 
 import {
   buildIcbcCheckResult,
-  ICBC_NAV_XML_URL,
+  ICBC_MAPS,
+  icbcNavXmlUrl,
   parseIcbcNavEntries,
+  verifyIcbcNotListedSources,
   type IcbcCheckResult,
+  type IcbcNavEntry,
 } from "@/lib/admin/icbcMaintenance";
 import { adminAccessErrorResponse, requireAdminAccess } from "@/lib/auth/requireAdminAccess";
 import { convexFunctions } from "@/lib/convexReferences";
@@ -29,27 +32,20 @@ export async function GET() {
   }
 
   const client = new ConvexHttpClient(convexUrl);
-  const navResponse = await fetch(ICBC_NAV_XML_URL, {
-    cache: "no-store",
-    headers: {
-      "User-Agent": "Terminal Auto Body Knowledge Base Maintenance",
-    },
-  });
-
-  if (!navResponse.ok) {
+  let latestEntries: IcbcNavEntry[];
+  try {
+    latestEntries = await fetchIcbcNavEntries();
+  } catch (error) {
     return Response.json(
-      { error: `ICBC navigation map request failed: ${navResponse.status} ${navResponse.statusText}` },
+      { error: error instanceof Error ? error.message : "ICBC navigation map request failed." },
       { status: 502 },
     );
   }
 
-  const latestEntries = parseIcbcNavEntries(await navResponse.text());
-  if (!latestEntries.length) {
-    return Response.json({ error: "ICBC navigation map did not contain any topic references." }, { status: 502 });
-  }
-
   const currentSources = await client.query(convexFunctions.icbcSourceSnapshot, {});
-  const result = buildIcbcCheckResult(latestEntries, currentSources);
+  const uncheckedResult = buildIcbcCheckResult(latestEntries, currentSources);
+  const verifiedNotListed = await verifyIcbcNotListedSources(uncheckedResult.comparison.notListedInNav);
+  const result = buildIcbcCheckResult(latestEntries, currentSources, Date.now(), verifiedNotListed);
   const { logStored, logWarning } = await recordIcbcCheck(client, result, access.email);
 
   const body: IcbcCheckApiResponse = {
@@ -59,6 +55,35 @@ export async function GET() {
   };
 
   return Response.json(body);
+}
+
+async function fetchIcbcNavEntries() {
+  const entriesByTopicId = new Map<string, IcbcNavEntry>();
+
+  for (const map of ICBC_MAPS) {
+    const navResponse = await fetch(icbcNavXmlUrl(map.mapName), {
+      cache: "no-store",
+      headers: {
+        "User-Agent": "Terminal Auto Body Knowledge Base Maintenance",
+      },
+    });
+
+    if (!navResponse.ok) {
+      throw new Error(`ICBC navigation map request failed: ${navResponse.status} ${navResponse.statusText}`);
+    }
+
+    for (const entry of parseIcbcNavEntries(await navResponse.text(), map.mapName)) {
+      if (!entriesByTopicId.has(entry.topicId.toLowerCase())) {
+        entriesByTopicId.set(entry.topicId.toLowerCase(), entry);
+      }
+    }
+  }
+
+  const entries = Array.from(entriesByTopicId.values());
+  if (!entries.length) {
+    throw new Error("ICBC navigation maps did not contain any topic references.");
+  }
+  return entries;
 }
 
 async function recordIcbcCheck(client: ConvexHttpClient, result: IcbcCheckResult, email: string) {
@@ -83,11 +108,17 @@ async function recordIcbcCheck(client: ConvexHttpClient, result: IcbcCheckResult
           current: result.comparison.totalCurrent,
           unchanged: result.comparison.unchangedCount,
           missing: result.comparison.missingFromKnowledgeBase.length,
-          stale: result.comparison.staleInKnowledgeBase.length,
+          notListedInNav: result.comparison.notListedInNav.length,
+          liveNotListedInNav: result.comparison.notListedInNav.filter((source) => source.directUrlStatus === "live")
+            .length,
+          confirmedNotFound: result.comparison.notListedInNav.filter((source) => source.directUrlStatus === "not_found")
+            .length,
+          directCheckFailed: result.comparison.notListedInNav.filter((source) => source.directUrlStatus === "check_failed")
+            .length,
           titleChanges: result.comparison.titleChanges.length,
         },
         missingSample: result.comparison.missingFromKnowledgeBase.slice(0, 20),
-        staleSample: result.comparison.staleInKnowledgeBase.slice(0, 20),
+        notListedSample: result.comparison.notListedInNav.slice(0, 20),
         titleChangeSample: result.comparison.titleChanges.slice(0, 20),
       }),
       createdByEmail: email,

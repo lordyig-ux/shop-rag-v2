@@ -162,6 +162,7 @@ export const deleteIcbcSourcesExceptBatchPage = mutationGeneric({
   args: {
     importSecret: v.optional(v.string()),
     keepBatchId: v.string(),
+    preserveSourceRefs: v.optional(v.array(v.string())),
     limit: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
@@ -173,11 +174,22 @@ export const deleteIcbcSourcesExceptBatchPage = mutationGeneric({
     }
 
     const limit = Math.max(1, Math.min(args.limit || 200, 500));
+    const preserveSourceRefs = new Set((args.preserveSourceRefs || []).map((sourceRef) => sourceRef.trim()).filter(Boolean));
     const chunks = (await ctx.db.query("chunks").collect())
-      .filter((chunk) => chunk.importedBatchId !== keepBatchId && isIcbcSource(chunk.sourceRef, chunk.sourceUrl))
+      .filter(
+        (chunk) =>
+          chunk.importedBatchId !== keepBatchId &&
+          isIcbcSource(chunk.sourceRef, chunk.sourceUrl) &&
+          !preserveSourceRefs.has(chunk.sourceRef),
+      )
       .slice(0, limit);
     const sources = (await ctx.db.query("sources").collect())
-      .filter((source) => source.importedBatchId !== keepBatchId && isIcbcSource(source.sourceRef, source.sourceUrl))
+      .filter(
+        (source) =>
+          source.importedBatchId !== keepBatchId &&
+          isIcbcSource(source.sourceRef, source.sourceUrl) &&
+          !preserveSourceRefs.has(source.sourceRef),
+      )
       .slice(0, limit);
 
     for (const chunk of chunks) {

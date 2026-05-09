@@ -4,7 +4,9 @@ import {
   buildIcbcCheckResult,
   compareIcbcSources,
   parseIcbcNavEntries,
+  sourceRefsToPreserveAfterRefresh,
   topicIdFromIcbcSource,
+  verifyIcbcNotListedSources,
 } from "./icbcMaintenance";
 
 describe("parseIcbcNavEntries", () => {
@@ -31,6 +33,20 @@ describe("parseIcbcNavEntries", () => {
         category: "ICBC",
         sourceUrl:
           "https://mdp.partners.icbc.com/topic/Policy-on-pre-repair-and-post-repair-scanning?map=DAMG-MP-NRP91J-vendors",
+      },
+    ]);
+  });
+
+  it("builds source URLs for a specified ICBC map", () => {
+    const xml = `<map><topicref href="CLMS-RF-I638DJ-grp-crp-updates" navtitle="Program updates" /></map>`;
+
+    expect(parseIcbcNavEntries(xml, "md-vendor-change-alerts")).toEqual([
+      {
+        topicId: "CLMS-RF-I638DJ-grp-crp-updates",
+        href: "CLMS-RF-I638DJ-grp-crp-updates",
+        title: "Program updates",
+        category: "ICBC",
+        sourceUrl: "https://mdp.partners.icbc.com/topic/CLMS-RF-I638DJ-grp-crp-updates?map=md-vendor-change-alerts",
       },
     ]);
   });
@@ -114,7 +130,8 @@ describe("compareIcbcSources", () => {
     expect(comparison.totalCurrent).toBe(2);
     expect(comparison.unchangedCount).toBe(1);
     expect(comparison.missingFromKnowledgeBase.map((entry) => entry.topicId)).toEqual(["New-ICBC-topic"]);
-    expect(comparison.staleInKnowledgeBase.map((source) => source.title)).toEqual(["Removed ICBC topic"]);
+    expect(comparison.notListedInNav.map((source) => source.title)).toEqual(["Removed ICBC topic"]);
+    expect(comparison.notListedInNav[0].directUrlStatus).toBe("unchecked");
   });
 
   it("summarizes an up-to-date check result", () => {
@@ -142,6 +159,73 @@ describe("compareIcbcSources", () => {
 
     expect(result.status).toBe("up_to_date");
     expect(result.checkedAt).toBe(123);
-    expect(result.summary).toBe("ICBC nav has 1 topics and the knowledge base has the same topic set.");
+    expect(result.summary).toBe("ICBC maps have 1 listed topics and the knowledge base has the same listed topic set.");
+  });
+});
+
+describe("verifyIcbcNotListedSources", () => {
+  it("marks nav-missing sources as live when their direct URL still responds", async () => {
+    const verified = await verifyIcbcNotListedSources(
+      [
+        {
+          title: "Replacement parts where depreciation does not apply",
+          sourceRef: "https://mdp.partners.icbc.com/topics/50CBF8B994B539D601815B01FC497FD5.html",
+          sourceUrl: "https://mdp.partners.icbc.com/topic/50CBF8B994B539D601815B01FC497FD5?map=DAMG-MP-NRP91J-vendors",
+          importedBatchId: "icbc-refresh-1",
+          importedAt: 100,
+        },
+      ],
+      {
+        fetchFn: async () => new Response("<title>Replacement parts where depreciation does not apply</title>", { status: 200 }),
+      },
+    );
+
+    expect(verified[0]).toMatchObject({
+      title: "Replacement parts where depreciation does not apply",
+      topicId: "50cbf8b994b539d601815b01fc497fd5",
+      directUrlStatus: "live",
+      httpStatus: 200,
+    });
+  });
+
+  it("preserves live or check-failed ICBC pages during refresh and allows confirmed not-found pages to be deleted", () => {
+    expect(
+      sourceRefsToPreserveAfterRefresh([
+        {
+          title: "Live orphan",
+          sourceRef: "live-ref",
+          sourceUrl: "https://example.test/live",
+          importedBatchId: "batch",
+          importedAt: 1,
+          topicId: "live",
+          checkedUrl: "https://example.test/live",
+          directUrlStatus: "live",
+          httpStatus: 200,
+        },
+        {
+          title: "Network issue",
+          sourceRef: "unknown-ref",
+          sourceUrl: "https://example.test/unknown",
+          importedBatchId: "batch",
+          importedAt: 1,
+          topicId: "unknown",
+          checkedUrl: "https://example.test/unknown",
+          directUrlStatus: "check_failed",
+          httpStatus: null,
+          checkError: "timeout",
+        },
+        {
+          title: "Dead page",
+          sourceRef: "dead-ref",
+          sourceUrl: "https://example.test/dead",
+          importedBatchId: "batch",
+          importedAt: 1,
+          topicId: "dead",
+          checkedUrl: "https://example.test/dead",
+          directUrlStatus: "not_found",
+          httpStatus: 404,
+        },
+      ]),
+    ).toEqual(["live-ref", "unknown-ref"]);
   });
 });
